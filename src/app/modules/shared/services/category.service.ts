@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 //call environment, declare constant
-const base_url = environment.base_url;
+const base_url = environment.base_uri;
 @Injectable({
   providedIn: 'root'
 })
