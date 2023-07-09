@@ -1,1 +1,26 @@
-<p>category works!</p>
+
+
+<mat-card>
+  <h2 class="alinear">Listado de Categorias</h2>
+    <mat-card-header>
+      <div>
+        <mat-form-field hintLabel="Busque Categoria" appearance="fill">
+            <mat-label>Buscar Categorias</mat-label>
+              <input matInput #input>
+        </mat-form-field>
+      </div>
+    </mat-card-header>
+
+   <mat-card-header>
+    <div fxFlex FxLayout="row" fxLayoutAlign="flex-end">
+      <ul FxLayout="row" fxLayoutGap="20px">
+        <li>
+          <button mat-raised-button color="primary">Agregar Categoria</button>  
+        </li>
+      </ul>
+     
+    </div>
+    </mat-card-header>
+
+
+</mat-card>
