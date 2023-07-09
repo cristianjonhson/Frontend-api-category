@@ -9,7 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class CategoryComponent implements OnInit {
 
-  
+
   constructor(private categoryService: CategoryService) { }
 
   ngOnInit(): void {
@@ -21,18 +21,33 @@ export class CategoryComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
   dataSource = new MatTableDataSource<CategoryElement>();
 
-  getCategories(){
+  getCategories() {
     this.categoryService.getCategories().subscribe(data => {
-          console.log("respuesta categories", data );
+      console.log("respuesta categories", data);
+      this.processCategoriesResponse(data);
     }, (error => console.log("error", error)))
+  }
+
+  processCategoriesResponse(resp: any) {
+    const dataCategory: CategoryElement[] = [];
+    if (resp.metadata[0].code == "00") {
+      let listCategory = resp.categoryResponse.category;
+
+      listCategory.forEach((element: CategoryElement) => {
+        dataCategory.push(element);
+      });
+
+      this.dataSource = new MatTableDataSource<CategoryElement>(dataCategory)
+
+    }
   }
 }
 
 //elemento interface tipo de datos que se construye para ocuparlo en determinadas tareas
-export interface CategoryElement{
-  
- description: string;
- id: number; 
- name: string;
+export interface CategoryElement {
+
+  description: string;
+  id: number;
+  name: string;
 
 }
