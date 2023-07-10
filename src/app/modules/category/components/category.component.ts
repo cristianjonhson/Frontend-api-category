@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { CategoryService } from '../../shared/services/category.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { NewCategoryComponent } from './new-category/new-category.component';
 
 @Component({
   selector: 'app-category',
@@ -10,7 +12,8 @@ import { MatTableDataSource } from '@angular/material/table';
 export class CategoryComponent implements OnInit {
 
   // Inyectar el servicio CategoryService
-  constructor(private categoryService: CategoryService) { }
+  constructor(private categoryService: CategoryService,
+              public dialog: MatDialog) { }
 
   ngOnInit(): void {
     // Llamar al método para obtener las categorías
@@ -25,6 +28,7 @@ export class CategoryComponent implements OnInit {
 
   // Propiedad para almacenar el mensaje de error
   errormensaje: string;
+
 
   // Método para obtener las categorías
   getCategories() {
@@ -56,7 +60,20 @@ export class CategoryComponent implements OnInit {
       console.log(this.dataSource.data, "data");
     }
   }
-}
+  
+  openCategoryDialog(){
+    let dialogRef = this.dialog.open(NewCategoryComponent, {
+      width: '450px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+  }
+  }
+
+
+
 
 //elemento interface tipo de datos que se construye para ocuparlo en determinadas tareas
 export interface CategoryElement {
