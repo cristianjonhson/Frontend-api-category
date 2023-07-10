@@ -9,36 +9,51 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class CategoryComponent implements OnInit {
 
-
+  // Inyectar el servicio CategoryService
   constructor(private categoryService: CategoryService) { }
 
   ngOnInit(): void {
+    // Llamar al método para obtener las categorías
     this.getCategories();
-
   }
 
-  //arreglo de string
+  // Arreglo de nombres de columnas para la tabla
   displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
-  dataSource = new MatTableDataSource<CategoryElement>();
+  
+  // Fuente de datos para la tabla
+  dataSource: MatTableDataSource<CategoryElement>;
 
+  // Propiedad para almacenar el mensaje de error
+  errormensaje: string;
+
+  // Método para obtener las categorías
   getCategories() {
-    this.categoryService.getCategories().subscribe(data => {
-      console.log("respuesta categories", data);
-      this.processCategoriesResponse(data);
-    }, (error => console.log("error", error)))
+    this.categoryService.getCategories().subscribe({
+      next: (data) => {
+        // Procesar la respuesta
+        this.processCategoriesResponse(data);
+      },
+      error: (error) => {
+        // Asignar mensaje de error
+        this.errormensaje = 'Ocurrió un error al obtener las categorías.';
+        console.log("error", error.message);
+      }
+    });
   }
 
+  // Método para procesar la respuesta de categorías
   processCategoriesResponse(resp: any) {
     const dataCategory: CategoryElement[] = [];
+
     if (resp.metadata[0].code == "00") {
       let listCategory = resp.categoryResponse.category;
 
-      listCategory.forEach((element: CategoryElement) => {
-        dataCategory.push(element);
-      });
+      console.log(listCategory, "hola");
 
-      this.dataSource = new MatTableDataSource<CategoryElement>(dataCategory)
-
+      // Asignar los datos a la fuente de datos de la tabla
+      this.dataSource = new MatTableDataSource<CategoryElement>(listCategory);
+     
+      console.log(this.dataSource.data, "data");
     }
   }
 }
