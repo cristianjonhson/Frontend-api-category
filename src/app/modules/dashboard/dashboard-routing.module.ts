@@ -1,20 +1,38 @@
 import { NgModule } from '@angular/core';
-
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard.component';
+import { HomeComponent } from './components/home/home.component';
+import { CategoryComponent } from '../category/components/category.component';
 
+/**
+ * Rutas del módulo Dashboard
+ * Incluye rutas hijas para navegación dentro del dashboard
+ */
 const routes: Routes = [
   {
-    path: 'dashboard',
+    path: '',
     component: DashboardComponent,
-    loadChildren: () => import('./router-child.module').then(m => m.RouterChildModule)
-  },
-]
+    children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
+        path: 'home',
+        component: HomeComponent
+      },
+      {
+        path: 'category',
+        component: CategoryComponent
+      }
+    ]
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-
+  exports: [RouterModule]
 })
 export class DashboardRoutingModule { }
 

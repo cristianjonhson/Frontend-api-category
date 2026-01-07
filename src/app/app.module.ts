@@ -1,22 +1,25 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DashboardModule } from './modules/dashboard/dashboard.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 
+/**
+ * Módulo raíz de la aplicación
+ * Solo importa módulos esenciales y CoreModule
+ * Los feature modules se cargan de forma lazy
+ */
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    BrowserAnimationsModule,
     CoreModule,
-    DashboardModule,
-    BrowserAnimationsModule
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
