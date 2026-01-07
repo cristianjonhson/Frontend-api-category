@@ -77,8 +77,10 @@ Antes de comenzar, asegúrate de tener instalado:
 
 2. **Instalar dependencias**
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
+   
+   > **Nota**: Se usa `--legacy-peer-deps` debido a conflictos de peer dependencies entre versiones de Angular.
 
 ## ⚙️ Configuración
 
@@ -204,6 +206,34 @@ npm run lint
 
 # Ejecutar tests E2E
 npm run e2e
+```
+
+## 🔧 Troubleshooting
+
+### Error al instalar dependencias
+
+Si encuentras errores de peer dependencies al ejecutar `npm install`, usa:
+
+```bash
+npm install --legacy-peer-deps
+```
+
+### Error "defaultProject" deprecado
+
+Este proyecto ya no usa la propiedad `defaultProject` en angular.json (removida en Angular 14+).
+
+### Vulnerabilidades de seguridad
+
+Para revisar vulnerabilidades:
+
+```bash
+npm audit
+```
+
+Para intentar corregirlas automáticamente:
+
+```bash
+npm audit fix --legacy-peer-deps
 ```
 
 ## 🧪 Testing
