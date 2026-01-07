@@ -1,28 +1,39 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { CategoryModel, CategoryRequest, CategoryResponse } from 'src/app/shared/models/category.model';
+import { ApiResponse } from 'src/app/shared/models/api-response.model';
+import { ICategory } from 'src/app/shared/interfaces/category.interface';
+import { API_CONSTANTS } from 'src/app/shared/constants/api.constants';
 
-//call environment, declare constant
+// Call environment, declare constant
 const base_url = environment.base_uri;
+
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
   constructor(private http: HttpClient) { }
-    /**
-     * get all categories
-     * @returns get all categories existing
-     */
-  getCategories(){
-      // endpoint 
-      const endpoint =`${base_url}/categories`;
-      return this.http.get(endpoint);
-    }
 
-    saveCategory(body: any){
-       // endpoint 
-       const endpoint =`${base_url}/categories`;
-       return this.http.post(endpoint, body); 
-    }
+  /**
+   * Obtiene todas las categorías
+   * @returns Observable con la respuesta de categorías
+   */
+  getCategories(): Observable<ApiResponse<CategoryResponse>> {
+    const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}`;
+    return this.http.get<ApiResponse<CategoryResponse>>(endpoint);
+  }
+
+  /**
+   * Guarda una nueva categoría
+   * @param body Datos de la categoría a guardar
+   * @returns Observable con la respuesta
+   */
+  saveCategory(body: CategoryRequest): Observable<ApiResponse<CategoryResponse>> {
+    const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}`;
+    return this.http.post<ApiResponse<CategoryResponse>>(endpoint, body);
+  }
 }

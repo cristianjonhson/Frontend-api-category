@@ -1,8 +1,12 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../../shared/services/category.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { NewCategoryComponent } from './new-category/new-category.component';
+import { CategoryModel } from 'src/app/shared/models/category.model';
+import { ICategory } from 'src/app/shared/interfaces/category.interface';
+import { ApiResponseCode } from 'src/app/shared/enums/api-response-code.enum';
+import { LoggerService } from 'src/app/core/services/logger.service';
 
 @Component({
   selector: 'app-category',
@@ -11,75 +15,71 @@ import { NewCategoryComponent } from './new-category/new-category.component';
 })
 export class CategoryComponent implements OnInit {
 
-  // Inyectar el servicio CategoryService
-  constructor(private categoryService: CategoryService,
-              public dialog: MatDialog) { }
+  // Arreglo de nombres de columnas para la tabla
+  displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
+
+  // Fuente de datos para la tabla
+  dataSource: MatTableDataSource<ICategory>;
+
+  // Propiedad para almacenar el mensaje de error
+  errorMessage: string;
+
+  constructor(
+    private categoryService: CategoryService,
+    public dialog: MatDialog,
+    private logger: LoggerService
+  ) { }
 
   ngOnInit(): void {
     // Llamar al método para obtener las categorías
     this.getCategories();
   }
 
-  // Arreglo de nombres de columnas para la tabla
-  displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
-  
-  // Fuente de datos para la tabla
-  dataSource: MatTableDataSource<CategoryElement>;
-
-  // Propiedad para almacenar el mensaje de error
-  errormensaje: string;
-
-
-  // Método para obtener las categorías
-  getCategories() {
+  /**
+   * Obtiene las categorías del servicio
+   */
+  getCategories(): void {
     this.categoryService.getCategories().subscribe({
-      next: (data) => {
-        // Procesar la respuesta
-        this.processCategoriesResponse(data);
+      next: (response) => {
+        this.logger.info('Respuesta de categorías recibida');
+        this.processCategoriesResponse(response);
       },
       error: (error) => {
-        // Asignar mensaje de error
-        this.errormensaje = 'Ocurrió un error al obtener las categorías.';
-        console.log("error", error.message);
+        this.errorMessage = error.message || 'Ocurrió un error al obtener las categorías.';
+        this.logger.error('Error al obtener categorías:', error);
       }
     });
   }
 
-  // Método para procesar la respuesta de categorías
-  processCategoriesResponse(resp: any) {
-    const dataCategory: CategoryElement[] = [];
-
-    if (resp.metadata[0].code == "00") {
-      let listCategory = resp.categoryResponse.category;
-
-      console.log(listCategory, "hola");
-
-      // Asignar los datos a la fuente de datos de la tabla
-      this.dataSource = new MatTableDataSource<CategoryElement>(listCategory);
-     
-      console.log(this.dataSource.data, "data");
+  /**
+   * Procesa la respuesta de categorías
+   * @param response Respuesta de la API
+   */
+  processCategoriesResponse(response: any): void {
+    if (response.metadata && response.metadata[0]?.code === ApiResponseCode.SUCCESS) {
+      const categories = response.categoryResponse?.category || [];
+      this.dataSource = new MatTableDataSource<ICategory>(categories);
+      this.logger.debug('Categorías cargadas:', categories);
+    } else {
+      this.errorMessage = response.metadata[0]?.message || 'Error al procesar categorías.';
+      this.logger.warn('Respuesta no exitosa:', response);
     }
   }
-  
-  openCategoryDialog(){
-    let dialogRef = this.dialog.open(NewCategoryComponent, {
+
+  /**
+   * Abre el diálogo para crear/editar categoría
+   */
+  openCategoryDialog(): void {
+    const dialogRef = this.dialog.open(NewCategoryComponent, {
       width: '450px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
+      if (result) {
+        this.logger.info('Diálogo cerrado con resultado:', result);
+        // Recargar categorías si se creó/editó una
+        this.getCategories();
+      }
     });
   }
-  }
-
-
-
-
-//elemento interface tipo de datos que se construye para ocuparlo en determinadas tareas
-export interface CategoryElement {
-
-  description: string;
-  id: number;
-  name: string;
-
 }
