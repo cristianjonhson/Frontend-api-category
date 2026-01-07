@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CategoryService } from '../../shared/services/category.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { NewCategoryComponent } from './new-category/new-category.component';
+import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { CategoryModel } from 'src/app/shared/models/category.model';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { ApiResponseCode } from 'src/app/shared/enums/api-response-code.enum';
