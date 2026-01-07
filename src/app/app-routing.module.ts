@@ -30,4 +30,13 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
+/**
+ * Módulo principal de enrutamiento
+ *
+ * Configura las rutas raíz de la aplicación usando lazy loading.
+ * Todas las feature modules se cargan bajo demanda para optimizar
+ * el tiempo de carga inicial.
+ *
+ * @module
+ */
 export class AppRoutingModule { }

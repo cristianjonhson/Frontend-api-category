@@ -34,5 +34,13 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
+/**
+ * Módulo de enrutamiento del Dashboard
+ *
+ * Define las rutas hijas para la sección de dashboard.
+ * Incluye rutas para Home y Category como hijos del DashboardComponent.
+ *
+ * @module
+ */
 export class DashboardRoutingModule { }
 

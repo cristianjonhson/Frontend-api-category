@@ -16,9 +16,29 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 /**
- * Material Module optimizado
- * Solo incluye los componentes que se están usando actualmente
- * Reduce significativamente el tamaño del bundle
+ * Módulo de Angular Material optimizado
+ *
+ * Importa y exporta únicamente los módulos de Material Design que
+ * se están utilizando en la aplicación. Esto reduce el tamaño del
+ * bundle final significativamente (14 módulos vs 40+ del MaterialModule completo).
+ *
+ * @module
+ * @optimized
+ *
+ * Componentes incluidos:
+ * - Button: Botones con estilos Material
+ * - Card: Tarjetas con contenido
+ * - Dialog: Diálogos modales
+ * - FormField: Campos de formulario
+ * - Icon: Íconos Material
+ * - Input: Inputs de texto
+ * - List: Listas
+ * - Menu: Menús desplegables
+ * - Paginator: Paginación de tablas
+ * - Sidenav: Navegación lateral
+ * - SnackBar: Notificaciones toast
+ * - Table: Tablas de datos
+ * - Toolbar: Barras de herramientas
  */
 const MATERIAL_MODULES = [
   MatButtonModule,

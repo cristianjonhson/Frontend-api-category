@@ -8,8 +8,16 @@ import { CategoryModule } from '../category/category.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 
 /**
- * Módulo del Dashboard
- * Se carga de forma lazy desde app-routing.module.ts
+ * Módulo principal del Dashboard
+ *
+ * Feature module con lazy loading que contiene el panel de control
+ * administrativo y sus componentes relacionados. Se carga bajo demanda
+ * cuando el usuario accede a la ruta /dashboard.
+ *
+ * Este módulo importa CategoryModule para incluir las funcionalidades
+ * de gestión de categorías dentro del dashboard.
+ *
+ * @module
  */
 @NgModule({
   declarations: [

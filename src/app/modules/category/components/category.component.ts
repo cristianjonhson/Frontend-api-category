@@ -9,6 +9,17 @@ import { LoggerService } from 'src/app/core/services/logger.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 
+/**
+ * Componente para la gestión de categorías
+ *
+ * Componente smart que maneja la visualización y gestión de categorías.
+ * Extiende BaseComponent para auto-unsubscribe de observables.
+ * Utiliza Material Table para mostrar los datos en formato tabular.
+ *
+ * @component
+ * @selector app-category
+ * @extends BaseComponent
+ */
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
@@ -22,6 +33,13 @@ export class CategoryComponent extends BaseComponent implements OnInit {
   // Fuente de datos para la tabla
   dataSource: MatTableDataSource<ICategory>;
 
+  /**
+   * Constructor del componente
+   * @param categoryService - Servicio para operaciones CRUD de categorías
+   * @param dialog - Servicio de Material Dialog para abrir modales
+   * @param logger - Servicio centralizado de logging
+   * @param notification - Servicio para mostrar notificaciones al usuario
+   */
   constructor(
     private categoryService: CategoryService,
     public dialog: MatDialog,
