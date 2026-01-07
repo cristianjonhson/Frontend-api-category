@@ -4,12 +4,14 @@
 /dist
 /tmp
 /out-tsc
+/target
 # Only exists if Bazel was run
 /bazel-out
 
 # dependencies
 /node_modules
 package-lock.json
+yarn.lock
 
 # profiling files
 chrome-profiler-events*.json
@@ -46,3 +48,26 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Build artifacts
+*.tgz
+*.zip
+*.tar.gz
+
+# Editor directories and files
+*~
+.*.swp
+.*.swo
+*.bak
