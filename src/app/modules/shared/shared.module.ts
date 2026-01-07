@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
-import { MaterialModule } from './material.module';
+import { MaterialModuleOptimized } from './material-optimized.module';
 
 /**
  * Shared Module - Componentes, directivas y pipes compartidos
@@ -18,13 +18,13 @@ import { MaterialModule } from './material.module';
     CommonModule,
     RouterModule,
     FlexLayoutModule,
-    MaterialModule
+    MaterialModuleOptimized
   ],
   imports: [
     CommonModule,
     RouterModule,
     FlexLayoutModule,
-    MaterialModule
+    MaterialModuleOptimized
   ]
 })
 export class SharedModule { }

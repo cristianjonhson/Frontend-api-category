@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CategoryModel, CategoryRequest, CategoryResponse } from 'src/app/shared/models/category.model';
 import { ApiResponse } from 'src/app/shared/models/api-response.model';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { API_CONSTANTS } from 'src/app/shared/constants/api.constants';
+import { ApiResponseCode } from 'src/app/shared/enums/api-response-code.enum';
+import { LoggerService } from 'src/app/core/services/logger.service';
 
 // Call environment, declare constant
 const base_url = environment.base_uri;
@@ -16,24 +18,65 @@ const base_url = environment.base_uri;
 })
 export class CategoryService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private logger: LoggerService
+  ) { }
 
   /**
    * Obtiene todas las categorías
-   * @returns Observable con la respuesta de categorías
+   * @returns Observable con array de categorías procesadas
    */
-  getCategories(): Observable<ApiResponse<CategoryResponse>> {
+  getCategories(): Observable<ICategory[]> {
     const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}`;
-    return this.http.get<ApiResponse<CategoryResponse>>(endpoint);
+
+    return this.http.get<ApiResponse<CategoryResponse>>(endpoint).pipe(
+      map(response => this.processGetCategoriesResponse(response))
+    );
   }
 
   /**
    * Guarda una nueva categoría
    * @param body Datos de la categoría a guardar
-   * @returns Observable con la respuesta
+   * @returns Observable con la respuesta procesada
    */
   saveCategory(body: CategoryRequest): Observable<ApiResponse<CategoryResponse>> {
     const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}`;
+    this.logger.info('Guardando categoría:', body);
     return this.http.post<ApiResponse<CategoryResponse>>(endpoint, body);
+  }
+
+  /**
+   * Procesa la respuesta de obtener categorías
+   * Lógica de negocio movida del componente al servicio
+   * @param response Respuesta de la API
+   * @returns Array de categorías o array vacío
+   */
+  private processGetCategoriesResponse(response: any): ICategory[] {
+    if (!response.metadata || response.metadata.length === 0) {
+      this.logger.warn('Respuesta sin metadata');
+      return [];
+    }
+
+    const code = response.metadata[0].code;
+
+    if (code !== ApiResponseCode.SUCCESS) {
+      this.logger.warn('Respuesta no exitosa:', code);
+      return [];
+    }
+
+    const categories = response.categoryResponse?.category || [];
+    this.logger.debug('Categorías procesadas:', categories);
+
+    return categories;
+  }
+
+  /**
+   * Valida si una categoría tiene datos válidos
+   * @param category Categoría a validar
+   * @returns true si es válida
+   */
+  validateCategory(category: CategoryRequest): boolean {
+    return !!(category.name?.trim() && category.description?.trim());
   }
 }

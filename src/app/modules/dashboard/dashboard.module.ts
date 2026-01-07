@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './pages/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { SharedModule } from '../shared/shared.module';
-import { MaterialModule } from '../shared/material.module';
+import { MaterialModuleOptimized } from '../shared/material-optimized.module';
 import { CategoryModule } from '../category/category.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 
@@ -20,7 +20,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
-    MaterialModule,
+    MaterialModuleOptimized,
     CategoryModule
   ]
 })
