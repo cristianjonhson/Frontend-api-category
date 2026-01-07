@@ -1,6 +1,7 @@
 import { NgModule, Optional, SkipSelf, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { GlobalErrorHandler } from './handlers/global-error.handler';
 
@@ -12,7 +13,8 @@ import { GlobalErrorHandler } from './handlers/global-error.handler';
   declarations: [],
   imports: [
     CommonModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSnackBarModule
   ],
   providers: [
     {
