@@ -23,14 +23,23 @@ Frontend API Category es una aplicación web construida con Angular 16 que permi
 
 ## ✨ Características
 
+### Funcionalidades
 - ✅ Gestión completa de categorías (CRUD)
 - ✅ Autenticación y autorización con Keycloak
 - ✅ Interfaz responsiva con Angular Material
 - ✅ Diseño moderno con Material Design y Materialize CSS
-- ✅ Arquitectura modular y escalable
 - ✅ Dashboard administrativo con navegación lateral
-- ✅ Rutas protegidas y lazy loading
 - ✅ Formularios reactivos
+
+### Arquitectura Avanzada
+- ✅ **Lazy Loading** - Carga diferida de módulos (bundle reducido 66%: 1.37MB → 463KB)
+- ✅ **Auto-unsubscribe** - BaseComponent con patrón takeUntil (prevención de memory leaks)
+- ✅ **Error Handling** - GlobalErrorHandler + ErrorInterceptor centralizado
+- ✅ **Notificaciones** - NotificationService con Material Snackbar
+- ✅ **Logging** - LoggerService con niveles (DEBUG/INFO/WARN/ERROR)
+- ✅ **Type Safety** - Interfaces, modelos y enums (cero "any")
+- ✅ **Material Optimizado** - Solo 14 módulos esenciales (vs 40+ originales)
+- ✅ **Clean Architecture** - Lógica de negocio en servicios, componentes presentacionales
 
 ## 🛠 Tecnologías
 
@@ -142,14 +151,43 @@ Frontend-api-category/
 │
 ├── src/
 │   ├── app/
+│   │   ├── core/                      # ⭐ Servicios singleton y configuración global
+│   │   │   ├── handlers/
+│   │   │   │   └── global-error.handler.ts
+│   │   │   ├── interceptors/
+│   │   │   │   └── error.interceptor.ts
+│   │   │   ├── services/
+│   │   │   │   ├── logger.service.ts
+│   │   │   │   └── notification.service.ts
+│   │   │   └── core.module.ts
+│   │   │
+│   │   ├── shared/                    # ⭐ Recursos compartidos
+│   │   │   ├── components/
+│   │   │   │   └── base.component.ts  # Componente base con auto-unsubscribe
+│   │   │   ├── models/
+│   │   │   │   ├── api-response.model.ts
+│   │   │   │   └── category.model.ts
+│   │   │   ├── interfaces/
+│   │   │   │   ├── api-metadata.interface.ts
+│   │   │   │   ├── api-response.interface.ts
+│   │   │   │   └── category.interface.ts
+│   │   │   ├── enums/
+│   │   │   │   ├── api-response-code.enum.ts
+│   │   │   │   └── log-level.enum.ts
+│   │   │   ├── constants/
+│   │   │   │   ├── api.constants.ts
+│   │   │   │   └── error-messages.constants.ts
+│   │   │   └── styles/
+│   │   │       └── notifications.css
+│   │   │
 │   │   ├── modules/
 │   │   │   ├── category/              # Módulo de categorías
 │   │   │   │   ├── components/
 │   │   │   │   │   ├── category.component.*
-│   │   │   │   │   └── new-category/  # Componente para nueva categoría
+│   │   │   │   │   └── new-category/
 │   │   │   │   └── category.module.ts
 │   │   │   │
-│   │   │   ├── dashboard/             # Módulo del dashboard
+│   │   │   ├── dashboard/             # Módulo del dashboard (Lazy Loading)
 │   │   │   │   ├── components/
 │   │   │   │   │   └── home/
 │   │   │   │   ├── pages/
@@ -159,13 +197,13 @@ Frontend-api-category/
 │   │   │   │
 │   │   │   └── shared/                # Módulo compartido
 │   │   │       ├── components/
-│   │   │       │   └── sidenav/       # Navegación lateral
+│   │   │       │   └── sidenav/
 │   │   │       ├── services/
 │   │   │       │   └── category.service.ts
-│   │   │       ├── material.module.ts
+│   │   │       ├── material-optimized.module.ts  # ⭐ Material optimizado
 │   │   │       └── shared.module.ts
 │   │   │
-│   │   ├── app-routing.module.ts      # Enrutamiento principal
+│   │   ├── app-routing.module.ts      # Enrutamiento principal con lazy loading
 │   │   ├── app.component.*            # Componente raíz
 │   │   └── app.module.ts              # Módulo raíz
 │   │
@@ -185,9 +223,25 @@ Frontend-api-category/
 
 ### Descripción de Módulos
 
-- **Category Module**: Gestiona todas las funcionalidades relacionadas con categorías
-- **Dashboard Module**: Proporciona el panel de control principal con lazy loading
-- **Shared Module**: Contiene componentes, servicios y utilidades compartidas
+#### Core Module
+Contiene servicios singleton y configuración global:
+- **LoggerService**: Sistema de logging centralizado con niveles
+- **NotificationService**: Gestión de notificaciones con Material Snackbar
+- **ErrorInterceptor**: Interceptor HTTP para manejo centralizado de errores
+- **GlobalErrorHandler**: Captura y gestiona errores no manejados
+
+#### Shared Module
+Recursos compartidos entre módulos:
+- **BaseComponent**: Componente abstracto con auto-unsubscribe (takeUntil)
+- **Models**: CategoryModel, ApiResponse con validación
+- **Interfaces**: ICategory, IApiResponse, IApiMetadata
+- **Enums**: ApiResponseCode, LogLevel
+- **Constants**: API_CONSTANTS, ERROR_MESSAGES
+- **MaterialModuleOptimized**: Solo 14 módulos Material esenciales
+
+#### Feature Modules
+- **Category Module**: Gestión completa de categorías (CRUD)
+- **Dashboard Module**: Panel de control con lazy loading (optimización 66%)
 
 ## 📜 Scripts Disponibles
 
@@ -270,14 +324,22 @@ ng build --configuration production
 
 Los artefactos de la construcción se almacenarán en el directorio `dist/`.
 
-### Optimizaciones en Producción
+### Optimizaciones Implementadas
 
-El build de producción incluye:
-- Minificación de código
-- Uglificación
-- Tree-shaking
-- Optimización de assets
-- AOT (Ahead-of-Time) compilation
+#### Optimizaciones de Angular
+- **AOT Compilation**: Compilación Ahead-of-Time
+- **Tree-shaking**: Eliminación de código no utilizado
+- **Minificación**: Reducción del tamaño de archivos
+- **Uglificación**: Ofuscación de código
+- **Bundle optimization**: Optimización de paquetes
+
+#### Optimizaciones Arquitecturales
+- **Lazy Loading**: Carga diferida de módulos
+  - Initial Bundle: 464.66 KB (vs 1.37 MB original)
+  - Reducción: 66% en el bundle inicial
+- **Material Optimizado**: 14 módulos vs 40+ originales
+- **Import paths absolutos**: Mejora en tree-shaking
+- **Auto-unsubscribe**: Prevención de memory leaks
 
 ## 🤝 Contribuir
 
