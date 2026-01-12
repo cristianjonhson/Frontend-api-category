@@ -1,0 +1,26 @@
+/* Estilo para el título del formulario */
+.form-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Estilo para el formulario */
+.responsive-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Estilo para los campos del formulario */
+.full-width {
+  width: 100%;
+}
+
+/* Estilo para el grupo de botones */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
-import { NewCategoryComponent } from './new-category/new-category.component';
 import { AddCategoryComponent } from './add-category/add-category.component';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
@@ -77,24 +76,7 @@ export class CategoryComponent extends BaseComponent implements OnInit {
       });
   }
 
-  /**
-   * Abre el diálogo para crear/editar categoría
-   */
-  openCategoryDialog(): void {
-    const dialogRef = this.dialog.open(NewCategoryComponent, {
-      width: '450px'
-    });
 
-    dialogRef.afterClosed()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(result => {
-        if (result) {
-          this.logger.info('Categoría guardada, recargando lista');
-          this.notification.success('Categoría guardada exitosamente');
-          this.getCategories();
-        }
-      });
-  }
 
   /**
    * Abre el diálogo para agregar una nueva categoría
