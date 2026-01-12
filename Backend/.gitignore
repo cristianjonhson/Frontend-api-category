@@ -1,0 +1,45 @@
+# Archivos y carpetas de compilación
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Archivos de configuración de entorno
+*.env
+*.local
+
+# Archivos de logs
+*.log
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de IDEs
+/.idea/
+/*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+
+# Archivos de configuración de Maven
+.mvn/
+.settings/
+.classpath
+.project
+
+# Archivos de pruebas y cobertura
+/test-output/
+/coverage/
+jacoco.exec
+
+# Archivos de base de datos temporales
+*.h2.db
+*.mv.db
+
+# Archivos de seguridad
+*.key
+*.pem
+
+# Archivos de usuario
+*.sublime-workspace
+*.sublime-project
