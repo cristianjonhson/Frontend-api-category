@@ -1,3 +1,86 @@
+# Proyecto Full-Stack: Frontend y Backend
+
+## Estructura del Repositorio
+
+```
+/
+|-- Frontend/    # Código Angular existente
+|-- Backend/     # Nuevo proyecto Spring Boot
+|-- README.md    # Documentación del proyecto
+|-- docker-compose.yml # Configuración opcional para levantar todo
+```
+
+## Instrucciones para levantar el proyecto
+
+### Requisitos previos
+
+1. **Node.js y Angular CLI** (para el frontend):
+   - [Descargar Node.js](https://nodejs.org/)
+   - Instalar Angular CLI: `npm install -g @angular/cli`
+
+2. **Java y Maven** (para el backend):
+   - [Descargar Java 17+](https://adoptium.net/)
+   - [Descargar Maven](https://maven.apache.org/)
+
+3. **Docker** (opcional, para levantar todo con `docker-compose`):
+   - [Descargar Docker](https://www.docker.com/)
+
+### Levantar el Frontend
+
+```bash
+cd Frontend
+npm install
+ng serve
+```
+
+El frontend estará disponible en: `http://localhost:4200`
+
+### Levantar el Backend
+
+```bash
+cd Backend
+./mvnw spring-boot:run
+```
+
+El backend estará disponible en: `http://localhost:8080`
+
+### Usar Docker Compose (opcional)
+
+```bash
+docker-compose up
+```
+
+Esto levantará el frontend, backend y base de datos (PostgreSQL).
+
+## Documentación
+
+- **Frontend**: Código Angular en la carpeta `Frontend/`.
+- **Backend**: Proyecto Spring Boot en la carpeta `Backend/`.
+- **Endpoints**: Documentados en Swagger (`http://localhost:8080/swagger-ui.html`).
+
+## Diagrama de Paquetes (Backend)
+
+```
+Backend/
+|-- domain/         # Entidades, interfaces de repositorio, reglas de negocio
+|-- application/    # Casos de uso, DTOs, validaciones
+|-- infrastructure/ # Controladores, persistencia, configuración
+|-- common/         # Excepciones, utilidades, constantes
+```
+
+## Variables de Entorno
+
+Configurar en `application.yml`:
+
+- `dev`: Desarrollo local
+- `test`: Pruebas
+- `prod`: Producción
+
+## Base de Datos
+
+- **PostgreSQL** (por defecto) o **H2** (para pruebas).
+- Migraciones con Flyway (`Backend/src/main/resources/db/migration`).
+
 # Frontend API Category
 
 Sistema de gestión de categorías desarrollado con Angular, que proporciona una interfaz moderna y responsiva para la administración de categorías de productos o inventarios.

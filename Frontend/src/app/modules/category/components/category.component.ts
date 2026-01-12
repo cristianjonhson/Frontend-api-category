@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
 import { NewCategoryComponent } from './new-category/new-category.component';
+import { AddCategoryComponent } from './add-category/add-category.component';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { LoggerService } from 'src/app/core/services/logger.service';
@@ -93,5 +94,32 @@ export class CategoryComponent extends BaseComponent implements OnInit {
           this.getCategories();
         }
       });
+  }
+
+  /**
+   * Abre el diálogo para agregar una nueva categoría
+   */
+  openAddCategoryDialog(): void {
+    const dialogRef = this.dialog.open(AddCategoryComponent, {
+      width: '600px',
+      height: '400px'
+    });
+
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => {
+        if (result) {
+          this.logger.info('Nueva categoría agregada, recargando lista');
+          this.notification.success('Categoría agregada exitosamente');
+          this.getCategories();
+        }
+      });
+  }
+
+  /**
+   * Actualiza la lista de categorías después de agregar una nueva
+   */
+  refreshCategories(): void {
+    this.getCategories();
   }
 }

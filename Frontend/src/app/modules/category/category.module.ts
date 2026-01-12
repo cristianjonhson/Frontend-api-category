@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoryComponent } from './components/category.component';
 import { NewCategoryComponent } from './components/new-category/new-category.component';
 import { MaterialModuleOptimized } from '../shared/material-optimized.module';
+import { AddCategoryComponent } from './components/add-category/add-category.component';
 
 /**
  * Módulo de Categorías
@@ -17,7 +18,8 @@ import { MaterialModuleOptimized } from '../shared/material-optimized.module';
 @NgModule({
   declarations: [
     CategoryComponent,
-    NewCategoryComponent
+    NewCategoryComponent,
+    AddCategoryComponent
   ],
   imports: [
     CommonModule,

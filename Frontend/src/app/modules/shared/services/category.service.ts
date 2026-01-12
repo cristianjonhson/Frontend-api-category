@@ -47,6 +47,22 @@ export class CategoryService {
   }
 
   /**
+   * Crea una nueva categoría
+   * @param category Datos de la nueva categoría
+   * @returns Observable con la respuesta de la API
+   */
+  createCategory(category: CategoryRequest): Observable<ApiResponse<CategoryResponse>> {
+    const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}`;
+    this.logger.info('Creando nueva categoría:', category);
+    return this.http.post<ApiResponse<CategoryResponse>>(endpoint, category).pipe(
+      catchError(error => {
+        this.logger.error('Error al crear categoría:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
    * Procesa la respuesta de obtener categorías
    * Lógica de negocio movida del componente al servicio
    * @param response Respuesta de la API
