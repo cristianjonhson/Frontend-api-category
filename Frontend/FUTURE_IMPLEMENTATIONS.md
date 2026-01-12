@@ -43,7 +43,7 @@ Este documento detalla el estado actual del proyecto, identificando tanto las bu
 
 ### 4. **Component-Based Architecture**
 - ✅ Separación clara de componentes
-- ✅ Componentes reutilizables (NewCategoryComponent)
+- ✅ Componentes reutilizables (addCategoryComponent)
 
 ### 5. **Material Design Module**
 - ✅ Módulo compartido para Angular Material
