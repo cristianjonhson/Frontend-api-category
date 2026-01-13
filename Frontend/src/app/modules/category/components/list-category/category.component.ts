@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
-import { AddCategoryComponent } from './add-category/add-category.component';
+import { AddCategoryComponent } from '../add-category/add-category.component';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { LoggerService } from 'src/app/core/services/logger.service';

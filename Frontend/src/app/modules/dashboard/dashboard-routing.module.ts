@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
-import { CategoryComponent } from '../category/components/category.component';
+import { CategoryComponent } from '../category/components/list-category/category.component';
 
 /**
  * Rutas del módulo Dashboard
