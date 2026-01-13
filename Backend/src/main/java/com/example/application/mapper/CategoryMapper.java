@@ -1,19 +1,20 @@
 package com.example.application.mapper;
 
 import com.example.application.dto.CategoryDTO;
-import com.example.domain.model.CategoryEntity;
+import com.example.domain.model.Category;
 
 public class CategoryMapper {
 
-    public static CategoryDTO toDTO(CategoryEntity entity) {
-        return new CategoryDTO(entity.getId(), entity.getName(), entity.getDescription());
+    public static CategoryDTO toDTO(Category domain) {
+        return new CategoryDTO(domain.getId(), domain.getName(), domain.getDescription());
     }
 
-    public static CategoryEntity toEntity(CategoryDTO dto) {
-        CategoryEntity entity = new CategoryEntity();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setDescription(dto.getDescription());
-        return entity;
+    public static Category toDomain(CategoryDTO dto) {
+        return new Category(dto.getId(), dto.getName(), dto.getDescription());
+    }
+
+    // ✅ Para crear: NO seteamos id (se genera en BD)
+    public static Category toDomainForCreate(String name, String description) {
+        return new Category(null, name, description);
     }
 }
