@@ -1,39 +1,53 @@
 package com.example.infrastructure.controller;
 
+import com.example.application.dto.ApiResponse;
+import com.example.application.dto.CategoryCreateRequest;
 import com.example.application.dto.CategoryDTO;
+import com.example.application.mapper.CategoryMapper;
+import com.example.application.port.in.CategoryUseCase;
+import com.example.domain.model.Category;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    private final List<CategoryDTO> categories = new ArrayList<>();
+    private final CategoryUseCase categoryUseCase;
+
+    public CategoryController(CategoryUseCase categoryUseCase) {
+        this.categoryUseCase = categoryUseCase;
+    }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getAllCategories() {
-        List<CategoryDTO> categories = this.categories;
-        Map<String, Object> metadata = new HashMap<>();
-        metadata.put("code", "SUCCESS");
+    public ResponseEntity<ApiResponse<CategoryDTO>> getAllCategories() {
+        List<CategoryDTO> dtos = categoryUseCase.getAll().stream()
+                .map(CategoryMapper::toDTO)
+                .collect(Collectors.toList());
 
-        Map<String, Object> categoryResponse = new HashMap<>();
-        categoryResponse.put("category", categories);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("metadata", List.of(metadata));
-        response.put("categoryResponse", categoryResponse);
+        ApiResponse<CategoryDTO> response = new ApiResponse<>(
+                List.of(new ApiResponse.Metadata("SUCCESS")),
+                new ApiResponse.CategoryResponse<>(dtos)
+        );
 
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO category) {
-        category.setId((long) (categories.size() + 1));
-        categories.add(category);
-        return ResponseEntity.ok(category);
+    public ResponseEntity<ApiResponse<CategoryDTO>> createCategory(@Valid @RequestBody CategoryCreateRequest request) {
+        Category created = categoryUseCase.create(
+                CategoryMapper.toDomainForCreate(request.getName(), request.getDescription())
+        );
+
+        ApiResponse<CategoryDTO> response = new ApiResponse<>(
+                List.of(new ApiResponse.Metadata("SUCCESS")),
+                new ApiResponse.CategoryResponse<>(List.of(CategoryMapper.toDTO(created)))
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
