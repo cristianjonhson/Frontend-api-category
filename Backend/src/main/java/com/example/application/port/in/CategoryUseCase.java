@@ -1,5 +1,10 @@
 package com.example.application.port.in;
 
-public class CategoryUseCase {
-    
+import com.example.domain.model.Category;
+
+import java.util.List;
+
+public interface CategoryUseCase {
+    List<Category> getAll();
+    Category create(Category category);
 }
