@@ -1,25 +1,30 @@
 package com.example.application.service;
 
-import com.example.domain.model.CategoryEntity;
-import com.example.infrastructure.repository.CategoryRepository;
+import com.example.application.port.in.CategoryUseCase;
+import com.example.application.port.out.CategoryPersistencePort;
+import com.example.domain.model.Category;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CategoryService {
+public class CategoryService implements CategoryUseCase {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryPersistencePort persistence;
 
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryService(CategoryPersistencePort persistence) {
+        this.persistence = persistence;
     }
 
-    public List<CategoryEntity> getAllCategories() {
-        return categoryRepository.findAll();
+    @Override
+    public List<Category> getAll() {
+        return persistence.findAll();
     }
 
-    public CategoryEntity createCategory(CategoryEntity category) {
-        return categoryRepository.save(category);
+    @Override
+    public Category create(Category category) {
+        // ✅ id debe ser null al crear
+        category.setId(null);
+        return persistence.save(category);
     }
 }
