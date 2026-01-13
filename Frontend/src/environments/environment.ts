@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  base_uri: "http://localhost:8080/api"
+  base_uri: "http://localhost:8080/api",
+  swagger_uri: "http://localhost:8080/swagger-ui/index.html"
 };
 
 /*
