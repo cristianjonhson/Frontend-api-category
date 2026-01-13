@@ -29,7 +29,7 @@ public class CategoryControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
-    @Test
+   @Test
     void testCreateCategory() throws Exception {
         CategoryDTO category = new CategoryDTO(null, "Test Category", "Test Description");
         String categoryJson = objectMapper.writeValueAsString(category);
@@ -38,7 +38,8 @@ public class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(categoryJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test Category"))
-                .andExpect(jsonPath("$.description").value("Test Description"));
+                .andExpect(jsonPath("$.metadata[0].code").value("SUCCESS"))
+                .andExpect(jsonPath("$.categoryResponse.category[0].name").value("Test Category"))
+                .andExpect(jsonPath("$.categoryResponse.category[0].description").value("Test Description"));
     }
-}
+    }
