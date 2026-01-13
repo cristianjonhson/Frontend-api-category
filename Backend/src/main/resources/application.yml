@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/app_db
     username: admin
-    password: admin
+    password: nueva
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

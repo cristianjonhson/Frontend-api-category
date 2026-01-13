@@ -1,7 +1,7 @@
 package com.example.application.mapper;
 
 import com.example.application.dto.CategoryDTO;
-import com.example.domain.CategoryEntity;
+import com.example.domain.model.CategoryEntity;
 
 public class CategoryMapper {
 

@@ -1,6 +1,6 @@
 package com.example.application.service;
 
-import com.example.domain.CategoryEntity;
+import com.example.domain.model.CategoryEntity;
 import com.example.infrastructure.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
