@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { CategoryComponent } from '../category/components/list-category/category.component';
+import { ProductListComponent } from '../product/components/product-list/product-list.component';
 
 /**
  * Rutas del módulo Dashboard
@@ -25,6 +26,10 @@ const routes: Routes = [
       {
         path: 'category',
         component: CategoryComponent
+      },
+      {
+        path: 'product',
+        component: ProductListComponent
       }
     ]
   }

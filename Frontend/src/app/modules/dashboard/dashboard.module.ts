@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MaterialModuleOptimized } from '../shared/material-optimized.module';
 import { CategoryModule } from '../category/category.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
+import { ProductModule } from '../product/product.module';
 
 /**
  * Módulo principal del Dashboard
@@ -29,7 +30,8 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     DashboardRoutingModule,
     SharedModule,
     MaterialModuleOptimized,
-    CategoryModule
+    CategoryModule,
+    ProductModule
   ]
 })
 export class DashboardModule { }
