@@ -8,13 +8,16 @@ import { ProductService } from '../../services/product.service';
 })
 export class ProductListComponent implements OnInit {
   products: any[] = [];
-  displayedColumns: string[] = ['name', 'price'];
+  displayedColumns: string[] = ['name', 'price', 'category']; // Add 'category' column
 
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.productService.getProducts().subscribe((data) => {
-      this.products = data;
+      this.products = data.map(product => ({
+        ...product,
+        category: product.category || 'Sin categoría' // Ensure category is always defined
+      }));
     });
   }
 }
