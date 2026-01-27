@@ -9,3 +9,8 @@ mat-table {
 mat-header-cell, mat-cell {
   padding: 8px;
 }
+
+.search-bar {
+  margin-bottom: 20px;
+  width: 100%;
+}
