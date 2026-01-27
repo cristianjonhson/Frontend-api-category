@@ -11,25 +11,54 @@ import { debounceTime } from 'rxjs/operators';
 export class ProductListComponent implements OnInit {
   products: any[] = [];
   filteredProducts: any[] = [];
+
   searchControl = new FormControl('');
+  categoryControl = new FormControl(''); // '' = todas
+
+  categories: string[] = [];
+
   displayedColumns: string[] = ['name', 'price', 'category', 'quantity'];
 
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.productService.getProducts().subscribe((data) => {
-      this.products = data;
-      this.filteredProducts = data;
+      this.products = data ?? [];
+      this.filteredProducts = this.products;
+
+      // Si category viene como string: product.category
+      // Si viene como objeto: product.category.name
+      this.categories = Array.from(
+        new Set(
+          this.products
+            .map(p => (p?.category?.name ?? p?.category ?? '').toString().trim())
+            .filter(c => !!c)
+        )
+      ).sort();
+
+      this.applyFilters();
     });
 
-   this.searchControl.valueChanges
-  .pipe(debounceTime(300))
-  .subscribe((searchTerm) => {
-    const term = (searchTerm ?? '').toString().toLowerCase();
-    this.filteredProducts = this.products.filter(p =>
-      (p.name ?? '').toLowerCase().includes(term)
-    );
-  });
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe(() => this.applyFilters());
 
+    this.categoryControl.valueChanges
+      .subscribe(() => this.applyFilters());
+  }
+
+  private applyFilters(): void {
+    const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
+    const selectedCategory = (this.categoryControl.value ?? '').toString().trim();
+
+    this.filteredProducts = this.products.filter((p) => {
+      const name = (p?.name ?? '').toString().toLowerCase();
+      const category = (p?.category?.name ?? p?.category ?? '').toString().trim();
+
+      const matchesName = !term || name.includes(term);
+      const matchesCategory = !selectedCategory || category === selectedCategory;
+
+      return matchesName && matchesCategory;
+    });
   }
 }
