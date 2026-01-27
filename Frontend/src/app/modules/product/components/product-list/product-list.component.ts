@@ -22,10 +22,14 @@ export class ProductListComponent implements OnInit {
       this.filteredProducts = data;
     });
 
-    this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe((searchTerm) => {
-      this.filteredProducts = this.products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    });
+   this.searchControl.valueChanges
+  .pipe(debounceTime(300))
+  .subscribe((searchTerm) => {
+    const term = (searchTerm ?? '').toString().toLowerCase();
+    this.filteredProducts = this.products.filter(p =>
+      (p.name ?? '').toLowerCase().includes(term)
+    );
+  });
+
   }
 }
