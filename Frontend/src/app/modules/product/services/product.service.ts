@@ -6,9 +6,9 @@ import { Observable, of } from 'rxjs';
 })
 export class ProductService {
   private products = [
-    { name: 'Producto 1', price: 100, category: 'Electrónica' },
-    { name: 'Producto 2', price: 200, category: 'Hogar' },
-    { name: 'Producto 3', price: 300, category: 'Deportes' },
+    { name: 'Producto 1', price: 100, category: 'Electrónica', quantity: 10 },
+    { name: 'Producto 2', price: 200, category: 'Hogar', quantity: 5 },
+    { name: 'Producto 3', price: 300, category: 'Deportes', quantity: 20 },
   ];
 
   getProducts(): Observable<any[]> {
