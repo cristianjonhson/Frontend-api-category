@@ -1,10 +1,22 @@
 <div class="product-list">
   <h1>Lista de Productos</h1>
 
-  <mat-form-field appearance="outline" class="search-bar">
-    <mat-label>Buscar producto</mat-label>
-    <input matInput [formControl]="searchControl" placeholder="Ingrese el nombre del producto">
-  </mat-form-field>
+  <div class="filters">
+    <!-- Buscador por nombre -->
+    <mat-form-field appearance="outline" class="filter">
+      <mat-label>Buscar producto</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Ingrese el nombre del producto">
+    </mat-form-field>
+
+    <!-- Buscador por categoría -->
+    <mat-form-field appearance="outline" class="filter">
+      <mat-label>Categoría</mat-label>
+      <mat-select [formControl]="categoryControl">
+        <mat-option value="">Todas</mat-option>
+        <mat-option *ngFor="let c of categories" [value]="c">{{ c }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
   <mat-table [dataSource]="filteredProducts" class="mat-elevation-z8">
     <ng-container matColumnDef="name">
