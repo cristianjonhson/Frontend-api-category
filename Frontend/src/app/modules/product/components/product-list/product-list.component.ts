@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-list',
@@ -8,17 +10,22 @@ import { ProductService } from '../../services/product.service';
 })
 export class ProductListComponent implements OnInit {
   products: any[] = [];
-  displayedColumns: string[] = ['name', 'price', 'category', 'quantity']; // Add 'quantity' column
+  filteredProducts: any[] = [];
+  searchControl = new FormControl('');
+  displayedColumns: string[] = ['name', 'price', 'category', 'quantity'];
 
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.productService.getProducts().subscribe((data) => {
-      this.products = data.map(product => ({
-        ...product,
-        category: product.category || 'Sin categoría',
-        quantity: product.quantity || 0
-      }));
+      this.products = data;
+      this.filteredProducts = data;
+    });
+
+    this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe((searchTerm) => {
+      this.filteredProducts = this.products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     });
   }
 }
