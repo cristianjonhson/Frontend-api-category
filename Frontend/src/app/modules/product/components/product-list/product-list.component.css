@@ -14,3 +14,15 @@ mat-header-cell, mat-cell {
   margin-bottom: 20px;
   width: 100%;
 }
+
+.filters{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter{
+  min-width: 260px;
+  flex: 1;
+}
