@@ -8,7 +8,7 @@ import { ProductService } from '../../services/product.service';
 })
 export class ProductListComponent implements OnInit {
   products: any[] = [];
-  displayedColumns: string[] = ['name', 'price', 'category']; // Add 'category' column
+  displayedColumns: string[] = ['name', 'price', 'category', 'quantity']; // Add 'quantity' column
 
   constructor(private productService: ProductService) {}
 
@@ -16,7 +16,8 @@ export class ProductListComponent implements OnInit {
     this.productService.getProducts().subscribe((data) => {
       this.products = data.map(product => ({
         ...product,
-        category: product.category || 'Sin categoría' // Ensure category is always defined
+        category: product.category || 'Sin categoría',
+        quantity: product.quantity || 0
       }));
     });
   }
