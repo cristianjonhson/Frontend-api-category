@@ -1,6 +1,12 @@
 <div class="product-list">
   <h1>Lista de Productos</h1>
-  <mat-table [dataSource]="products" class="mat-elevation-z8">
+
+  <mat-form-field appearance="outline" class="search-bar">
+    <mat-label>Buscar producto</mat-label>
+    <input matInput [formControl]="searchControl" placeholder="Ingrese el nombre del producto">
+  </mat-form-field>
+
+  <mat-table [dataSource]="filteredProducts" class="mat-elevation-z8">
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
       <mat-cell *matCellDef="let product"> {{product.name}} </mat-cell>
