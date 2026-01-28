@@ -55,7 +55,8 @@ export class ProductCreateDialogComponent {
       .subscribe({
         next: (created) => {
           console.log('Dialog: created', created);
-          this.dialogRef.close(created);
+          const result = created ?? payload;
+          this.dialogRef.close(result);
         },
         error: (err) => {
           console.error('Dialog: createProduct error', err);
