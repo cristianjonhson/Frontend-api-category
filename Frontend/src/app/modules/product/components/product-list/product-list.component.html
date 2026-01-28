@@ -16,6 +16,10 @@
         <mat-option *ngFor="let c of categories" [value]="c">{{ c }}</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      Añadir producto
+    </button>
   </div>
 
   <mat-table [dataSource]="filteredProducts" class="mat-elevation-z8">
