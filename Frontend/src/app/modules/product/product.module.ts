@@ -7,11 +7,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 import { ProductListComponent } from './components/product-list/product-list.component';
+import { ProductCreateDialogComponent } from './components/product-add/product-create-dialog.component';
 
 @NgModule({
-  declarations: [ProductListComponent],
+  declarations: [
+    ProductListComponent,
+    ProductCreateDialogComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -20,7 +26,9 @@ import { ProductListComponent } from './components/product-list/product-list.com
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatDialogModule,
+    MatButtonModule
   ],
-  exports: [ProductListComponent],
+  exports: [ProductListComponent]
 })
-export class ProductModule {}
+export class ProductModule { }
