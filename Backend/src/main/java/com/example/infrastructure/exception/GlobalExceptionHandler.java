@@ -3,6 +3,7 @@ package com.example.infrastructure.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
@@ -14,6 +15,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(Map.of(
                 "code", "VALIDATION_ERROR",
                 "message", ex.getBindingResult().getAllErrors().get(0).getDefaultMessage()
+        ));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleNotFound(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                "code", "NOT_FOUND",
+                "message", ex.getMessage()
         ));
     }
 
