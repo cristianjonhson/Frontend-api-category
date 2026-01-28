@@ -7,6 +7,7 @@ import com.example.infrastructure.persistence.jpa.repository.CategoryJpaReposito
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,6 +24,11 @@ public class CategoryJpaAdapter implements CategoryPersistencePort {
         return repo.findAll().stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Category> findById(Long id) {
+        return repo.findById(id).map(this::toDomain);
     }
 
     @Override
