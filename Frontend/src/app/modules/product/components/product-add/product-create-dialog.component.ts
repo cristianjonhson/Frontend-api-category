@@ -1,7 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
+
+export interface ProductCreateDialogData {
+  categories: string[];
+}
 
 @Component({
   selector: 'app-product-create-dialog',
@@ -11,7 +16,8 @@ import { ProductService } from '../../services/product.service';
 export class ProductCreateDialogComponent {
   loading = false;
 
-  form = this.fb.group({
+  // nonNullable evita nulls
+  form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     price: [0, [Validators.required, Validators.min(0)]],
     category: ['', [Validators.required]],
@@ -20,32 +26,40 @@ export class ProductCreateDialogComponent {
 
   constructor(
     private fb: FormBuilder,
+    private productService: ProductService,
     private dialogRef: MatDialogRef<ProductCreateDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { categories: string[] },
-    private productService: ProductService
+    @Inject(MAT_DIALOG_DATA) public data: ProductCreateDialogData
   ) {}
 
   close(): void {
-    this.dialogRef.close();
+    console.log('Dialog: close');
+    this.dialogRef.close(null);
   }
 
-  save(): void {
-    if (this.form.invalid) return;
+  submit(): void {
+    console.log('Dialog: submit click');
+    this.form.markAllAsTouched();
+
+    if (this.form.invalid) {
+      console.log('Dialog: form invalid', this.form.value);
+      return;
+    }
+
+    const payload = this.form.getRawValue();
+    console.log('Dialog: payload', payload);
 
     this.loading = true;
 
-    // Ajusta el payload según tu API
-    const payload = this.form.getRawValue();
-
-    this.productService.createProduct(payload).subscribe({
-      next: (created) => {
-        this.loading = false;
-        this.dialogRef.close(created); // devuelve el producto creado al listado
-      },
-      error: () => {
-        this.loading = false;
-        // aquí podrías mostrar un snackBar si quieres
-      }
-    });
+    this.productService.createProduct(payload)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe({
+        next: (created) => {
+          console.log('Dialog: created', created);
+          this.dialogRef.close(created);
+        },
+        error: (err) => {
+          console.error('Dialog: createProduct error', err);
+        }
+      });
   }
 }
