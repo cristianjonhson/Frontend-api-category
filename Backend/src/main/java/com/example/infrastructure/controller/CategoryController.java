@@ -3,11 +3,13 @@ package com.example.infrastructure.controller;
 import com.example.application.dto.ApiResponse;
 import com.example.application.dto.CategoryCreateRequest;
 import com.example.application.dto.CategoryDTO;
+import com.example.application.dto.CategoryUpdateRequest;
 import com.example.application.mapper.CategoryMapper;
 import com.example.application.port.in.CategoryUseCase;
 import com.example.domain.model.Category;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,5 +51,27 @@ public class CategoryController {
         );
 
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<CategoryDTO>> updateCategory(
+            @PathVariable Long id,
+            @Valid @RequestBody CategoryUpdateRequest request) {
+        Category updated = categoryUseCase.update(id,
+                new Category(null, request.getName(), request.getDescription())
+        );
+
+        ApiResponse<CategoryDTO> response = new ApiResponse<>(
+                List.of(new ApiResponse.Metadata("SUCCESS")),
+                new ApiResponse.CategoryResponse<>(List.of(CategoryMapper.toDTO(updated)))
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        categoryUseCase.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
