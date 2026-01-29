@@ -1,12 +1,15 @@
 package com.example.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 
 public class ProductDTO {
+    @JsonIgnore
     private Long id;
     private String name;
     private BigDecimal price;
     private Integer quantity;
+    @JsonIgnore
     private Long categoryId;
     private String categoryName;
 
