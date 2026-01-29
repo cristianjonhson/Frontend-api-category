@@ -37,6 +37,11 @@ public class CategoryJpaAdapter implements CategoryPersistencePort {
         return toDomain(saved);
     }
 
+    @Override
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
+
     private Category toDomain(CategoryJpaEntity e) {
         return new Category(e.getId(), e.getName(), e.getDescription());
     }
