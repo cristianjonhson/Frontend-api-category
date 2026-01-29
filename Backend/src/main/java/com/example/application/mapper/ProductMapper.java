@@ -17,8 +17,7 @@ public class ProductMapper {
                 domain.getPrice(),
                 domain.getQuantity(),
                 categoryId,
-                categoryName
-        );
+                categoryName);
     }
 
     public static Product toDomainForCreate(String name, java.math.BigDecimal price, Integer quantity) {
