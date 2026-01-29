@@ -1,6 +1,9 @@
 package com.example.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class CategoryDTO {
+    @JsonIgnore
     private Long id;
     private String name;
     private String description;
