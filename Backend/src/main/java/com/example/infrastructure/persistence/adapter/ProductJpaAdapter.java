@@ -10,6 +10,7 @@ import com.example.infrastructure.persistence.jpa.repository.ProductJpaRepositor
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -31,9 +32,19 @@ public class ProductJpaAdapter implements ProductPersistencePort {
     }
 
     @Override
+    public Optional<Product> findById(Long id) {
+        return productRepo.findById(id).map(this::toDomain);
+    }
+
+    @Override
     public Product save(Product product) {
         ProductJpaEntity saved = productRepo.save(toEntity(product));
         return toDomain(saved);
+    }
+
+    @Override
+    public void delete(Long id) {
+        productRepo.deleteById(id);
     }
 
     private Product toDomain(ProductJpaEntity e) {
