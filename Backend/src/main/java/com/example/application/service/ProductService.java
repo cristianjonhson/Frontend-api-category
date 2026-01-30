@@ -36,4 +36,27 @@ public class ProductService implements ProductUseCase {
 
         return productPersistence.save(product);
     }
+
+    @Override
+    public Product update(Long id, Product product, Long categoryId) {
+        Product existing = productPersistence.findById(id)
+                .orElseThrow(() -> new NotFoundException("Product not found"));
+
+        Category category = categoryPersistence.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Category not found"));
+
+        existing.setName(product.getName());
+        existing.setPrice(product.getPrice());
+        existing.setQuantity(product.getQuantity());
+        existing.setCategory(category);
+
+        return productPersistence.save(existing);
+    }
+
+    @Override
+    public void delete(Long id) {
+        productPersistence.findById(id)
+                .orElseThrow(() -> new NotFoundException("Product not found"));
+        productPersistence.delete(id);
+    }
 }
