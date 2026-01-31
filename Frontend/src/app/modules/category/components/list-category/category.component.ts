@@ -99,6 +99,35 @@ export class CategoryComponent extends BaseComponent implements OnInit {
   }
 
   /**
+   * Elimina una categoría seleccionada
+   * @param category Categoría a eliminar
+   */
+  onDeleteCategory(category: ICategory): void {
+    if (!category.id) {
+      this.notification.error('No se puede eliminar: falta el id de la categoría');
+      return;
+    }
+
+    const confirmed = window.confirm(`¿Eliminar la categoría "${category.name}"?`);
+    if (!confirmed) {
+      return;
+    }
+
+    this.categoryService.deleteCategory(category.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.notification.success('Categoría eliminada exitosamente');
+          this.getCategories();
+        },
+        error: (error) => {
+          this.logger.error('Error al eliminar categoría:', error);
+          this.notification.error(error.message || 'Error al eliminar categoría');
+        }
+      });
+  }
+
+  /**
    * Actualiza la lista de categorías después de agregar una nueva
    */
   refreshCategories(): void {
