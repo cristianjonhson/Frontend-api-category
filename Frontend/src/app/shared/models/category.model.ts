@@ -4,12 +4,12 @@ import { ICategory } from '../interfaces/category.interface';
  * Modelo para la entidad Categoría
  */
 export class CategoryModel implements ICategory {
-  id: number;
+  id?: number;
   name: string;
   description: string;
 
   constructor(data: Partial<CategoryModel> = {}) {
-    this.id = data.id || 0;
+    this.id = data.id;
     this.name = data.name || '';
     this.description = data.description || '';
   }
