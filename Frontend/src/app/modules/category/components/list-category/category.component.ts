@@ -28,10 +28,10 @@ import { BaseComponent } from 'src/app/shared/components/base.component';
 export class CategoryComponent extends BaseComponent implements OnInit {
 
   // Arreglo de nombres de columnas para la tabla
-  displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'actions'];
 
   // Fuente de datos para la tabla
-  dataSource: MatTableDataSource<ICategory>;
+  dataSource: MatTableDataSource<ICategory> = new MatTableDataSource<ICategory>();
 
   /**
    * Constructor del componente
