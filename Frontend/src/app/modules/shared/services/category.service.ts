@@ -55,6 +55,22 @@ export class CategoryService {
   }
 
   /**
+   * Elimina una categoría por id
+   * @param id Identificador de la categoría
+   */
+  deleteCategory(id: number): Observable<void> {
+    const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}/${id}`;
+
+    return this.http.delete<void>(endpoint).pipe(
+      tap(() => this.logger.info('Eliminando categoría:', id)),
+      catchError(err => {
+        this.logger.error('Error al eliminar categoría:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  /**
    * Procesa la respuesta de obtener categorías
    * Lógica de negocio movida del componente al servicio
    * @param response Respuesta de la API
