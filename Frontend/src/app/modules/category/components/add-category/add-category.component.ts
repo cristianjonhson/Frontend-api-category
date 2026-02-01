@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-category',
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 })
 export class AddCategoryComponent {
   categoryForm: FormGroup;
+  loading = false;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -28,18 +31,34 @@ export class AddCategoryComponent {
    * Envía el formulario para agregar una nueva categoría
    */
   submit(): void {
-    if (this.categoryForm.valid) {
-      this.categoryService.createCategory(this.categoryForm.value).subscribe({
+    this.errorMessage = '';
+    this.categoryForm.markAllAsTouched();
+
+    if (this.categoryForm.invalid || this.loading) {
+      return;
+    }
+
+    this.loading = true;
+    this.categoryForm.disable();
+
+    this.categoryService.createCategory(this.categoryForm.value)
+      .pipe(finalize(() => {
+        this.loading = false;
+        this.categoryForm.enable();
+      }))
+      .subscribe({
         next: () => {
           this.notification.success('Categoría creada exitosamente');
+          this.categoryForm.reset();
           this.dialogRef.close(true);
         },
         error: (err) => {
-          this.notification.error('Error al crear la categoría');
+          const message = err?.error?.message || err?.message || 'Error al crear la categoría';
+          this.errorMessage = message;
+          this.notification.error(message);
           console.error(err);
         }
       });
-    }
   }
 
   /**
