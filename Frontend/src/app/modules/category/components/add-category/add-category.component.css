@@ -24,3 +24,11 @@
   justify-content: flex-end;
   gap: 1rem;
 }
+
+.form-error {
+  color: #b00020;
+  background: #fde7e9;
+  border: 1px solid #f5c2c7;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
