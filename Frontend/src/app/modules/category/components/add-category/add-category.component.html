@@ -1,5 +1,7 @@
 <h2 class="form-title">Agregar Nueva Categoría</h2>
 <form [formGroup]="categoryForm" (ngSubmit)="submit()" class="responsive-form">
+  <div *ngIf="errorMessage" class="form-error" role="alert">{{ errorMessage }}</div>
+
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Nombre</mat-label>
     <input matInput formControlName="name" placeholder="Ingrese el nombre de la categoría">
@@ -13,7 +15,9 @@
   </mat-form-field>
 
   <div class="button-group">
-    <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid">Guardar</button>
-    <button mat-button type="button" (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || loading">
+      {{ loading ? 'Guardando...' : 'Guardar' }}
+    </button>
+    <button mat-button type="button" (click)="cancel()" [disabled]="loading">Cancelar</button>
   </div>
 </form>
