@@ -45,9 +45,12 @@ public class CategoryController {
                 CategoryMapper.toDomainForCreate(request.getName(), request.getDescription())
         );
 
+        CategoryDTO dto = CategoryMapper.toDTO(created);
+        dto.setId(null); // No retornar el id en la respuesta de creación
+
         ApiResponse<CategoryDTO> response = new ApiResponse<>(
                 List.of(new ApiResponse.Metadata("SUCCESS")),
-                new ApiResponse.CategoryResponse<>(List.of(CategoryMapper.toDTO(created)))
+                new ApiResponse.CategoryResponse<>(List.of(dto))
         );
 
         return ResponseEntity.ok(response);
@@ -61,9 +64,12 @@ public class CategoryController {
                 new Category(null, request.getName(), request.getDescription())
         );
 
+        CategoryDTO dto = CategoryMapper.toDTO(updated);
+        dto.setId(null); // No retornar el id en la respuesta de actualización
+
         ApiResponse<CategoryDTO> response = new ApiResponse<>(
                 List.of(new ApiResponse.Metadata("SUCCESS")),
-                new ApiResponse.CategoryResponse<>(List.of(CategoryMapper.toDTO(updated)))
+                new ApiResponse.CategoryResponse<>(List.of(dto))
         );
 
         return ResponseEntity.ok(response);
