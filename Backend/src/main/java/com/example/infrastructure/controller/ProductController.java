@@ -45,9 +45,13 @@ public class ProductController {
                 request.getCategoryId()
         );
 
+        ProductDTO dto = ProductMapper.toDTO(created);
+        dto.setId(null); // No retornar el id en la respuesta de creación
+        dto.setCategoryId(null); // No retornar el categoryId en la respuesta
+
         ApiResponse<ProductDTO> response = new ApiResponse<>(
                 List.of(new ApiResponse.Metadata("SUCCESS")),
-                new ApiResponse.ProductResponse<>(List.of(ProductMapper.toDTO(created)))
+                new ApiResponse.ProductResponse<>(List.of(dto))
         );
 
         return ResponseEntity.ok(response);
@@ -62,9 +66,13 @@ public class ProductController {
                 request.getCategoryId()
         );
 
+        ProductDTO dto = ProductMapper.toDTO(updated);
+        dto.setId(null); // No retornar el id en la respuesta de actualización
+        dto.setCategoryId(null); // No retornar el categoryId en la respuesta
+
         ApiResponse<ProductDTO> response = new ApiResponse<>(
                 List.of(new ApiResponse.Metadata("SUCCESS")),
-                new ApiResponse.ProductResponse<>(List.of(ProductMapper.toDTO(updated)))
+                new ApiResponse.ProductResponse<>(List.of(dto))
         );
 
         return ResponseEntity.ok(response);
