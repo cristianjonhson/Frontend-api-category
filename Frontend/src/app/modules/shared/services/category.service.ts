@@ -55,6 +55,23 @@ export class CategoryService {
   }
 
   /**
+   * Actualiza una categoría por id
+   * @param id Identificador de la categoría
+   * @param body Datos de la categoría
+   */
+  updateCategory(id: number, body: CategoryRequest): Observable<ApiResponse<CategoryResponse>> {
+    const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}/${id}`;
+
+    return this.http.put<ApiResponse<CategoryResponse>>(endpoint, body).pipe(
+      tap(() => this.logger.info('Actualizando categoría:', id)),
+      catchError(err => {
+        this.logger.error('Error al actualizar categoría:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  /**
    * Elimina una categoría por id
    * @param id Identificador de la categoría
    */
