@@ -39,10 +39,10 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="accent" (click)="openEditCategoryDialog(element)" [disabled]="!element.id">
+          <button mat-icon-button color="accent" (click)="openEditCategoryDialog(element)">
             <mat-icon aria-label="Edit">edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="onDeleteCategory(element)" [disabled]="!element.id">
+          <button mat-icon-button color="warn" (click)="onDeleteCategory(element)">
             <mat-icon aria-label="Delete">delete</mat-icon>
           </button>
         </td>
