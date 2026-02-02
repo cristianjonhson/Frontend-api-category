@@ -1,0 +1,23 @@
+<h2 class="form-title">Editar Categoría</h2>
+<form [formGroup]="categoryForm" (ngSubmit)="submit()" class="responsive-form">
+  <div *ngIf="errorMessage" class="form-error" role="alert">{{ errorMessage }}</div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="name" placeholder="Ingrese el nombre de la categoría">
+    <mat-error *ngIf="categoryForm.get('name')?.invalid">El nombre es requerido</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput formControlName="description" placeholder="Ingrese la descripción"></textarea>
+    <mat-error *ngIf="categoryForm.get('description')?.invalid">La descripción es requerida</mat-error>
+  </mat-form-field>
+
+  <div class="button-group">
+    <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || loading">
+      {{ loading ? 'Guardando...' : 'Guardar' }}
+    </button>
+    <button mat-button type="button" (click)="cancel()" [disabled]="loading">Cancelar</button>
+  </div>
+</form>
