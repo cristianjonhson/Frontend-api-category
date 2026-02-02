@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
 import { AddCategoryComponent } from '../add-category/add-category.component';
+import { EditCategoryComponent } from '../edit-category/edit-category.component';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { LoggerService } from 'src/app/core/services/logger.service';
@@ -93,6 +94,32 @@ export class CategoryComponent extends BaseComponent implements OnInit {
         if (result) {
           this.logger.info('Nueva categoría agregada, recargando lista');
           this.notification.success('Categoría agregada exitosamente');
+          this.getCategories();
+        }
+      });
+  }
+
+  /**
+   * Abre el diálogo para editar una categoría
+   */
+  openEditCategoryDialog(category: ICategory): void {
+    if (!category.id) {
+      this.notification.error('No se puede editar: falta el id de la categoría');
+      return;
+    }
+
+    const dialogRef = this.dialog.open(EditCategoryComponent, {
+      width: '600px',
+      height: '400px',
+      data: { category }
+    });
+
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => {
+        if (result) {
+          this.logger.info('Categoría actualizada, recargando lista');
+          this.notification.success('Categoría actualizada exitosamente');
           this.getCategories();
         }
       });
