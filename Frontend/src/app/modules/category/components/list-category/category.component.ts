@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { takeUntil } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { EditCategoryComponent } from '../edit-category/edit-category.component';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
@@ -34,6 +35,9 @@ export class CategoryComponent extends BaseComponent implements OnInit {
   // Fuente de datos para la tabla
   dataSource: MatTableDataSource<ICategory> = new MatTableDataSource<ICategory>();
 
+  // Control para el buscador
+  searchControl = new FormControl('');
+
   /**
    * Constructor del componente
    * @param categoryService - Servicio para operaciones CRUD de categorías
@@ -51,7 +55,23 @@ export class CategoryComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dataSource.filterPredicate = (data: ICategory, filter: string) => {
+      const term = (filter ?? '').toString().toLowerCase().trim();
+      if (!term) {
+        return true;
+      }
+
+      const name = (data?.name ?? '').toString().toLowerCase();
+      const description = (data?.description ?? '').toString().toLowerCase();
+
+      return name.includes(term) || description.includes(term);
+    };
+
     this.getCategories();
+
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe(() => this.applyFilter());
   }
 
   /**
@@ -64,7 +84,8 @@ export class CategoryComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (categories) => {
           this.logger.info('Categorías recibidas:', categories.length);
-          this.dataSource = new MatTableDataSource<ICategory>(categories);
+          this.dataSource.data = categories;
+          this.applyFilter();
 
           if (categories.length === 0) {
             this.notification.info('No se encontraron categorías');
@@ -75,6 +96,14 @@ export class CategoryComponent extends BaseComponent implements OnInit {
           this.notification.error(error.message || 'Error al cargar categorías');
         }
       });
+  }
+
+  /**
+   * Aplica el filtro de búsqueda a la tabla
+   */
+  applyFilter(): void {
+    const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
+    this.dataSource.filter = term;
   }
 
 
