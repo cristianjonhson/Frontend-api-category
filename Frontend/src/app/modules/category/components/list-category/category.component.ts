@@ -103,11 +103,6 @@ export class CategoryComponent extends BaseComponent implements OnInit {
    * Abre el diálogo para editar una categoría
    */
   openEditCategoryDialog(category: ICategory): void {
-    if (!category.id) {
-      this.notification.error('No se puede editar: falta el id de la categoría');
-      return;
-    }
-
     const dialogRef = this.dialog.open(EditCategoryComponent, {
       width: '600px',
       height: '400px',
@@ -130,11 +125,6 @@ export class CategoryComponent extends BaseComponent implements OnInit {
    * @param category Categoría a eliminar
    */
   onDeleteCategory(category: ICategory): void {
-    if (!category.id) {
-      this.notification.error('No se puede eliminar: falta el id de la categoría');
-      return;
-    }
-
     const confirmed = window.confirm(`¿Eliminar la categoría "${category.name}"?`);
     if (!confirmed) {
       return;
