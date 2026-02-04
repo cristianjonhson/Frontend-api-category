@@ -4,6 +4,7 @@ import { DashboardComponent } from './pages/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { CategoryComponent } from '../category/components/list-category/category.component';
 import { ProductListComponent } from '../product/components/product-list/product-list.component';
+import { ROUTES } from 'src/app/shared/constants/routes.constants';
 
 /**
  * Rutas del módulo Dashboard
@@ -11,24 +12,24 @@ import { ProductListComponent } from '../product/components/product-list/product
  */
 const routes: Routes = [
   {
-    path: '',
+    path: ROUTES.ROOT,
     component: DashboardComponent,
     children: [
       {
-        path: '',
-        redirectTo: 'home',
+        path: ROUTES.ROOT,
+        redirectTo: ROUTES.HOME,
         pathMatch: 'full'
       },
       {
-        path: 'home',
+        path: ROUTES.HOME,
         component: HomeComponent
       },
       {
-        path: 'category',
+        path: ROUTES.CATEGORY,
         component: CategoryComponent
       },
       {
-        path: 'product',
+        path: ROUTES.PRODUCT,
         component: ProductListComponent
       }
     ]
