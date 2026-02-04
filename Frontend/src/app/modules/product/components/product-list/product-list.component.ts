@@ -4,6 +4,8 @@ import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
+import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
+import { TIMING } from 'src/app/shared/constants/ui.constants';
 
 @Component({
   selector: 'app-product-list',
@@ -32,14 +34,15 @@ export class ProductListComponent implements OnInit {
       this.applyFilters();
     });
 
-    this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(() => this.applyFilters());
+    this.searchControl.valueChanges
+      .pipe(debounceTime(TIMING.SEARCH_DEBOUNCE))
+      .subscribe(() => this.applyFilters());
     this.categoryControl.valueChanges.subscribe(() => this.applyFilters());
   }
 
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(ProductCreateDialogComponent, {
-      width: '520px',
-      disableClose: false, // si quieres que solo cierre con botón, ponlo en true
+      ...DIALOG_CONFIG.PRODUCT_FORM,
       data: { categories: this.categories }
     });
 
