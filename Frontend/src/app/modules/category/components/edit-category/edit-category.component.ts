@@ -5,6 +5,7 @@ import { finalize } from 'rxjs/operators';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants';
 
 export interface EditCategoryDialogData {
   category: ICategory;
@@ -59,11 +60,11 @@ export class EditCategoryComponent {
       }))
       .subscribe({
         next: () => {
-          this.notification.success('Categoría actualizada exitosamente');
+          this.notification.success(SUCCESS_MESSAGES.CATEGORY_UPDATED);
           this.dialogRef.close(true);
         },
         error: (err) => {
-          const message = err?.error?.message || err?.message || 'Error al actualizar la categoría';
+          const message = err?.error?.message || err?.message || ERROR_MESSAGES.CATEGORY_UPDATE_ERROR;
           this.errorMessage = message;
           this.notification.error(message);
           console.error(err);
