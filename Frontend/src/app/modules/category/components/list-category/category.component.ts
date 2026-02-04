@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -27,7 +28,10 @@ import { BaseComponent } from 'src/app/shared/components/base.component';
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css']
 })
-export class CategoryComponent extends BaseComponent implements OnInit {
+export class CategoryComponent extends BaseComponent implements OnInit, AfterViewInit {
+
+  // ViewChild para el paginador
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   // Arreglo de nombres de columnas para la tabla
   displayedColumns: string[] = ['name', 'description', 'actions'];
@@ -72,6 +76,14 @@ export class CategoryComponent extends BaseComponent implements OnInit {
     this.searchControl.valueChanges
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe(() => this.applyFilter());
+  }
+
+  /**
+   * Hook del ciclo de vida que se ejecuta después de inicializar la vista
+   * Conecta el paginador al dataSource
+   */
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 
   /**
