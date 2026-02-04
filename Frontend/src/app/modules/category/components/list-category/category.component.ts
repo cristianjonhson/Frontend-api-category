@@ -11,6 +11,7 @@ import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
+import { DIALOG_CONFIG, TIMING, SUCCESS_MESSAGES, ERROR_MESSAGES, INFO_MESSAGES, CONFIRMATION_MESSAGES, PAGINATOR_CONFIG } from 'src/app/shared/constants';
 
 /**
  * Componente para la gestión de categorías
@@ -41,6 +42,9 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
 
   // Control para el buscador
   searchControl = new FormControl('');
+
+  // Configuración del paginador (expuesta para el template)
+  readonly paginatorConfig = PAGINATOR_CONFIG;
 
   /**
    * Constructor del componente
@@ -74,7 +78,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
     this.getCategories();
 
     this.searchControl.valueChanges
-      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .pipe(debounceTime(TIMING.SEARCH_DEBOUNCE), takeUntil(this.destroy$))
       .subscribe(() => this.applyFilter());
   }
 
@@ -100,12 +104,12 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
           this.applyFilter();
 
           if (categories.length === 0) {
-            this.notification.info('No se encontraron categorías');
+            this.notification.info(INFO_MESSAGES.NO_CATEGORIES);
           }
         },
         error: (error) => {
           this.logger.error('Error al obtener categorías:', error);
-          this.notification.error(error.message || 'Error al cargar categorías');
+          this.notification.error(error.message || ERROR_MESSAGES.CATEGORY_LOAD_ERROR);
         }
       });
   }
@@ -124,17 +128,14 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    * Abre el diálogo para agregar una nueva categoría
    */
   openAddCategoryDialog(): void {
-    const dialogRef = this.dialog.open(AddCategoryComponent, {
-      width: '600px',
-      height: '400px'
-    });
+    const dialogRef = this.dialog.open(AddCategoryComponent, DIALOG_CONFIG.FORM);
 
     dialogRef.afterClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
         if (result) {
           this.logger.info('Nueva categoría agregada, recargando lista');
-          this.notification.success('Categoría agregada exitosamente');
+          this.notification.success(SUCCESS_MESSAGES.CATEGORY_CREATED);
           this.getCategories();
         }
       });
@@ -145,8 +146,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    */
   openEditCategoryDialog(category: ICategory): void {
     const dialogRef = this.dialog.open(EditCategoryComponent, {
-      width: '600px',
-      height: '400px',
+      ...DIALOG_CONFIG.FORM,
       data: { category }
     });
 
@@ -155,7 +155,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .subscribe(result => {
         if (result) {
           this.logger.info('Categoría actualizada, recargando lista');
-          this.notification.success('Categoría actualizada exitosamente');
+          this.notification.success(SUCCESS_MESSAGES.CATEGORY_UPDATED);
           this.getCategories();
         }
       });
@@ -166,7 +166,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    * @param category Categoría a eliminar
    */
   onDeleteCategory(category: ICategory): void {
-    const confirmed = window.confirm(`¿Eliminar la categoría "${category.name}"?`);
+    const confirmed = window.confirm(CONFIRMATION_MESSAGES.DELETE_CATEGORY(category.name));
     if (!confirmed) {
       return;
     }
@@ -175,12 +175,12 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.notification.success('Categoría eliminada exitosamente');
+          this.notification.success(SUCCESS_MESSAGES.CATEGORY_DELETED);
           this.getCategories();
         },
         error: (error) => {
           this.logger.error('Error al eliminar categoría:', error);
-          this.notification.error(error.message || 'Error al eliminar categoría');
+          this.notification.error(error.message || ERROR_MESSAGES.CATEGORY_DELETE_ERROR);
         }
       });
   }
