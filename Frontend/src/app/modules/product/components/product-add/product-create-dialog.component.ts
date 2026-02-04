@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
+import { VALIDATION_RULES } from 'src/app/shared/constants';
 
 export interface ProductCreateDialogData {
   categories: string[];
@@ -18,10 +19,10 @@ export class ProductCreateDialogComponent {
 
   // nonNullable evita nulls
   form = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    price: [0, [Validators.required, Validators.min(0)]],
+    name: ['', [Validators.required, Validators.minLength(VALIDATION_RULES.PRODUCT.NAME_MIN_LENGTH)]],
+    price: [0, [Validators.required, Validators.min(VALIDATION_RULES.PRODUCT.PRICE_MIN)]],
     category: ['', [Validators.required]],
-    quantity: [0, [Validators.required, Validators.min(0)]],
+    quantity: [0, [Validators.required, Validators.min(VALIDATION_RULES.PRODUCT.QUANTITY_MIN)]],
   });
 
   constructor(
