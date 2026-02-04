@@ -1,12 +1,30 @@
+.category-list {
+  margin: 20px;
+}
+
 .alinear{
   text-align: center;
   margin-top: 20px;
 }
 
-ul li{
-  list-style: none;
+.filters{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-mat-form-field{
-  width: 140%;
+.filter{
+  min-width: 260px;
+  flex: 1;
 }
+
+mat-table {
+  width: 100%;
+}
+
+mat-header-cell, mat-cell {
+  padding: 8px;
+}
+
