@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { finalize } from 'rxjs/operators';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-add-category',
@@ -48,12 +49,12 @@ export class AddCategoryComponent {
       }))
       .subscribe({
         next: () => {
-          this.notification.success('Categoría creada exitosamente');
+          this.notification.success(SUCCESS_MESSAGES.CATEGORY_CREATED);
           this.categoryForm.reset();
           this.dialogRef.close(true);
         },
         error: (err) => {
-          const message = err?.error?.message || err?.message || 'Error al crear la categoría';
+          const message = err?.error?.message || err?.message || ERROR_MESSAGES.CATEGORY_CREATE_ERROR;
           this.errorMessage = message;
           this.notification.error(message);
           console.error(err);
