@@ -2,9 +2,9 @@
   <h2 class="alinear">Listado de Categorias</h2>
 
   <div class="filters">
-    <mat-form-field hintLabel="Busque Categoria" appearance="outline" class="filter">
+    <mat-form-field appearance="outline" class="filter">
       <mat-label>Buscar Categorias</mat-label>
-      <input matInput [formControl]="searchControl" />
+      <input matInput [formControl]="searchControl" placeholder="Ingrese el nombre de la categoría"/>
     </mat-form-field>
 
     <button mat-raised-button color="primary" (click)="openAddCategoryDialog()">Agregar Nueva Categoría</button>
