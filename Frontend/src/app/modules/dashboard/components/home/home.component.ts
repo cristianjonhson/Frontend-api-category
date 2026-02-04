@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CategoryService } from 'src/app/modules/shared/services/category.service'; // ajusta el path si es distinto
+import { APP_CONFIG } from 'src/app/shared/constants/app.constants';
+import { ROUTE_PATHS } from 'src/app/shared/constants/routes.constants';
 
 type ApiStatus = 'LOADING' | 'ONLINE' | 'OFFLINE';
 
@@ -27,7 +29,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.showTips = JSON.parse(localStorage.getItem('home_show_tips') ?? 'true');
+    this.showTips = JSON.parse(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.HOME_SHOW_TIPS) ?? 'true');
     this.loadSummary();
   }
 
@@ -48,16 +50,16 @@ export class HomeComponent implements OnInit {
 
   toggleTips(value: boolean): void {
     this.showTips = value;
-    localStorage.setItem('home_show_tips', JSON.stringify(value));
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.HOME_SHOW_TIPS, JSON.stringify(value));
   }
 
   goToCategories(): void {
     this.lastAction = 'Ir a categorías';
-    this.router.navigate(['/category']); // ajusta ruta real
+    this.router.navigate([ROUTE_PATHS.CATEGORY]);
   }
 
   goToNewCategory(): void {
     this.lastAction = 'Crear categoría';
-    this.router.navigate(['/categories/new']); // ajusta ruta real
+    this.router.navigate([ROUTE_PATHS.CATEGORIES_NEW]);
   }
 }
