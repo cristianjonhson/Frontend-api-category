@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ROUTES, ROUTE_PATHS } from 'src/app/shared/constants/routes.constants';
 
 /**
  * Configuración de rutas principales de la aplicación
@@ -7,17 +8,17 @@ import { RouterModule, Routes } from '@angular/router';
  */
 const routes: Routes = [
   {
-    path: '',
+    path: ROUTES.ROOT,
     pathMatch: 'full',
-    redirectTo: '/dashboard'
+    redirectTo: ROUTE_PATHS.DASHBOARD
   },
   {
-    path: 'dashboard',
+    path: ROUTES.DASHBOARD,
     loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {
-    path: '**',
-    redirectTo: '/dashboard' // Redirigir rutas no encontradas al dashboard
+    path: ROUTES.WILDCARD,
+    redirectTo: ROUTE_PATHS.DASHBOARD // Redirigir rutas no encontradas al dashboard
   }
 ];
 
