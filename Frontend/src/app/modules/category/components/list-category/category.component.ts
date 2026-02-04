@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -48,14 +48,38 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    * @param dialog - Servicio de Material Dialog para abrir modales
    * @param logger - Servicio centralizado de logging
    * @param notification - Servicio para mostrar notificaciones al usuario
+   * @param paginatorIntl - Servicio para personalizar etiquetas del paginador
    */
   constructor(
     private categoryService: CategoryService,
     public dialog: MatDialog,
     private logger: LoggerService,
-    private notification: NotificationService
+    private notification: NotificationService,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     super(); // Llamar al constructor del BaseComponent
+    this.configurePaginatorLabels();
+  }
+
+  /**
+   * Configura las etiquetas del paginador en español
+   */
+  private configurePaginatorLabels(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página:';
+    this.paginatorIntl.nextPageLabel = 'Página siguiente';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
+    this.paginatorIntl.getRangeLabel = (page: number, pageSize: number, length: number) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex = startIndex < length ?
+        Math.min(startIndex + pageSize, length) :
+        startIndex + pageSize;
+      return `${startIndex + 1} - ${endIndex} de ${length}`;
+    };
   }
 
   ngOnInit(): void {
@@ -171,7 +195,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       return;
     }
 
-    this.categoryService.deleteCategory(category.id)
+    this.categoryService.deleteCategory(category.id!)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
