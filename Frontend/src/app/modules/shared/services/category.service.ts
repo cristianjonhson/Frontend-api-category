@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { CategoryRequest, CategoryResponse } from 'src/app/shared/models/category.model';
 import { ApiResponse } from 'src/app/shared/models/api-response.model';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
-import { API_CONSTANTS } from 'src/app/shared/constants/api.constants';
+import { API_CONFIG } from 'src/app/shared/constants/api.constants';
 import { ApiResponseCode } from 'src/app/shared/enums/api-response-code.enum';
 import { LoggerService } from 'src/app/core/services/logger.service';
 
@@ -26,7 +26,7 @@ export class CategoryService {
    * @returns Observable con array de categorías procesadas
    */
   getCategories(): Observable<ICategory[]> {
-    const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}`;
+    const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.CATEGORIES}`;
 
     return this.http.get<ApiResponse<CategoryResponse>>(endpoint).pipe(
       map(res => this.processGetCategoriesResponse(res)),
@@ -43,7 +43,7 @@ export class CategoryService {
    * @returns Observable con la respuesta de la API
    */
   createCategory(body: CategoryRequest): Observable<ApiResponse<CategoryResponse>> {
-    const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}`;
+    const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.CATEGORIES}`;
 
     return this.http.post<ApiResponse<CategoryResponse>>(endpoint, body).pipe(
       tap(() => this.logger.info('Creando nueva categoría:', body)),
@@ -60,7 +60,7 @@ export class CategoryService {
    * @param body Datos de la categoría
    */
   updateCategory(id: number, body: CategoryRequest): Observable<ApiResponse<CategoryResponse>> {
-    const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}/${id}`;
+    const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.CATEGORIES}/${id}`;
 
     return this.http.put<ApiResponse<CategoryResponse>>(endpoint, body).pipe(
       tap(() => this.logger.info('Actualizando categoría:', id)),
@@ -76,7 +76,7 @@ export class CategoryService {
    * @param id Identificador de la categoría
    */
   deleteCategory(id: number): Observable<void> {
-    const endpoint = `${base_url}${API_CONSTANTS.ENDPOINTS.CATEGORIES}/${id}`;
+    const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.CATEGORIES}/${id}`;
 
     return this.http.delete<void>(endpoint).pipe(
       tap(() => this.logger.info('Eliminando categoría:', id)),
