@@ -32,6 +32,7 @@
     "materialize-css": "1.0.0",
     "materialize-stepper": "3.0.1",
     "rxjs": "7.8.1",
+    "sweetalert2": "11.26.19",
     "tslib": "2.6.0",
     "zone.js": "0.13.1"
   },
