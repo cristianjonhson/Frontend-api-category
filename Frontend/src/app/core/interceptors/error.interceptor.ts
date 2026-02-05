@@ -9,7 +9,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoggerService } from '../services/logger.service';
-import { ERROR_MESSAGES } from '../../shared/constants/api.constants';
+import { ERROR_MESSAGES } from '../../shared/constants/messages.constants';
 
 /**
  * Interceptor para manejo centralizado de errores HTTP
@@ -22,7 +22,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        let errorMessage = ERROR_MESSAGES.UNKNOWN_ERROR;
+        let errorMessage: string = ERROR_MESSAGES.UNKNOWN_ERROR;
 
         if (error.error instanceof ErrorEvent) {
           // Error del lado del cliente
