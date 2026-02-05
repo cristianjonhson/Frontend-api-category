@@ -38,14 +38,3 @@ export const HTTP_ERROR_MESSAGES = {
   UNKNOWN_ERROR: 'Ocurrió un error inesperado.'
 } as const;
 
-/**
- * Alias de compatibilidad retroactiva.
- * @deprecated Usar API_CONFIG
- */
-export const API_CONSTANTS = API_CONFIG;
-
-/**
- * Alias de compatibilidad retroactiva.
- * @deprecated Usar ERROR_MESSAGES desde messages.constants.ts o HTTP_ERROR_MESSAGES
- */
-export const ERROR_MESSAGES = HTTP_ERROR_MESSAGES;
