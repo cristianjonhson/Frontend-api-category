@@ -11,7 +11,10 @@ import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
-import { DIALOG_CONFIG, TIMING, SUCCESS_MESSAGES, ERROR_MESSAGES, INFO_MESSAGES, CONFIRMATION_MESSAGES, PAGINATOR_CONFIG } from 'src/app/shared/constants';
+import { TIMING } from 'src/app/shared/constants/ui.constants';
+import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
+import { PAGINATOR_CONFIG } from 'src/app/shared/constants/pagination.constants';
+import { SUCCESS_MESSAGES, ERROR_MESSAGES, INFO_MESSAGES, CONFIRMATION_MESSAGES } from 'src/app/shared/constants/messages.constants';
 
 /**
  * Componente para la gestión de categorías
