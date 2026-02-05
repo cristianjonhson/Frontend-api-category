@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { EditCategoryComponent } from '../edit-category/edit-category.component';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
@@ -169,23 +170,57 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    * @param category Categoría a eliminar
    */
   onDeleteCategory(category: ICategory): void {
-    const confirmed = window.confirm(CONFIRMATION_MESSAGES.DELETE_CATEGORY(category.name));
-    if (!confirmed) {
-      return;
-    }
+    Swal.fire({
+      title: 'Confirmar eliminacion',
+      text: CONFIRMATION_MESSAGES.DELETE_CATEGORY(category.name),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      focusCancel: true,
+      reverseButtons: true
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        return;
+      }
 
-    this.categoryService.deleteCategory(category.id!)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.notification.success(SUCCESS_MESSAGES.CATEGORY_DELETED);
-          this.getCategories();
-        },
-        error: (error) => {
-          this.logger.error('Error al eliminar categoría:', error);
-          this.notification.error(error.message || ERROR_MESSAGES.CATEGORY_DELETE_ERROR);
+      Swal.fire({
+        title: 'Eliminando categoria...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
         }
       });
+
+      this.categoryService.deleteCategory(category.id!)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.notification.success(SUCCESS_MESSAGES.CATEGORY_DELETED);
+            this.getCategories();
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminada',
+              text: SUCCESS_MESSAGES.CATEGORY_DELETED,
+              timer: 1800,
+              showConfirmButton: false
+            });
+          },
+          error: (error) => {
+            const message = error.message || ERROR_MESSAGES.CATEGORY_DELETE_ERROR;
+            this.logger.error('Error al eliminar categoria:', error);
+            this.notification.error(message);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: message
+            });
+          }
+        });
+    });
   }
 
   /**
