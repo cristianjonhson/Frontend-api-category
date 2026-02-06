@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
+import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants/messages.constants';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-product-list',
@@ -20,7 +22,7 @@ export class ProductListComponent implements OnInit {
   categoryControl = new FormControl('');
   categories: string[] = [];
 
-  displayedColumns: string[] = ['name', 'price', 'category', 'quantity'];
+  displayedColumns: string[] = ['name', 'price', 'category', 'quantity', 'actions'];
 
   constructor(
     private productService: ProductService,
@@ -78,6 +80,57 @@ export class ProductListComponent implements OnInit {
       const matchesCategory = !selectedCategory || category === selectedCategory;
 
       return matchesName && matchesCategory;
+    });
+  }
+
+  onDeleteProduct(product: any): void {
+    Swal.fire({
+      title: 'Confirmar eliminacion',
+      text: CONFIRMATION_MESSAGES.DELETE_PRODUCT(product?.name ?? ''),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      focusCancel: true,
+      reverseButtons: true
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      Swal.fire({
+        title: 'Eliminando producto...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      this.productService.deleteProduct(product.id)
+        .subscribe({
+          next: () => {
+            this.products = this.products.filter(p => p.id !== product.id);
+            this.buildCategories();
+            this.applyFilters();
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado',
+              text: SUCCESS_MESSAGES.PRODUCT_DELETED,
+              timer: 1800,
+              showConfirmButton: false
+            });
+          },
+          error: (error) => {
+            const message = error?.message || ERROR_MESSAGES.PRODUCT_DELETE_ERROR;
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: message
+            });
+          }
+        });
     });
   }
 }
