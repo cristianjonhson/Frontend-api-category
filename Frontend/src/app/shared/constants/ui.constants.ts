@@ -33,3 +33,11 @@ export const BREAKPOINTS = {
   /** Escritorio */
   DESKTOP: 1280
 } as const;
+
+/**
+ * Colores para SweetAlert
+ */
+export const SWEET_ALERT_COLORS = {
+  CONFIRM: '#d33',
+  CANCEL: '#3085d6'
+} as const;
