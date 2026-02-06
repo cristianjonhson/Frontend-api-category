@@ -4,10 +4,10 @@ import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
+import { SweetAlertService } from 'src/app/shared/services';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants/messages.constants';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-product-list',
@@ -26,7 +26,8 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sweetAlert: SweetAlertService
   ) {}
 
   ngOnInit(): void {
@@ -84,28 +85,13 @@ export class ProductListComponent implements OnInit {
   }
 
   onDeleteProduct(product: any): void {
-    Swal.fire({
-      title: 'Confirmar eliminacion',
-      text: CONFIRMATION_MESSAGES.DELETE_PRODUCT(product?.name ?? ''),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Si, eliminar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      focusCancel: true,
-      reverseButtons: true
-    }).then((result) => {
-      if (!result.isConfirmed) {
+    this.sweetAlert.confirmDelete(CONFIRMATION_MESSAGES.DELETE_PRODUCT(product?.name ?? ''))
+      .then((confirmed) => {
+      if (!confirmed) {
         return;
       }
 
-      Swal.fire({
-        title: 'Eliminando producto...',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => Swal.showLoading()
-      });
+      this.sweetAlert.showDeleting('producto');
 
       this.productService.deleteProduct(product.id)
         .subscribe({
@@ -114,21 +100,11 @@ export class ProductListComponent implements OnInit {
             this.buildCategories();
             this.applyFilters();
 
-            Swal.fire({
-              icon: 'success',
-              title: 'Eliminado',
-              text: SUCCESS_MESSAGES.PRODUCT_DELETED,
-              timer: 1800,
-              showConfirmButton: false
-            });
+            this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_DELETED);
           },
           error: (error) => {
             const message = error?.message || ERROR_MESSAGES.PRODUCT_DELETE_ERROR;
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: message
-            });
+            this.sweetAlert.showError(message);
           }
         });
     });
