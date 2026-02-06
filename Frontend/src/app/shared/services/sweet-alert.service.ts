@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
-import { SWEET_ALERT_TEXTS, SWEET_ALERT_COLORS, SWEET_ALERT_CONFIG } from 'src/app/shared/constants';
+import { SWEET_ALERT_TEXTS, SWEET_ALERT_COLORS, SWEET_ALERT_CONFIG, SWEET_ALERT_ICONS } from 'src/app/shared/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class SweetAlertService {
     return Swal.fire({
       title: SWEET_ALERT_TEXTS.TITLE_CONFIRM_DELETE,
       text: message,
-      icon: 'warning',
+      icon: SWEET_ALERT_ICONS.WARNING,
       showCancelButton: true,
       confirmButtonText: SWEET_ALERT_TEXTS.BUTTON_CONFIRM_DELETE,
       cancelButtonText: SWEET_ALERT_TEXTS.BUTTON_CANCEL,
@@ -35,7 +35,7 @@ export class SweetAlertService {
 
   showSuccess(message: string): Promise<any> {
     return Swal.fire({
-      icon: 'success',
+      icon: SWEET_ALERT_ICONS.SUCCESS,
       title: SWEET_ALERT_TEXTS.TITLE_DELETED,
       text: message,
       timer: SWEET_ALERT_CONFIG.SUCCESS_TIMER,
@@ -45,7 +45,7 @@ export class SweetAlertService {
 
   showError(message: string): Promise<any> {
     return Swal.fire({
-      icon: 'error',
+      icon: SWEET_ALERT_ICONS.ERROR,
       title: SWEET_ALERT_TEXTS.TITLE_ERROR,
       text: message
     });
