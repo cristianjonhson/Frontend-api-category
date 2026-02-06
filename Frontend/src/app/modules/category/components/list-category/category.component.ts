@@ -4,7 +4,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import Swal from 'sweetalert2';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { EditCategoryComponent } from '../edit-category/edit-category.component';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
@@ -12,6 +11,7 @@ import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
+import { SweetAlertService } from 'src/app/shared/services';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { PAGINATOR_CONFIG } from 'src/app/shared/constants/pagination.constants';
@@ -61,7 +61,8 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
     private categoryService: CategoryService,
     public dialog: MatDialog,
     private logger: LoggerService,
-    private notification: NotificationService
+    private notification: NotificationService,
+    private sweetAlert: SweetAlertService
   ) {
     super(); // Llamar al constructor del BaseComponent
   }
@@ -170,30 +171,13 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    * @param category Categoría a eliminar
    */
   onDeleteCategory(category: ICategory): void {
-    Swal.fire({
-      title: 'Confirmar eliminacion',
-      text: CONFIRMATION_MESSAGES.DELETE_CATEGORY(category.name),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Si, eliminar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      focusCancel: true,
-      reverseButtons: true
-    }).then((result) => {
-      if (!result.isConfirmed) {
+    this.sweetAlert.confirmDelete(CONFIRMATION_MESSAGES.DELETE_CATEGORY(category.name))
+      .then((confirmed) => {
+      if (!confirmed) {
         return;
       }
 
-      Swal.fire({
-        title: 'Eliminando categoria...',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
+      this.sweetAlert.showDeleting('categoria');
 
       this.categoryService.deleteCategory(category.id!)
         .pipe(takeUntil(this.destroy$))
@@ -201,23 +185,13 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
           next: () => {
             this.notification.success(SUCCESS_MESSAGES.CATEGORY_DELETED);
             this.getCategories();
-            Swal.fire({
-              icon: 'success',
-              title: 'Eliminada',
-              text: SUCCESS_MESSAGES.CATEGORY_DELETED,
-              timer: 1800,
-              showConfirmButton: false
-            });
+            this.sweetAlert.showSuccess(SUCCESS_MESSAGES.CATEGORY_DELETED);
           },
           error: (error) => {
             const message = error.message || ERROR_MESSAGES.CATEGORY_DELETE_ERROR;
             this.logger.error('Error al eliminar categoria:', error);
             this.notification.error(message);
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: message
-            });
+            this.sweetAlert.showError(message);
           }
         });
     });
