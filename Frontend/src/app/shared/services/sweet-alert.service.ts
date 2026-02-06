@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
-import { SWEET_ALERT_TEXTS } from 'src/app/shared/constants';
+import { SWEET_ALERT_TEXTS, SWEET_ALERT_COLORS } from 'src/app/shared/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class SweetAlertService {
       showCancelButton: true,
       confirmButtonText: SWEET_ALERT_TEXTS.BUTTON_CONFIRM_DELETE,
       cancelButtonText: SWEET_ALERT_TEXTS.BUTTON_CANCEL,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
+      confirmButtonColor: SWEET_ALERT_COLORS.CONFIRM,
+      cancelButtonColor: SWEET_ALERT_COLORS.CANCEL,
       focusCancel: true,
       reverseButtons: true
     }).then((result) => result.isConfirmed);
