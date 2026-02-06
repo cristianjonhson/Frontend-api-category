@@ -41,3 +41,13 @@ export const SWEET_ALERT_COLORS = {
   CONFIRM: '#d33',
   CANCEL: '#3085d6'
 } as const;
+
+/**
+ * Configuracion base para SweetAlert
+ */
+export const SWEET_ALERT_CONFIG = {
+  SUCCESS_TIMER: 1800,
+  SHOW_CONFIRM_BUTTON: false,
+  REVERSE_BUTTONS: true,
+  FOCUS_CANCEL: true
+} as const;

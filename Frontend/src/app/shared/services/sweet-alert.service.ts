@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
-import { SWEET_ALERT_TEXTS, SWEET_ALERT_COLORS } from 'src/app/shared/constants';
+import { SWEET_ALERT_TEXTS, SWEET_ALERT_COLORS, SWEET_ALERT_CONFIG } from 'src/app/shared/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,8 @@ export class SweetAlertService {
       cancelButtonText: SWEET_ALERT_TEXTS.BUTTON_CANCEL,
       confirmButtonColor: SWEET_ALERT_COLORS.CONFIRM,
       cancelButtonColor: SWEET_ALERT_COLORS.CANCEL,
-      focusCancel: true,
-      reverseButtons: true
+      focusCancel: SWEET_ALERT_CONFIG.FOCUS_CANCEL,
+      reverseButtons: SWEET_ALERT_CONFIG.REVERSE_BUTTONS
     }).then((result) => result.isConfirmed);
   }
 
@@ -38,8 +38,8 @@ export class SweetAlertService {
       icon: 'success',
       title: SWEET_ALERT_TEXTS.TITLE_DELETED,
       text: message,
-      timer: 1800,
-      showConfirmButton: false
+      timer: SWEET_ALERT_CONFIG.SUCCESS_TIMER,
+      showConfirmButton: SWEET_ALERT_CONFIG.SHOW_CONFIRM_BUTTON
     });
   }
 
