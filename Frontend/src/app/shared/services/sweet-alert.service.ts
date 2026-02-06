@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
+import { SWEET_ALERT_TEXTS } from 'src/app/shared/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +9,12 @@ export class SweetAlertService {
 
   confirmDelete(message: string): Promise<boolean> {
     return Swal.fire({
-      title: 'Confirmar eliminacion',
+      title: SWEET_ALERT_TEXTS.TITLE_CONFIRM_DELETE,
       text: message,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Si, eliminar',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText: SWEET_ALERT_TEXTS.BUTTON_CONFIRM_DELETE,
+      cancelButtonText: SWEET_ALERT_TEXTS.BUTTON_CANCEL,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       focusCancel: true,
@@ -23,7 +24,7 @@ export class SweetAlertService {
 
   showDeleting(entityLabel: string): void {
     Swal.fire({
-      title: `Eliminando ${entityLabel}...`,
+      title: SWEET_ALERT_TEXTS.TITLE_DELETING(entityLabel),
       allowOutsideClick: false,
       allowEscapeKey: false,
       didOpen: () => {
@@ -35,7 +36,7 @@ export class SweetAlertService {
   showSuccess(message: string): Promise<any> {
     return Swal.fire({
       icon: 'success',
-      title: 'Eliminado',
+      title: SWEET_ALERT_TEXTS.TITLE_DELETED,
       text: message,
       timer: 1800,
       showConfirmButton: false
@@ -45,7 +46,7 @@ export class SweetAlertService {
   showError(message: string): Promise<any> {
     return Swal.fire({
       icon: 'error',
-      title: 'Error',
+      title: SWEET_ALERT_TEXTS.TITLE_ERROR,
       text: message
     });
   }
