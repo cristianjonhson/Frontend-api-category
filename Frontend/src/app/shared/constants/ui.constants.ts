@@ -51,3 +51,12 @@ export const SWEET_ALERT_CONFIG = {
   REVERSE_BUTTONS: true,
   FOCUS_CANCEL: true
 } as const;
+
+/**
+ * Iconos para SweetAlert
+ */
+export const SWEET_ALERT_ICONS = {
+  SUCCESS: 'success',
+  ERROR: 'error',
+  WARNING: 'warning'
+} as const;
