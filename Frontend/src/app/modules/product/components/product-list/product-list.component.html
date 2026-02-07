@@ -22,7 +22,7 @@
     </button>
   </div>
 
-  <mat-table [dataSource]="filteredProducts" class="mat-elevation-z8">
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
       <mat-cell *matCellDef="let product"> {{product.name}} </mat-cell>
@@ -55,4 +55,9 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+
+  <mat-paginator
+    [pageSizeOptions]="paginatorConfig.PAGE_SIZE_OPTIONS"
+    [showFirstLastButtons]="paginatorConfig.SHOW_FIRST_LAST_BUTTONS">
+  </mat-paginator>
 </div>
