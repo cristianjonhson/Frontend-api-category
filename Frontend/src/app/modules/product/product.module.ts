@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductCreateDialogComponent } from './components/product-add/product-create-dialog.component';
@@ -27,7 +28,8 @@ import { ProductCreateDialogComponent } from './components/product-add/product-c
     MatInputModule,
     MatSelectModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatPaginatorModule
   ],
   exports: [ProductListComponent]
 })
