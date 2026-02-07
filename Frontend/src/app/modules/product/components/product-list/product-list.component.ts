@@ -1,26 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
 import { SweetAlertService } from 'src/app/shared/services';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants/messages.constants';
+import { PAGINATOR_CONFIG } from 'src/app/shared/constants/pagination.constants';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
-export class ProductListComponent implements OnInit {
+
+export class ProductListComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   products: any[] = [];
   filteredProducts: any[] = [];
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   searchControl = new FormControl('');
   categoryControl = new FormControl('');
   categories: string[] = [];
+  readonly paginatorConfig = PAGINATOR_CONFIG;
 
   displayedColumns: string[] = ['name', 'price', 'category', 'quantity', 'actions'];
 
@@ -41,6 +49,10 @@ export class ProductListComponent implements OnInit {
       .pipe(debounceTime(TIMING.SEARCH_DEBOUNCE))
       .subscribe(() => this.applyFilters());
     this.categoryControl.valueChanges.subscribe(() => this.applyFilters());
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 
   openCreateDialog(): void {
@@ -82,6 +94,10 @@ export class ProductListComponent implements OnInit {
 
       return matchesName && matchesCategory;
     });
+
+    this.dataSource.data = this.filteredProducts;
+    this.dataSource.paginator = this.paginator;
+    this.paginator?.firstPage();
   }
 
   onDeleteProduct(product: any): void {
