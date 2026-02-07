@@ -1,32 +1,84 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { ApiResponse } from 'src/app/shared/models/api-response.model';
+import { API_CONFIG } from 'src/app/shared/constants';
+
+const base_url = environment.base_uri;
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  constructor() {}
-
-  private products = [
-    { id: 1, name: 'Producto 1', price: 100, category: 'Electrónica', quantity: 10 },
-    { id: 2, name: 'Producto 2', price: 200, category: 'Hogar', quantity: 5 },
-    { id: 3, name: 'Producto 3', price: 300, category: 'Deportes', quantity: 20 },
-  ];
+  constructor(private http: HttpClient) {}
 
   getProducts(): Observable<any[]> {
-    return of([...this.products]);
+    const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}`;
+
+    return this.http.get<ApiResponse<any>>(endpoint).pipe(
+      map((response) => this.processGetProductsResponse(response)),
+      catchError((err) => throwError(() => err))
+    );
   }
 
   createProduct(payload: any): Observable<any> {
-    const maxId = this.products.reduce((max, product) => Math.max(max, product.id ?? 0), 0);
-    const created = { id: maxId + 1, ...payload };
-    this.products = [created, ...this.products];
-    return of(created);
+    const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}`;
+    const requestBody = {
+      name: payload?.name,
+      price: payload?.price,
+      quantity: payload?.quantity,
+      categoryId: payload?.categoryId
+    };
+
+    return this.http.post<ApiResponse<any>>(endpoint, requestBody).pipe(
+      map((response) => this.processCreateProductResponse(response, requestBody)),
+      catchError((err) => throwError(() => err))
+    );
   }
 
   deleteProduct(id: number): Observable<void> {
-    this.products = this.products.filter(product => product.id !== id);
-    return of(void 0);
+    const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}/${id}`;
+
+    return this.http.delete<void>(endpoint).pipe(
+      catchError((err) => throwError(() => err))
+    );
+  }
+
+  private processGetProductsResponse(response: ApiResponse<any>): any[] {
+    const products = response?.productResponse?.product ?? [];
+    return products.map((product: any) => this.normalizeProduct(product));
+  }
+
+  private processCreateProductResponse(response: ApiResponse<any>, fallback: any): any {
+    const created = response?.productResponse?.product?.[0]
+      ?? response?.productResponse?.product
+      ?? response?.productResponse
+      ?? fallback;
+
+    return this.normalizeProduct(created);
+  }
+
+  private normalizeProduct(product: any): any {
+    if (!product) {
+      return {};
+    }
+
+    const categoryName = product?.categoryName
+      ?? product?.category?.name
+      ?? product?.category
+      ?? '';
+
+    return {
+      id: product?.id,
+      name: product?.name,
+      price: product?.price,
+      quantity: product?.quantity,
+      categoryId: product?.categoryId ?? product?.category?.id,
+      categoryName,
+      category: categoryName
+    };
   }
 
 }
