@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
 import { PaginatorService, SweetAlertService } from 'src/app/shared/services';
+import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants/messages.constants';
@@ -34,6 +35,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private productService: ProductService,
+    private categoryService: CategoryService,
     private dialog: MatDialog,
     private sweetAlert: SweetAlertService,
     private paginatorService: PaginatorService
@@ -42,9 +44,11 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.loadCategories();
+
     this.productService.getProducts().subscribe((data) => {
       this.products = data ?? [];
-      this.buildCategories();
+      this.buildCategoriesFallback();
       this.applyFilters();
     });
 
@@ -69,19 +73,40 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
       // Si tu backend devuelve el producto creado, lo agregas y refiltras:
       this.products = [created, ...this.products];
-      this.buildCategories();
+      this.buildCategoriesFallback();
       this.applyFilters();
     });
   }
 
-  private buildCategories(): void {
-    this.categories = Array.from(
+  private loadCategories(): void {
+    this.categoryService.getCategories().subscribe((categories) => {
+      this.categories = (categories ?? [])
+        .map(category => (category?.name ?? '').toString().trim())
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b));
+
+      if (this.categories.length === 0) {
+        this.buildCategoriesFallback();
+      }
+    });
+  }
+
+  private buildCategoriesFallback(): void {
+    const derivedCategories = Array.from(
       new Set(
         this.products
           .map(p => (p?.category?.name ?? p?.category ?? '').toString().trim())
           .filter(Boolean)
       )
     ).sort();
+
+    if (this.categories.length === 0) {
+      this.categories = derivedCategories;
+      return;
+    }
+
+    this.categories = Array.from(new Set([...this.categories, ...derivedCategories]))
+      .sort((a, b) => a.localeCompare(b));
   }
 
   private applyFilters(): void {
@@ -115,7 +140,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
         .subscribe({
           next: () => {
             this.products = this.products.filter(p => p.id !== product.id);
-            this.buildCategories();
+            this.buildCategoriesFallback();
             this.applyFilters();
 
             this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_DELETED);
