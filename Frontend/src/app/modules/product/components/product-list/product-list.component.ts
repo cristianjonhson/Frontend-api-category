@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
-import { SweetAlertService } from 'src/app/shared/services';
+import { PaginatorService, SweetAlertService } from 'src/app/shared/services';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants/messages.constants';
@@ -23,7 +23,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   products: any[] = [];
   filteredProducts: any[] = [];
-  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  dataSource: MatTableDataSource<any>;
 
   searchControl = new FormControl('');
   categoryControl = new FormControl('');
@@ -35,8 +35,11 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   constructor(
     private productService: ProductService,
     private dialog: MatDialog,
-    private sweetAlert: SweetAlertService
-  ) {}
+    private sweetAlert: SweetAlertService,
+    private paginatorService: PaginatorService
+  ) {
+    this.dataSource = this.paginatorService.createDataSource<any>();
+  }
 
   ngOnInit(): void {
     this.productService.getProducts().subscribe((data) => {
@@ -52,7 +55,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.paginatorService.connect(this.dataSource, this.paginator);
   }
 
   openCreateDialog(): void {
@@ -95,9 +98,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       return matchesName && matchesCategory;
     });
 
-    this.dataSource.data = this.filteredProducts;
-    this.dataSource.paginator = this.paginator;
-    this.paginator?.firstPage();
+    this.paginatorService.setData(this.dataSource, this.filteredProducts, this.paginator);
+    this.paginatorService.resetToFirstPage(this.paginator, this.dataSource);
   }
 
   onDeleteProduct(product: any): void {

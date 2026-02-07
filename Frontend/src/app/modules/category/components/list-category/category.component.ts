@@ -11,7 +11,7 @@ import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { LoggerService } from 'src/app/core/services/logger.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
-import { SweetAlertService } from 'src/app/shared/services';
+import { PaginatorService, SweetAlertService } from 'src/app/shared/services';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { PAGINATOR_CONFIG } from 'src/app/shared/constants/pagination.constants';
@@ -42,7 +42,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
   displayedColumns: string[] = ['name', 'description', 'actions'];
 
   // Fuente de datos para la tabla
-  dataSource: MatTableDataSource<ICategory> = new MatTableDataSource<ICategory>();
+  dataSource: MatTableDataSource<ICategory>;
 
   // Control para el buscador
   searchControl = new FormControl('');
@@ -62,9 +62,11 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
     public dialog: MatDialog,
     private logger: LoggerService,
     private notification: NotificationService,
-    private sweetAlert: SweetAlertService
+    private sweetAlert: SweetAlertService,
+    private paginatorService: PaginatorService
   ) {
     super(); // Llamar al constructor del BaseComponent
+    this.dataSource = this.paginatorService.createDataSource<ICategory>();
   }
 
   ngOnInit(): void {
@@ -92,7 +94,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    * Conecta el paginador al dataSource
    */
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.paginatorService.connect(this.dataSource, this.paginator);
   }
 
   /**
@@ -105,7 +107,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .subscribe({
         next: (categories) => {
           this.logger.info('Categorías recibidas:', categories.length);
-          this.dataSource.data = categories;
+          this.paginatorService.setData(this.dataSource, categories, this.paginator);
           this.applyFilter();
 
           if (categories.length === 0) {
@@ -124,7 +126,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    */
   applyFilter(): void {
     const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
-    this.dataSource.filter = term;
+    this.paginatorService.applyFilter(this.dataSource, term, this.paginator);
   }
 
 
