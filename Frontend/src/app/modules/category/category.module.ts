@@ -27,6 +27,9 @@ import { EditCategoryComponent } from './components/edit-category/edit-category.
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule
+  ],
+  exports: [
+    CategoryComponent
   ]
 })
 export class CategoryModule { }
