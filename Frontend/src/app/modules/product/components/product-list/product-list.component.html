@@ -35,7 +35,7 @@
 
     <ng-container matColumnDef="category">
       <mat-header-cell *matHeaderCellDef> Categoría </mat-header-cell>
-      <mat-cell *matCellDef="let product"> {{product.category}} </mat-cell>
+      <mat-cell *matCellDef="let product"> {{product.categoryName || product.category?.name || product.category}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="quantity">
