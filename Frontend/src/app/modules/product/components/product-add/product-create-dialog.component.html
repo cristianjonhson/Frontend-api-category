@@ -21,10 +21,10 @@
 
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>Categoría</mat-label>
-      <mat-select formControlName="category">
-        <mat-option *ngFor="let c of (data?.categories ?? [])" [value]="c">{{ c }}</mat-option>
+      <mat-select formControlName="categoryId">
+        <mat-option *ngFor="let c of (data?.categories ?? [])" [value]="c.id">{{ c.name }}</mat-option>
       </mat-select>
-      <mat-error *ngIf="form.controls.category.touched && form.controls.category.invalid">
+      <mat-error *ngIf="form.controls.categoryId.touched && form.controls.categoryId.invalid">
         Selecciona una categoría
       </mat-error>
     </mat-form-field>
