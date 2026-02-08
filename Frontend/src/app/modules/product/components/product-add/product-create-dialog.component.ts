@@ -4,9 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
 import { VALIDATION_RULES } from 'src/app/shared/constants';
+import { ICategory } from 'src/app/shared/interfaces/category.interface';
 
 export interface ProductCreateDialogData {
-  categories: string[];
+  categories: ICategory[];
 }
 
 @Component({
@@ -21,7 +22,7 @@ export class ProductCreateDialogComponent {
   form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(VALIDATION_RULES.PRODUCT.NAME_MIN_LENGTH)]],
     price: [0, [Validators.required, Validators.min(VALIDATION_RULES.PRODUCT.PRICE_MIN)]],
-    category: ['', [Validators.required]],
+    categoryId: [0, [Validators.required, Validators.min(1)]],
     quantity: [0, [Validators.required, Validators.min(VALIDATION_RULES.PRODUCT.QUANTITY_MIN)]],
   });
 
