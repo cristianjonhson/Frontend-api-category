@@ -5,6 +5,7 @@ import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
 import { VALIDATION_RULES } from 'src/app/shared/constants';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
+import { IProductRequest } from 'src/app/shared/interfaces/product.interface';
 
 export interface ProductCreateDialogData {
   categories: ICategory[];
@@ -47,7 +48,7 @@ export class ProductCreateDialogComponent {
       return;
     }
 
-    const payload = this.form.getRawValue();
+    const payload: IProductRequest = this.form.getRawValue();
     console.log('Dialog: payload', payload);
 
     this.loading = true;
