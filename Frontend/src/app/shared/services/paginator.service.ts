@@ -23,7 +23,7 @@ export class PaginatorService {
     }
   }
 
-  resetToFirstPage(paginator?: MatPaginator, dataSource?: MatTableDataSource<unknown>): void {
+  resetToFirstPage<T>(paginator?: MatPaginator, dataSource?: MatTableDataSource<T>): void {
     if (paginator) {
       paginator.firstPage();
       return;
