@@ -5,6 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from 'src/app/shared/models/api-response.model';
 import { API_CONFIG } from 'src/app/shared/constants';
+import { IProduct, IProductRequest } from 'src/app/shared/interfaces/product.interface';
 
 const base_url = environment.base_uri;
 
@@ -14,7 +15,7 @@ const base_url = environment.base_uri;
 export class ProductService {
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<any[]> {
+  getProducts(): Observable<IProduct[]> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}`;
 
     return this.http.get<ApiResponse<any>>(endpoint).pipe(
@@ -23,9 +24,9 @@ export class ProductService {
     );
   }
 
-  createProduct(payload: any): Observable<any> {
+  createProduct(payload: IProductRequest): Observable<IProduct> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}`;
-    const requestBody = {
+    const requestBody: IProductRequest = {
       name: payload?.name,
       price: payload?.price,
       quantity: payload?.quantity,
@@ -46,12 +47,12 @@ export class ProductService {
     );
   }
 
-  private processGetProductsResponse(response: ApiResponse<any>): any[] {
+  private processGetProductsResponse(response: ApiResponse<any>): IProduct[] {
     const products = response?.productResponse?.product ?? [];
     return products.map((product: any) => this.normalizeProduct(product));
   }
 
-  private processCreateProductResponse(response: ApiResponse<any>, fallback: any): any {
+  private processCreateProductResponse(response: ApiResponse<any>, fallback: IProductRequest): IProduct {
     const created = response?.productResponse?.product?.[0]
       ?? response?.productResponse?.product
       ?? response?.productResponse
@@ -60,9 +61,15 @@ export class ProductService {
     return this.normalizeProduct(created);
   }
 
-  private normalizeProduct(product: any): any {
+  private normalizeProduct(product: any): IProduct {
     if (!product) {
-      return {};
+      return {
+        name: '',
+        price: 0,
+        quantity: 0,
+        categoryName: '',
+        category: ''
+      };
     }
 
     const categoryName = product?.categoryName
