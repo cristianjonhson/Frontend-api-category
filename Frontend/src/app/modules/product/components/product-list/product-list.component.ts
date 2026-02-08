@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
 import { PaginatorService, SweetAlertService } from 'src/app/shared/services';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
+import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants/messages.constants';
@@ -29,6 +30,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   searchControl = new FormControl('');
   categoryControl = new FormControl('');
   categories: string[] = [];
+  realCategories: ICategory[] = [];
   readonly paginatorConfig = PAGINATOR_CONFIG;
 
   displayedColumns: string[] = ['name', 'price', 'category', 'quantity', 'actions'];
@@ -65,7 +67,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(ProductCreateDialogComponent, {
       ...DIALOG_CONFIG.PRODUCT_FORM,
-      data: { categories: this.categories }
+      data: { categories: this.realCategories }
     });
 
     dialogRef.afterClosed().subscribe((created) => {
@@ -80,7 +82,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   private loadCategories(): void {
     this.categoryService.getCategories().subscribe((categories) => {
-      this.categories = (categories ?? [])
+      this.realCategories = categories ?? [];
+      this.categories = this.realCategories
         .map(category => (category?.name ?? '').toString().trim())
         .filter(Boolean)
         .sort((a, b) => a.localeCompare(b));
@@ -115,7 +118,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
     this.filteredProducts = this.products.filter(p => {
       const name = (p?.name ?? '').toString().toLowerCase();
-      const category = (p?.category?.name ?? p?.category ?? '').toString().trim();
+      const category = (p?.categoryName ?? p?.category?.name ?? p?.category ?? '').toString().trim();
 
       const matchesName = !term || name.includes(term);
       const matchesCategory = !selectedCategory || category === selectedCategory;
