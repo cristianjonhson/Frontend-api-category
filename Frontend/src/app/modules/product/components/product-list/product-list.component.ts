@@ -9,6 +9,7 @@ import { ProductCreateDialogComponent } from '../product-add/product-create-dial
 import { PaginatorService, SweetAlertService } from 'src/app/shared/services';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
+import { IProduct } from 'src/app/shared/interfaces/product.interface';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants/messages.constants';
@@ -23,9 +24,9 @@ import { PAGINATOR_CONFIG } from 'src/app/shared/constants/pagination.constants'
 export class ProductListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  products: any[] = [];
-  filteredProducts: any[] = [];
-  dataSource: MatTableDataSource<any>;
+  products: IProduct[] = [];
+  filteredProducts: IProduct[] = [];
+  dataSource: MatTableDataSource<IProduct>;
 
   searchControl = new FormControl('');
   categoryControl = new FormControl('');
@@ -42,7 +43,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     private sweetAlert: SweetAlertService,
     private paginatorService: PaginatorService
   ) {
-    this.dataSource = this.paginatorService.createDataSource<any>();
+    this.dataSource = this.paginatorService.createDataSource<IProduct>();
   }
 
   ngOnInit(): void {
@@ -98,7 +99,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     const derivedCategories = Array.from(
       new Set(
         this.products
-          .map(p => (p?.category?.name ?? p?.category ?? '').toString().trim())
+          .map((product: IProduct) => this.getCategoryName(product))
           .filter(Boolean)
       )
     ).sort();
@@ -116,9 +117,9 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
     const selectedCategory = (this.categoryControl.value ?? '').toString().trim();
 
-    this.filteredProducts = this.products.filter(p => {
+    this.filteredProducts = this.products.filter((p: IProduct) => {
       const name = (p?.name ?? '').toString().toLowerCase();
-      const category = (p?.categoryName ?? p?.category?.name ?? p?.category ?? '').toString().trim();
+      const category = this.getCategoryName(p);
 
       const matchesName = !term || name.includes(term);
       const matchesCategory = !selectedCategory || category === selectedCategory;
@@ -130,7 +131,15 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this.paginatorService.resetToFirstPage(this.paginator, this.dataSource);
   }
 
-  onDeleteProduct(product: any): void {
+  private getCategoryName(product: IProduct): string {
+    if (typeof product?.category === 'string') {
+      return product.category.trim();
+    }
+
+    return (product?.categoryName ?? product?.category?.name ?? '').toString().trim();
+  }
+
+  onDeleteProduct(product: IProduct): void {
     this.sweetAlert.confirmDelete(CONFIRMATION_MESSAGES.DELETE_PRODUCT(product?.name ?? ''))
       .then((confirmed) => {
       if (!confirmed) {
@@ -138,6 +147,11 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       }
 
       this.sweetAlert.showDeleting('producto');
+
+      if (!product.id) {
+        this.sweetAlert.showError(ERROR_MESSAGES.PRODUCT_DELETE_ERROR);
+        return;
+      }
 
       this.productService.deleteProduct(product.id)
         .subscribe({
