@@ -46,6 +46,9 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
       <mat-cell *matCellDef="let product">
+        <button mat-icon-button color="accent" (click)="openEditDialog(product)" aria-label="Editar producto">
+          <mat-icon>edit</mat-icon>
+        </button>
         <button mat-icon-button color="warn" (click)="onDeleteProduct(product)" aria-label="Eliminar producto">
           <mat-icon>delete</mat-icon>
         </button>
