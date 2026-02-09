@@ -39,6 +39,21 @@ export class ProductService {
     );
   }
 
+  updateProduct(id: number, payload: IProductRequest): Observable<IProduct> {
+    const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}/${id}`;
+    const requestBody: IProductRequest = {
+      name: payload?.name,
+      price: payload?.price,
+      quantity: payload?.quantity,
+      categoryId: payload?.categoryId
+    };
+
+    return this.http.put<ApiResponse<any>>(endpoint, requestBody).pipe(
+      map((response) => this.processCreateProductResponse(response, requestBody)),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
   deleteProduct(id: number): Observable<void> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}/${id}`;
 
