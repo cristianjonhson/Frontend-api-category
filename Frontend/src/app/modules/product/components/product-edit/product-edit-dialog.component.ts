@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
-import { VALIDATION_RULES } from 'src/app/shared/constants';
+import { ERROR_MESSAGES, VALIDATION_RULES } from 'src/app/shared/constants';
 import { ICategory, IProduct, IProductRequest } from 'src/app/shared/interfaces';
 
 export interface ProductEditDialogData {
@@ -18,6 +18,7 @@ export interface ProductEditDialogData {
 })
 export class ProductEditDialogComponent {
   loading = false;
+  errorMessage = '';
 
   form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(VALIDATION_RULES.PRODUCT.NAME_MIN_LENGTH)]],
@@ -40,6 +41,7 @@ export class ProductEditDialogComponent {
   }
 
   submit(): void {
+    this.errorMessage = '';
     this.form.markAllAsTouched();
 
     if (this.form.invalid || this.loading) {
@@ -48,20 +50,26 @@ export class ProductEditDialogComponent {
 
     const productId = this.data?.product?.id;
     if (!productId) {
+      this.errorMessage = ERROR_MESSAGES.PRODUCT_UPDATE_ERROR;
       return;
     }
 
     const payload: IProductRequest = this.form.getRawValue();
     this.loading = true;
+    this.form.disable();
 
     this.productService.updateProduct(productId, payload)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(finalize(() => {
+        this.loading = false;
+        this.form.enable();
+      }))
       .subscribe({
         next: (updated) => {
           this.dialogRef.close(updated ?? { id: productId, ...payload });
         },
-        error: () => {
-          this.dialogRef.close(null);
+        error: (err) => {
+          const message = err?.error?.message || err?.message || ERROR_MESSAGES.PRODUCT_UPDATE_ERROR;
+          this.errorMessage = message;
         }
       });
   }
