@@ -13,11 +13,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductCreateDialogComponent } from './components/product-add/product-create-dialog.component';
+import { ProductEditDialogComponent } from './components/product-edit/product-edit-dialog.component';
 
 @NgModule({
   declarations: [
     ProductListComponent,
-    ProductCreateDialogComponent
+    ProductCreateDialogComponent,
+    ProductEditDialogComponent
   ],
   imports: [
     CommonModule,
