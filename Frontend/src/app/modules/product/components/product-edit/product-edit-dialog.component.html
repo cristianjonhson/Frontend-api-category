@@ -3,6 +3,8 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
   <mat-dialog-content class="dialog-content">
 
+    <div *ngIf="errorMessage" class="form-error" role="alert">{{ errorMessage }}</div>
+
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>Nombre</mat-label>
       <input matInput formControlName="name" />
