@@ -6,10 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
+import { ProductEditDialogComponent } from '../product-edit/product-edit-dialog.component';
 import { PaginatorService, SweetAlertService } from 'src/app/shared/services';
 import { CategoryService } from 'src/app/modules/shared/services/category.service';
-import { ICategory } from 'src/app/shared/interfaces/category.interface';
-import { IProduct } from 'src/app/shared/interfaces/product.interface';
+import { ICategory, IProduct } from 'src/app/shared/interfaces';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants/messages.constants';
@@ -81,6 +81,41 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     });
   }
 
+  openEditDialog(product: IProduct): void {
+    const productId = product?.id;
+    if (!productId) {
+      this.sweetAlert.showError(ERROR_MESSAGES.PRODUCT_UPDATE_ERROR);
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ProductEditDialogComponent, {
+      ...DIALOG_CONFIG.PRODUCT_FORM,
+      data: {
+        product,
+        categories: this.realCategories
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((updated: IProduct | null) => {
+      if (!updated) {
+        return;
+      }
+
+      const normalizedUpdated: IProduct = {
+        ...updated,
+        categoryName: this.resolveCategoryName(updated.categoryId, updated.categoryName)
+      };
+
+      this.products = this.products.map((item) =>
+        item.id === productId ? { ...item, ...normalizedUpdated } : item
+      );
+
+      this.buildCategoriesFallback();
+      this.applyFilters();
+      this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_UPDATED);
+    });
+  }
+
   private loadCategories(): void {
     this.categoryService.getCategories().subscribe((categories) => {
       this.realCategories = categories ?? [];
@@ -137,6 +172,15 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     }
 
     return (product?.categoryName ?? product?.category?.name ?? '').toString().trim();
+  }
+
+  private resolveCategoryName(categoryId?: number, fallbackName?: string): string {
+    if (!categoryId) {
+      return (fallbackName ?? '').toString().trim();
+    }
+
+    const category = this.realCategories.find((item) => item.id === categoryId);
+    return (category?.name ?? fallbackName ?? '').toString().trim();
   }
 
   onDeleteProduct(product: IProduct): void {
