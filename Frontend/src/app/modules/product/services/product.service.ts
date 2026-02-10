@@ -41,6 +41,11 @@ export class ProductService {
 
   updateProduct(id: number, payload: IProductRequest): Observable<IProduct> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}/${id}`;
+    const options = {
+      headers: {
+        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
+      }
+    };
     const requestBody: IProductRequest = {
       name: payload?.name,
       price: payload?.price,
@@ -48,7 +53,7 @@ export class ProductService {
       categoryId: payload?.categoryId
     };
 
-    return this.http.put<ApiResponse<any>>(endpoint, requestBody).pipe(
+    return this.http.put<ApiResponse<any>>(endpoint, requestBody, options).pipe(
       map((response) => this.processCreateProductResponse(response, requestBody)),
       catchError((err) => throwError(() => err))
     );
@@ -56,8 +61,13 @@ export class ProductService {
 
   deleteProduct(id: number): Observable<void> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}/${id}`;
+    const options = {
+      headers: {
+        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
+      }
+    };
 
-    return this.http.delete<void>(endpoint).pipe(
+    return this.http.delete<void>(endpoint, options).pipe(
       catchError((err) => throwError(() => err))
     );
   }
