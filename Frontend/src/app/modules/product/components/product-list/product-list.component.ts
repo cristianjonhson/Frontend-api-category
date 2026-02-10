@@ -48,17 +48,20 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadCategories();
-
-    this.productService.getProducts().subscribe((data) => {
-      this.products = data ?? [];
-      this.buildCategoriesFallback();
-      this.applyFilters();
-    });
+    this.loadProducts();
 
     this.searchControl.valueChanges
       .pipe(debounceTime(TIMING.SEARCH_DEBOUNCE))
       .subscribe(() => this.applyFilters());
     this.categoryControl.valueChanges.subscribe(() => this.applyFilters());
+  }
+
+  private loadProducts(): void {
+    this.productService.getProducts().subscribe((data) => {
+      this.products = data ?? [];
+      this.buildCategoriesFallback();
+      this.applyFilters();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -75,9 +78,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       if (!created) return;
 
       // Si tu backend devuelve el producto creado, lo agregas y refiltras:
-      this.products = [created, ...this.products];
-      this.buildCategoriesFallback();
-      this.applyFilters();
+      this.loadProducts();
     });
   }
 
@@ -200,9 +201,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       this.productService.deleteProduct(product.id)
         .subscribe({
           next: () => {
-            this.products = this.products.filter(p => p.id !== product.id);
-            this.buildCategoriesFallback();
-            this.applyFilters();
+            this.loadProducts();
 
             this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_DELETED);
           },
