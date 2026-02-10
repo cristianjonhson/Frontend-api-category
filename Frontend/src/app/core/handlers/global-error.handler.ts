@@ -1,5 +1,8 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 import { LoggerService } from '../services/logger.service';
+import { NotificationService } from '../services/notification.service';
+import { ERROR_MESSAGES } from '../../shared/constants/messages.constants';
+import { environment } from 'src/environments/environment';
 
 /**
  * Manejador global de errores
@@ -8,7 +11,10 @@ import { LoggerService } from '../services/logger.service';
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
 
-  constructor(private logger: LoggerService) {}
+  constructor(
+    private logger: LoggerService,
+    private notification: NotificationService
+  ) {}
 
   handleError(error: Error | any): void {
     const errorMessage = error?.message || error?.toString() || 'Error desconocido';
@@ -24,6 +30,8 @@ export class GlobalErrorHandler implements ErrorHandler {
     if (!this.isProduction()) {
       console.error('💥 Error capturado por GlobalErrorHandler:', error);
     }
+
+    this.notification.error(ERROR_MESSAGES.UNKNOWN_ERROR);
 
     // Aquí puedes agregar lógica adicional:
     // - Enviar a servicio de monitoreo (Sentry, etc.)
