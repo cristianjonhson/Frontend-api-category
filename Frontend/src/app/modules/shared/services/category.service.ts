@@ -44,8 +44,13 @@ export class CategoryService {
    */
   createCategory(body: CategoryRequest): Observable<ApiResponse<CategoryResponse>> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.CATEGORIES}`;
+    const options = {
+      headers: {
+        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
+      }
+    };
 
-    return this.http.post<ApiResponse<CategoryResponse>>(endpoint, body).pipe(
+    return this.http.post<ApiResponse<CategoryResponse>>(endpoint, body, options).pipe(
       tap(() => this.logger.info('Creando nueva categoría:', body)),
       catchError(err => {
         this.logger.error('Error al crear categoría:', err);
@@ -61,8 +66,13 @@ export class CategoryService {
    */
   updateCategory(id: number, body: CategoryRequest): Observable<ApiResponse<CategoryResponse>> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.CATEGORIES}/${id}`;
+    const options = {
+      headers: {
+        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
+      }
+    };
 
-    return this.http.put<ApiResponse<CategoryResponse>>(endpoint, body).pipe(
+    return this.http.put<ApiResponse<CategoryResponse>>(endpoint, body, options).pipe(
       tap(() => this.logger.info('Actualizando categoría:', id)),
       catchError(err => {
         this.logger.error('Error al actualizar categoría:', err);
@@ -77,8 +87,13 @@ export class CategoryService {
    */
   deleteCategory(id: number): Observable<void> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.CATEGORIES}/${id}`;
+    const options = {
+      headers: {
+        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
+      }
+    };
 
-    return this.http.delete<void>(endpoint).pipe(
+    return this.http.delete<void>(endpoint, options).pipe(
       tap(() => this.logger.info('Eliminando categoría:', id)),
       catchError(err => {
         this.logger.error('Error al eliminar categoría:', err);
