@@ -7,6 +7,10 @@ export const API_CONFIG = {
     CATEGORIES: '/categories',
     PRODUCTS: '/products'
   },
+  /** Headers técnicos para control interno del frontend */
+  HEADERS: {
+    SKIP_GLOBAL_ERROR: 'X-Skip-Global-Error'
+  },
   /** Timeout para peticiones HTTP (en milisegundos) */
   TIMEOUT: 30000,
   /** Número de intentos para reintentar peticiones fallidas */
