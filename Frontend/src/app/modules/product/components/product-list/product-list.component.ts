@@ -102,17 +102,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      const normalizedUpdated: IProduct = {
-        ...updated,
-        categoryName: this.resolveCategoryName(updated.categoryId, updated.categoryName)
-      };
-
-      this.products = this.products.map((item) =>
-        item.id === productId ? { ...item, ...normalizedUpdated } : item
-      );
-
-      this.buildCategoriesFallback();
-      this.applyFilters();
+      this.loadProducts();
       this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_UPDATED);
     });
   }
@@ -173,15 +163,6 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     }
 
     return (product?.categoryName ?? product?.category?.name ?? '').toString().trim();
-  }
-
-  private resolveCategoryName(categoryId?: number, fallbackName?: string): string {
-    if (!categoryId) {
-      return (fallbackName ?? '').toString().trim();
-    }
-
-    const category = this.realCategories.find((item) => item.id === categoryId);
-    return (category?.name ?? fallbackName ?? '').toString().trim();
   }
 
   onDeleteProduct(product: IProduct): void {
