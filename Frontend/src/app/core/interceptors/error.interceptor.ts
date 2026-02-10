@@ -11,6 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { LoggerService } from '../services/logger.service';
 import { ERROR_MESSAGES } from '../../shared/constants/messages.constants';
 import { NotificationService } from '../services/notification.service';
+import { API_CONFIG } from '../../shared/constants';
 
 /**
  * Interceptor para manejo centralizado de errores HTTP
@@ -24,7 +25,12 @@ export class ErrorInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
+    const skipGlobalError = request.headers.get(API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR) === 'true';
+    const requestToHandle = request.headers.has(API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR)
+      ? request.clone({ headers: request.headers.delete(API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR) })
+      : request;
+
+    return next.handle(requestToHandle).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage: string = ERROR_MESSAGES.UNKNOWN_ERROR;
 
@@ -68,7 +74,9 @@ export class ErrorInterceptor implements HttpInterceptor {
         }
 
         // Retornar un observable con el error
-        this.notification.error(errorMessage);
+        if (!skipGlobalError) {
+          this.notification.error(errorMessage);
+        }
 
         return throwError(() => ({
           message: errorMessage,
