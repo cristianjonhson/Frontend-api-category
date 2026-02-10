@@ -10,6 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoggerService } from '../services/logger.service';
 import { ERROR_MESSAGES } from '../../shared/constants/messages.constants';
+import { NotificationService } from '../services/notification.service';
 
 /**
  * Interceptor para manejo centralizado de errores HTTP
@@ -17,7 +18,10 @@ import { ERROR_MESSAGES } from '../../shared/constants/messages.constants';
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
-  constructor(private logger: LoggerService) {}
+  constructor(
+    private logger: LoggerService,
+    private notification: NotificationService
+  ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
@@ -64,6 +68,8 @@ export class ErrorInterceptor implements HttpInterceptor {
         }
 
         // Retornar un observable con el error
+        this.notification.error(errorMessage);
+
         return throwError(() => ({
           message: errorMessage,
           status: error.status,
