@@ -7,3 +7,10 @@
   gap: 12px;
   padding-top: 8px;
 }
+
+.form-error {
+  width: 100%;
+  color: var(--mat-sys-error);
+  font-size: 13px;
+  margin-right: auto;
+}
