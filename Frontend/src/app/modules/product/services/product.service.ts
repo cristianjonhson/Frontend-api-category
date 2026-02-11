@@ -26,6 +26,11 @@ export class ProductService {
 
   createProduct(payload: IProductRequest): Observable<IProduct> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}`;
+    const options = {
+      headers: {
+        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
+      }
+    };
     const requestBody: IProductRequest = {
       name: payload?.name,
       price: payload?.price,
@@ -33,7 +38,7 @@ export class ProductService {
       categoryId: payload?.categoryId
     };
 
-    return this.http.post<ApiResponse<any>>(endpoint, requestBody).pipe(
+    return this.http.post<ApiResponse<any>>(endpoint, requestBody, options).pipe(
       map((response) => this.processCreateProductResponse(response, requestBody)),
       catchError((err) => throwError(() => err))
     );
