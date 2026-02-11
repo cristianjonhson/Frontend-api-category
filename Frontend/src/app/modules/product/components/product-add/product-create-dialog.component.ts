@@ -3,9 +3,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
-import { VALIDATION_RULES } from 'src/app/shared/constants';
+import { ERROR_MESSAGES, VALIDATION_RULES } from 'src/app/shared/constants';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { IProductRequest } from 'src/app/shared/interfaces/product.interface';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 export interface ProductCreateDialogData {
   categories: ICategory[];
@@ -18,6 +19,7 @@ export interface ProductCreateDialogData {
 })
 export class ProductCreateDialogComponent {
   loading = false;
+  errorMessage = '';
 
   // nonNullable evita nulls
   form = this.fb.nonNullable.group({
@@ -30,6 +32,7 @@ export class ProductCreateDialogComponent {
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
+    private notification: NotificationService,
     private dialogRef: MatDialogRef<ProductCreateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ProductCreateDialogData
   ) {}
@@ -40,29 +43,32 @@ export class ProductCreateDialogComponent {
   }
 
   submit(): void {
-    console.log('Dialog: submit click');
+    this.errorMessage = '';
     this.form.markAllAsTouched();
 
-    if (this.form.invalid) {
-      console.log('Dialog: form invalid', this.form.value);
+    if (this.form.invalid || this.loading) {
       return;
     }
 
     const payload: IProductRequest = this.form.getRawValue();
-    console.log('Dialog: payload', payload);
 
     this.loading = true;
+    this.form.disable();
 
     this.productService.createProduct(payload)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(finalize(() => {
+        this.loading = false;
+        this.form.enable();
+      }))
       .subscribe({
         next: (created) => {
-          console.log('Dialog: created', created);
           const result = created ?? payload;
           this.dialogRef.close(result);
         },
         error: (err) => {
-          console.error('Dialog: createProduct error', err);
+          const message = err?.error?.message || err?.message || ERROR_MESSAGES.PRODUCT_CREATE_ERROR;
+          this.errorMessage = message;
+          this.notification.error(message);
         }
       });
   }
