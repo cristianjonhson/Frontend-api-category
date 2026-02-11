@@ -79,6 +79,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
       // Si tu backend devuelve el producto creado, lo agregas y refiltras:
       this.loadProducts();
+      this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_CREATED);
     });
   }
 
