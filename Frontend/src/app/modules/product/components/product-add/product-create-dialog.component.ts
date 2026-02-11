@@ -6,7 +6,7 @@ import { ProductService } from '../../services/product.service';
 import { ERROR_MESSAGES, VALIDATION_RULES } from 'src/app/shared/constants';
 import { ICategory } from 'src/app/shared/interfaces/category.interface';
 import { IProductRequest } from 'src/app/shared/interfaces/product.interface';
-import { NotificationService } from 'src/app/core/services/notification.service';
+import { SweetAlertService } from 'src/app/shared/services';
 
 export interface ProductCreateDialogData {
   categories: ICategory[];
@@ -32,7 +32,7 @@ export class ProductCreateDialogComponent {
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
-    private notification: NotificationService,
+    private sweetAlert: SweetAlertService,
     private dialogRef: MatDialogRef<ProductCreateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ProductCreateDialogData
   ) {}
@@ -68,7 +68,7 @@ export class ProductCreateDialogComponent {
         error: (err) => {
           const message = err?.error?.message || err?.message || ERROR_MESSAGES.PRODUCT_CREATE_ERROR;
           this.errorMessage = message;
-          this.notification.error(message);
+          this.sweetAlert.showError(message);
         }
       });
   }
