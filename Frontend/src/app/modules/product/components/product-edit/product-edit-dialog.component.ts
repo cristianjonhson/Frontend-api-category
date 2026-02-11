@@ -5,6 +5,7 @@ import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
 import { ERROR_MESSAGES, VALIDATION_RULES } from 'src/app/shared/constants';
 import { ICategory, IProduct, IProductRequest } from 'src/app/shared/interfaces';
+import { SweetAlertService } from 'src/app/shared/services';
 
 export interface ProductEditDialogData {
   product: IProduct;
@@ -30,6 +31,7 @@ export class ProductEditDialogComponent {
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
+    private sweetAlert: SweetAlertService,
     private dialogRef: MatDialogRef<ProductEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ProductEditDialogData
   ) {
@@ -70,6 +72,7 @@ export class ProductEditDialogComponent {
         error: (err) => {
           const message = err?.error?.message || err?.message || ERROR_MESSAGES.PRODUCT_UPDATE_ERROR;
           this.errorMessage = message;
+          this.sweetAlert.showError(message);
         }
       });
   }
