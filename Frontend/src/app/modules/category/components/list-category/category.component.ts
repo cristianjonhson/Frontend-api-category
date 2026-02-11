@@ -185,14 +185,12 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            this.notification.success(SUCCESS_MESSAGES.CATEGORY_DELETED);
             this.getCategories();
             this.sweetAlert.showSuccess(SUCCESS_MESSAGES.CATEGORY_DELETED);
           },
           error: (error) => {
             const message = error.message || ERROR_MESSAGES.CATEGORY_DELETE_ERROR;
             this.logger.error('Error al eliminar categoria:', error);
-            this.notification.error(message);
             this.sweetAlert.showError(message);
           }
         });
