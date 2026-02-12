@@ -156,6 +156,8 @@ export const PAGE_TITLES = {
 export const SWEET_ALERT_TEXTS = {
   TITLE_CONFIRM_DELETE: 'Confirmar eliminacion',
   TITLE_DELETING: (entityLabel: string) => `Eliminando ${entityLabel}...`,
+  TITLE_CREATED: 'Creado',
+  TITLE_UPDATED: 'Actualizado',
   TITLE_DELETED: 'Eliminado',
   TITLE_ERROR: 'Error',
   BUTTON_CONFIRM_DELETE: 'Si, eliminar',
