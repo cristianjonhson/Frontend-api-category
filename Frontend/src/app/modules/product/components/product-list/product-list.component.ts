@@ -12,7 +12,7 @@ import { CategoryService } from 'src/app/modules/shared/services/category.servic
 import { ICategory, IProduct } from 'src/app/shared/interfaces';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
-import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants/messages.constants';
+import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from 'src/app/shared/constants/messages.constants';
 import { PAGINATOR_CONFIG } from 'src/app/shared/constants/pagination.constants';
 
 @Component({
@@ -79,7 +79,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
       // Si tu backend devuelve el producto creado, lo agregas y refiltras:
       this.loadProducts();
-      this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_CREATED);
+      this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_CREATED, SWEET_ALERT_TEXTS.TITLE_CREATED);
     });
   }
 
@@ -104,7 +104,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       }
 
       this.loadProducts();
-      this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_UPDATED);
+      this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PRODUCT_UPDATED, SWEET_ALERT_TEXTS.TITLE_UPDATED);
     });
   }
 
