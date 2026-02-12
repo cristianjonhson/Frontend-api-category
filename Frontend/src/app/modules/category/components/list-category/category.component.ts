@@ -15,7 +15,7 @@ import { PaginatorService, SweetAlertService } from 'src/app/shared/services';
 import { TIMING } from 'src/app/shared/constants/ui.constants';
 import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
 import { PAGINATOR_CONFIG } from 'src/app/shared/constants/pagination.constants';
-import { SUCCESS_MESSAGES, ERROR_MESSAGES, INFO_MESSAGES, CONFIRMATION_MESSAGES } from 'src/app/shared/constants/messages.constants';
+import { SUCCESS_MESSAGES, ERROR_MESSAGES, INFO_MESSAGES, CONFIRMATION_MESSAGES, SWEET_ALERT_TEXTS } from 'src/app/shared/constants/messages.constants';
 
 /**
  * Componente para la gestión de categorías
@@ -142,7 +142,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .subscribe(result => {
         if (result) {
           this.logger.info('Nueva categoría agregada, recargando lista');
-          this.notification.success(SUCCESS_MESSAGES.CATEGORY_CREATED);
+          this.sweetAlert.showSuccess(SUCCESS_MESSAGES.CATEGORY_CREATED, SWEET_ALERT_TEXTS.TITLE_CREATED);
           this.getCategories();
         }
       });
@@ -162,7 +162,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .subscribe(result => {
         if (result) {
           this.logger.info('Categoría actualizada, recargando lista');
-          this.notification.success(SUCCESS_MESSAGES.CATEGORY_UPDATED);
+          this.sweetAlert.showSuccess(SUCCESS_MESSAGES.CATEGORY_UPDATED, SWEET_ALERT_TEXTS.TITLE_UPDATED);
           this.getCategories();
         }
       });
