@@ -33,10 +33,10 @@ export class SweetAlertService {
     });
   }
 
-  showSuccess(message: string): Promise<any> {
+  showSuccess(message: string, title: string = SWEET_ALERT_TEXTS.TITLE_DELETED): Promise<any> {
     return Swal.fire({
       icon: SWEET_ALERT_ICONS.SUCCESS,
-      title: SWEET_ALERT_TEXTS.TITLE_DELETED,
+      title,
       text: message,
       timer: SWEET_ALERT_CONFIG.SUCCESS_TIMER,
       showConfirmButton: SWEET_ALERT_CONFIG.SHOW_CONFIRM_BUTTON
