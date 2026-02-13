@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CategoryService } from 'src/app/modules/shared/services/category.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
+import { CategoryService } from '../../../shared/services/category.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { finalize } from 'rxjs/operators';
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../../shared/constants';
 
 @Component({
   selector: 'app-add-category',
