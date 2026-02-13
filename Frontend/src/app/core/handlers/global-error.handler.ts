@@ -2,7 +2,7 @@ import { ErrorHandler, Injectable } from '@angular/core';
 import { LoggerService } from '../services/logger.service';
 import { NotificationService } from '../services/notification.service';
 import { ERROR_MESSAGES } from '../../shared/constants/messages.constants';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 
 /**
  * Manejador global de errores
