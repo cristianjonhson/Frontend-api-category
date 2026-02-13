@@ -6,16 +6,16 @@ import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { EditCategoryComponent } from '../edit-category/edit-category.component';
-import { CategoryService } from 'src/app/modules/shared/services/category.service';
-import { ICategory } from 'src/app/shared/interfaces/category.interface';
-import { LoggerService } from 'src/app/core/services/logger.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { BaseComponent } from 'src/app/shared/components/base.component';
-import { PaginatorService, SweetAlertService } from 'src/app/shared/services';
-import { TIMING } from 'src/app/shared/constants/ui.constants';
-import { DIALOG_CONFIG } from 'src/app/shared/constants/dialog.constants';
-import { PAGINATOR_CONFIG } from 'src/app/shared/constants/pagination.constants';
-import { SUCCESS_MESSAGES, ERROR_MESSAGES, INFO_MESSAGES, CONFIRMATION_MESSAGES, SWEET_ALERT_TEXTS } from 'src/app/shared/constants/messages.constants';
+import { CategoryService } from '../../../shared/services/category.service';
+import { ICategory } from '../../../../shared/interfaces/category.interface';
+import { LoggerService } from '../../../../core/services/logger.service';
+import { NotificationService } from '../../../../core/services/notification.service';
+import { BaseComponent } from '../../../../shared/components/base.component';
+import { PaginatorService, SweetAlertService } from '../../../../shared/services';
+import { TIMING } from '../../../../shared/constants/ui.constants';
+import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
+import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
+import { SUCCESS_MESSAGES, ERROR_MESSAGES, INFO_MESSAGES, CONFIRMATION_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
 
 /**
  * Componente para la gestión de categorías
