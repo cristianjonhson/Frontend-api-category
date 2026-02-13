@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
-import { SWEET_ALERT_TEXTS, SWEET_ALERT_COLORS, SWEET_ALERT_CONFIG, SWEET_ALERT_ICONS } from 'src/app/shared/constants';
+import { SWEET_ALERT_TEXTS, SWEET_ALERT_COLORS, SWEET_ALERT_CONFIG, SWEET_ALERT_ICONS } from '../constants';
 
 @Injectable({
   providedIn: 'root'
