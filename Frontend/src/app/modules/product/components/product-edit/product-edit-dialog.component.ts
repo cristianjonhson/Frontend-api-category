@@ -3,9 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
-import { ERROR_MESSAGES, VALIDATION_RULES } from 'src/app/shared/constants';
-import { ICategory, IProduct, IProductRequest } from 'src/app/shared/interfaces';
-import { SweetAlertService } from 'src/app/shared/services';
+import { ERROR_MESSAGES, VALIDATION_RULES } from '../../../../shared/constants';
+import { ICategory, IProduct, IProductRequest } from '../../../../shared/interfaces';
+import { SweetAlertService } from '../../../../shared/services';
 
 export interface ProductEditDialogData {
   product: IProduct;
