@@ -4,7 +4,7 @@ import { DashboardComponent } from './pages/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { CategoryComponent } from '../category/components/list-category/category.component';
 import { ProductListComponent } from '../product/components/product-list/product-list.component';
-import { ROUTES } from 'src/app/shared/constants/routes.constants';
+import { ROUTES } from '../../shared/constants/routes.constants';
 
 /**
  * Rutas del módulo Dashboard
