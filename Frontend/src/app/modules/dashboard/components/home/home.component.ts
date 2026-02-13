@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { CategoryService } from 'src/app/modules/shared/services/category.service'; // ajusta el path si es distinto
-import { APP_CONFIG } from 'src/app/shared/constants/app.constants';
-import { ROUTE_PATHS } from 'src/app/shared/constants/routes.constants';
+import { environment } from '../../../../../environments/environment';
+import { CategoryService } from '../../../shared/services/category.service'; // ajusta el path si es distinto
+import { APP_CONFIG } from '../../../../shared/constants/app.constants';
+import { ROUTE_PATHS } from '../../../../shared/constants/routes.constants';
 
 type ApiStatus = 'LOADING' | 'ONLINE' | 'OFFLINE';
 
