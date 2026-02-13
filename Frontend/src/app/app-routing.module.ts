@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ROUTES, ROUTE_PATHS } from 'src/app/shared/constants/routes.constants';
+import { ROUTES, ROUTE_PATHS } from './shared/constants/routes.constants';
 
 /**
  * Configuración de rutas principales de la aplicación
