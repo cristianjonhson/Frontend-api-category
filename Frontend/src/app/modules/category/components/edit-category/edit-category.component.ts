@@ -2,10 +2,10 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
-import { CategoryService } from 'src/app/modules/shared/services/category.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { ICategory } from 'src/app/shared/interfaces/category.interface';
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from 'src/app/shared/constants';
+import { CategoryService } from '../../../shared/services/category.service';
+import { NotificationService } from '../../../../core/services/notification.service';
+import { ICategory } from '../../../../shared/interfaces/category.interface';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../../shared/constants';
 
 export interface EditCategoryDialogData {
   category: ICategory;
