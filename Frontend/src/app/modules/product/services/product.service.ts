@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { ApiResponse } from 'src/app/shared/models/api-response.model';
-import { API_CONFIG } from 'src/app/shared/constants';
-import { IProduct, IProductRequest } from 'src/app/shared/interfaces/product.interface';
+import { environment } from '../../../../environments/environment';
+import { ApiResponse } from '../../../shared/models/api-response.model';
+import { API_CONFIG } from '../../../shared/constants';
+import { IProduct, IProductRequest } from '../../../shared/interfaces/product.interface';
 
 const base_url = environment.base_uri;
 
