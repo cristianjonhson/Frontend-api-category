@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { CategoryRequest, CategoryResponse } from 'src/app/shared/models/category.model';
-import { ApiResponse } from 'src/app/shared/models/api-response.model';
-import { ICategory } from 'src/app/shared/interfaces/category.interface';
-import { API_CONFIG } from 'src/app/shared/constants/api.constants';
-import { ApiResponseCode } from 'src/app/shared/enums/api-response-code.enum';
-import { LoggerService } from 'src/app/core/services/logger.service';
+import { environment } from '../../../../environments/environment';
+import { CategoryRequest, CategoryResponse } from '../../../shared/models/category.model';
+import { ApiResponse } from '../../../shared/models/api-response.model';
+import { ICategory } from '../../../shared/interfaces/category.interface';
+import { API_CONFIG } from '../../../shared/constants/api.constants';
+import { ApiResponseCode } from '../../../shared/enums/api-response-code.enum';
+import { LoggerService } from '../../../core/services/logger.service';
 
 // Call environment, declare constant
 const base_url = environment.base_uri;
