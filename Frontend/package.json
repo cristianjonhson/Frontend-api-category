@@ -9,6 +9,7 @@
     "lint": "ng lint",
     "lint:imports": "eslint \"src/**/*.ts\" --max-warnings=0",
     "lint:imports:fix": "eslint \"src/**/*.ts\" --fix",
+    "lint:ci": "pnpm run lint:imports",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -46,7 +47,9 @@
     "@types/jasmine": "4.3.5",
     "@types/jasminewd2": "2.0.10",
     "@types/node": "20.3.3",
+    "@typescript-eslint/parser": "8.56.1",
     "codelyzer": "6.0.2",
+    "eslint": "10.0.2",
     "jasmine-core": "5.0.1",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.2",
