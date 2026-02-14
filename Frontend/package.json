@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "pnpm run lint:imports",
     "lint:imports": "eslint \"src/**/*.ts\" --max-warnings=0",
     "lint:imports:fix": "eslint \"src/**/*.ts\" --fix",
     "lint:ci": "pnpm run lint:imports",
