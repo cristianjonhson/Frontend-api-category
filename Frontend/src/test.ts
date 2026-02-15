@@ -19,7 +19,12 @@ getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting()
 );
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);
+
+const contextLoader = (require as any).context
+  ? (require as any).context('./', true, /\.spec\.ts$/)
+  : (import.meta as any).webpackContext('./', {
+      recursive: true,
+      regExp: /\.spec\.ts$/
+    });
+
+contextLoader.keys().forEach(contextLoader);
