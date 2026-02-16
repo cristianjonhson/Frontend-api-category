@@ -20,6 +20,8 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting()
 );
 
+window.onbeforeunload = null;
+
 const contextLoader = (require as any).context
   ? (require as any).context('./', true, /\.spec\.ts$/)
   : (import.meta as any).webpackContext('./', {
