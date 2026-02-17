@@ -14,12 +14,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductCreateDialogComponent } from './components/product-add/product-create-dialog.component';
 import { ProductEditDialogComponent } from './components/product-edit/product-edit-dialog.component';
+import { StockManagementComponent } from './components/stock-management/stock-management.component';
 
 @NgModule({
   declarations: [
     ProductListComponent,
     ProductCreateDialogComponent,
-    ProductEditDialogComponent
+    ProductEditDialogComponent,
+    StockManagementComponent
   ],
   imports: [
     CommonModule,
@@ -33,6 +35,6 @@ import { ProductEditDialogComponent } from './components/product-edit/product-ed
     MatButtonModule,
     MatPaginatorModule
   ],
-  exports: [ProductListComponent]
+  exports: [ProductListComponent, StockManagementComponent]
 })
 export class ProductModule { }
