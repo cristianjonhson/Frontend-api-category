@@ -1,0 +1,16 @@
+.stock-container {
+  padding: 16px;
+}
+
+.subtitle {
+  margin-bottom: 16px;
+  color: #6b7280;
+}
+
+table {
+  width: 100%;
+}
+
+.loading {
+  padding: 12px 0;
+}
