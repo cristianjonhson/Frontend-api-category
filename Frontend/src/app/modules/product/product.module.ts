@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +26,7 @@ import { StockManagementComponent } from './components/stock-management/stock-ma
   ],
   imports: [
     CommonModule,
+    SharedModule,
     ReactiveFormsModule,
     MatTableModule,
     MatIconModule,
