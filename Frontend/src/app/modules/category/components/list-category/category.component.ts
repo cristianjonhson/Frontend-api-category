@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -12,6 +11,7 @@ import { LoggerService } from '../../../../core/services/logger.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { BaseComponent } from '../../../../shared/components/base.component';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
+import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 import { TIMING } from '../../../../shared/constants/ui.constants';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
@@ -36,7 +36,7 @@ import { SUCCESS_MESSAGES, ERROR_MESSAGES, INFO_MESSAGES, CONFIRMATION_MESSAGES,
 export class CategoryComponent extends BaseComponent implements OnInit, AfterViewInit {
 
   // ViewChild para el paginador
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('sharedPaginator') sharedPaginator!: SharedPaginatorComponent;
 
   // Arreglo de nombres de columnas para la tabla
   displayedColumns: string[] = ['name', 'description', 'actions'];
@@ -94,7 +94,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    * Conecta el paginador al dataSource
    */
   ngAfterViewInit(): void {
-    this.paginatorService.connect(this.dataSource, this.paginator);
+    this.paginatorService.connect(this.dataSource, this.sharedPaginator.paginator);
   }
 
   /**
@@ -107,7 +107,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .subscribe({
         next: (categories) => {
           this.logger.info('Categorías recibidas:', categories.length);
-          this.paginatorService.setData(this.dataSource, categories, this.paginator);
+          this.paginatorService.setData(this.dataSource, categories, this.sharedPaginator?.paginator);
           this.applyFilter();
 
           if (categories.length === 0) {
@@ -126,7 +126,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    */
   applyFilter(): void {
     const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
-    this.paginatorService.applyFilter(this.dataSource, term, this.paginator);
+    this.paginatorService.applyFilter(this.dataSource, term, this.sharedPaginator?.paginator);
   }
 
 
