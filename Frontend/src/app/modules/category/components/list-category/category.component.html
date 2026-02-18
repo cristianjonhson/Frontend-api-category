@@ -40,6 +40,10 @@
     <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="paginatorConfig.PAGE_SIZE_OPTIONS" [showFirstLastButtons]="paginatorConfig.SHOW_FIRST_LAST_BUTTONS">
-  </mat-paginator>
+  <app-shared-paginator
+    #sharedPaginator
+    [pageSizeOptions]="paginatorConfig.PAGE_SIZE_OPTIONS"
+    [showFirstLastButtons]="paginatorConfig.SHOW_FIRST_LAST_BUTTONS"
+    [pageSize]="paginatorConfig.DEFAULT_PAGE_SIZE">
+  </app-shared-paginator>
 </div>
