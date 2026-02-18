@@ -4,6 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoryComponent } from './components/list-category/category.component';
 import { MaterialModuleOptimized } from '../shared/material-optimized.module';
+import { SharedModule } from '../shared/shared.module';
 import { AddCategoryComponent } from './components/add-category/add-category.component';
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 
@@ -23,6 +24,7 @@ import { EditCategoryComponent } from './components/edit-category/edit-category.
   ],
   imports: [
     CommonModule,
+    SharedModule,
     MaterialModuleOptimized,
     FlexLayoutModule,
     FormsModule,
