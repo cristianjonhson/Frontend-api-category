@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { SharedPaginatorComponent } from './components/paginator/shared-paginator.component';
 import { MaterialModuleOptimized } from './material-optimized.module';
 
 /**
@@ -22,10 +23,12 @@ import { MaterialModuleOptimized } from './material-optimized.module';
  */
 @NgModule({
   declarations: [
-    SidenavComponent
+    SidenavComponent,
+    SharedPaginatorComponent
   ],
   exports: [
     SidenavComponent,
+    SharedPaginatorComponent,
     CommonModule,
     RouterModule,
     FlexLayoutModule,
