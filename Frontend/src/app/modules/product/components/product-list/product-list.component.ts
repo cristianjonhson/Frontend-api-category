@@ -4,11 +4,11 @@ import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
 import { ProductEditDialogComponent } from '../product-edit/product-edit-dialog.component';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { CategoryService } from '../../../shared/services/category.service';
+import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 import { ICategory, IProduct } from '../../../../shared/interfaces';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
 import { TIMING } from '../../../../shared/constants/ui.constants';
@@ -22,7 +22,7 @@ import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.consta
 })
 
 export class ProductListComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('sharedPaginator') sharedPaginator!: SharedPaginatorComponent;
 
   products: IProduct[] = [];
   filteredProducts: IProduct[] = [];
@@ -65,7 +65,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.paginatorService.connect(this.dataSource, this.paginator);
+    this.paginatorService.connect(this.dataSource, this.sharedPaginator.paginator);
   }
 
   openCreateDialog(): void {
@@ -154,8 +154,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       return matchesName && matchesCategory;
     });
 
-    this.paginatorService.setData(this.dataSource, this.filteredProducts, this.paginator);
-    this.paginatorService.resetToFirstPage(this.paginator, this.dataSource);
+    this.paginatorService.setData(this.dataSource, this.filteredProducts, this.sharedPaginator?.paginator);
+    this.paginatorService.resetToFirstPage(this.sharedPaginator?.paginator, this.dataSource);
   }
 
   private getCategoryName(product: IProduct): string {
