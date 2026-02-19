@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { ProductService } from '../../services/product.service';
+import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
+import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
 import { IProduct } from '../../../../shared/interfaces';
+import { PaginatorService } from '../../../../shared/services';
 
 interface IStockRow {
   productName: string;
@@ -17,19 +20,31 @@ interface IStockRow {
   templateUrl: './stock-management.component.html',
   styleUrls: ['./stock-management.component.css']
 })
-export class StockManagementComponent implements OnInit {
+export class StockManagementComponent implements OnInit, AfterViewInit {
+  @ViewChild('sharedPaginator') sharedPaginator!: SharedPaginatorComponent;
+
   readonly displayedColumns: string[] = ['productName', 'currentStock', 'minStock', 'maxStock', 'availableStock'];
-  readonly dataSource = new MatTableDataSource<IStockRow>([]);
+  readonly dataSource: MatTableDataSource<IStockRow>;
+  readonly paginatorConfig = PAGINATOR_CONFIG;
 
   readonly defaultMinStock = 10;
   readonly defaultMaxStock = 100;
 
   loading = false;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private paginatorService: PaginatorService
+  ) {
+    this.dataSource = this.paginatorService.createDataSource<IStockRow>();
+  }
 
   ngOnInit(): void {
     this.loadStock();
+  }
+
+  ngAfterViewInit(): void {
+    this.paginatorService.connect(this.dataSource, this.sharedPaginator.paginator);
   }
 
   private loadStock(): void {
@@ -37,11 +52,13 @@ export class StockManagementComponent implements OnInit {
 
     this.productService.getProducts().subscribe({
       next: (products) => {
-        this.dataSource.data = this.mapProductsToStockRows(products ?? []);
+        const stockRows = this.mapProductsToStockRows(products ?? []);
+        this.paginatorService.setData(this.dataSource, stockRows, this.sharedPaginator?.paginator);
+        this.paginatorService.resetToFirstPage(this.sharedPaginator?.paginator, this.dataSource);
         this.loading = false;
       },
       error: () => {
-        this.dataSource.data = [];
+        this.paginatorService.setData(this.dataSource, [], this.sharedPaginator?.paginator);
         this.loading = false;
       }
     });
