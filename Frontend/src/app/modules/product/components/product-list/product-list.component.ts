@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { PageEvent } from '@angular/material/paginator';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
 import { ProductEditDialogComponent } from '../product-edit/product-edit-dialog.component';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
@@ -193,5 +194,9 @@ export class ProductListComponent implements OnInit, AfterViewInit {
           }
         });
     });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.paginatorService.handlePageChange(event, this.dataSource, this.sharedPaginator?.paginator);
   }
 }
