@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -127,6 +128,10 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
   applyFilter(): void {
     const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
     this.paginatorService.applyFilter(this.dataSource, term, this.sharedPaginator?.paginator);
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.paginatorService.handlePageChange(event, this.dataSource, this.sharedPaginator?.paginator);
   }
 
 
