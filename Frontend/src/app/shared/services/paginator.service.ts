@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Injectable({
@@ -47,5 +47,21 @@ export class PaginatorService {
         dataSource.paginator.firstPage();
       }
     }
+  }
+
+  handlePageChange<T>(
+    event: PageEvent,
+    dataSource: MatTableDataSource<T>,
+    paginator?: MatPaginator
+  ): void {
+    const targetPaginator = paginator ?? dataSource.paginator;
+
+    if (!targetPaginator) {
+      return;
+    }
+
+    targetPaginator.pageIndex = event.pageIndex;
+    targetPaginator.pageSize = event.pageSize;
+    dataSource.paginator = targetPaginator;
   }
 }
