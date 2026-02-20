@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { ProductService } from '../../services/product.service';
@@ -77,5 +78,9 @@ export class StockManagementComponent implements OnInit, AfterViewInit {
         availableStock
       };
     });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.paginatorService.handlePageChange(event, this.dataSource, this.sharedPaginator?.paginator);
   }
 }
