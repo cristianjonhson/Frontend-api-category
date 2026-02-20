@@ -63,6 +63,7 @@
     #sharedPaginator
     [pageSizeOptions]="paginatorConfig.PAGE_SIZE_OPTIONS"
     [showFirstLastButtons]="paginatorConfig.SHOW_FIRST_LAST_BUTTONS"
-    [pageSize]="paginatorConfig.DEFAULT_PAGE_SIZE">
+    [pageSize]="paginatorConfig.DEFAULT_PAGE_SIZE"
+    (page)="onPageChange($event)">
   </app-shared-paginator>
 </div>
