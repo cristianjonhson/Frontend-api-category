@@ -38,7 +38,8 @@ describe('ProductListComponent', () => {
     createDataSource: jasmine.createSpy('createDataSource').and.callFake(() => ({ data: [] })),
     connect: jasmine.createSpy('connect'),
     setData: jasmine.createSpy('setData'),
-    resetToFirstPage: jasmine.createSpy('resetToFirstPage')
+    resetToFirstPage: jasmine.createSpy('resetToFirstPage'),
+    handlePageChange: jasmine.createSpy('handlePageChange')
   };
 
   beforeEach(async () => {
@@ -63,5 +64,25 @@ describe('ProductListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should delegate onPageChange to paginator service', () => {
+    const pageEvent = {
+      pageIndex: 2,
+      pageSize: 25,
+      length: 200,
+      previousPageIndex: 1
+    };
+    const paginatorRef = {} as any;
+
+    (component as any).sharedPaginator = { paginator: paginatorRef } as any;
+
+    component.onPageChange(pageEvent as any);
+
+    expect(paginatorServiceMock.handlePageChange).toHaveBeenCalledWith(
+      pageEvent as any,
+      component.dataSource,
+      paginatorRef
+    );
   });
 });
