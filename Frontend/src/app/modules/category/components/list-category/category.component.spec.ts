@@ -38,7 +38,8 @@ describe('CategoryComponent', () => {
     createDataSource: jasmine.createSpy('createDataSource').and.returnValue({}),
     connect: jasmine.createSpy('connect'),
     setData: jasmine.createSpy('setData'),
-    applyFilter: jasmine.createSpy('applyFilter')
+    applyFilter: jasmine.createSpy('applyFilter'),
+    handlePageChange: jasmine.createSpy('handlePageChange')
   };
 
   const dialogMock = {
@@ -69,5 +70,25 @@ describe('CategoryComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should delegate onPageChange to paginator service', () => {
+    const pageEvent = {
+      pageIndex: 1,
+      pageSize: 10,
+      length: 50,
+      previousPageIndex: 0
+    };
+    const paginatorRef = {} as any;
+
+    (component as any).sharedPaginator = { paginator: paginatorRef } as any;
+
+    component.onPageChange(pageEvent as any);
+
+    expect(paginatorServiceMock.handlePageChange).toHaveBeenCalledWith(
+      pageEvent as any,
+      component.dataSource,
+      paginatorRef
+    );
   });
 });
