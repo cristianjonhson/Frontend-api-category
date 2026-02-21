@@ -8,6 +8,7 @@ import { CategoryService } from '../../../shared/services/category.service';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
+import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
 
 describe('CategoryComponent', () => {
   let component: CategoryComponent;
@@ -73,20 +74,20 @@ describe('CategoryComponent', () => {
   });
 
   it('should delegate onPageChange to paginator service', () => {
-    const pageEvent = {
+    const pageEvent = createPageEvent({
       pageIndex: 1,
       pageSize: 10,
       length: 50,
       previousPageIndex: 0
-    };
+    });
     const paginatorRef = {} as any;
 
     (component as any).sharedPaginator = { paginator: paginatorRef } as any;
 
-    component.onPageChange(pageEvent as any);
+    component.onPageChange(pageEvent);
 
     expect(paginatorServiceMock.handlePageChange).toHaveBeenCalledWith(
-      pageEvent as any,
+      pageEvent,
       component.dataSource,
       paginatorRef
     );
