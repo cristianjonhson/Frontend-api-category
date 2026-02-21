@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { StockManagementComponent } from './stock-management.component';
 import { ProductService } from '../../services/product.service';
 import { PaginatorService } from '../../../../shared/services';
+import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
 
 describe('StockManagementComponent', () => {
   let component: StockManagementComponent;
@@ -44,20 +45,20 @@ describe('StockManagementComponent', () => {
   });
 
   it('should delegate onPageChange to paginator service', () => {
-    const pageEvent = {
+    const pageEvent = createPageEvent({
       pageIndex: 1,
       pageSize: 20,
       length: 120,
       previousPageIndex: 0
-    };
+    });
     const paginatorRef = {} as any;
 
     (component as any).sharedPaginator = { paginator: paginatorRef } as any;
 
-    component.onPageChange(pageEvent as any);
+    component.onPageChange(pageEvent);
 
     expect(paginatorServiceMock.handlePageChange).toHaveBeenCalledWith(
-      pageEvent as any,
+      pageEvent,
       component.dataSource,
       paginatorRef
     );
