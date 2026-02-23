@@ -24,6 +24,10 @@ public class ProductJpaEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryJpaEntity category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id")
+    private SupplierJpaEntity supplier;
+
     public ProductJpaEntity() {}
 
     public ProductJpaEntity(Long id, String name, BigDecimal price, Integer quantity, CategoryJpaEntity category) {
@@ -32,6 +36,15 @@ public class ProductJpaEntity {
         this.price = price;
         this.quantity = quantity;
         this.category = category;
+    }
+
+    public ProductJpaEntity(Long id, String name, BigDecimal price, Integer quantity, CategoryJpaEntity category, SupplierJpaEntity supplier) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.category = category;
+        this.supplier = supplier;
     }
 
     public Long getId() { return id; }
@@ -48,4 +61,7 @@ public class ProductJpaEntity {
 
     public CategoryJpaEntity getCategory() { return category; }
     public void setCategory(CategoryJpaEntity category) { this.category = category; }
+
+    public SupplierJpaEntity getSupplier() { return supplier; }
+    public void setSupplier(SupplierJpaEntity supplier) { this.supplier = supplier; }
 }
