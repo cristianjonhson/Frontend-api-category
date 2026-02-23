@@ -41,8 +41,14 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ApiResponse<ProductDTO>> createProduct(@Valid @RequestBody ProductCreateRequest request) {
         Product created = productUseCase.create(
-                ProductMapper.toDomainForCreate(request.getName(), request.getPrice(), request.getQuantity()),
-                request.getCategoryId()
+                ProductMapper.toDomainForCreate(
+                        request.getName(),
+                        request.getPrice(),
+                        request.getQuantity(),
+                        request.getSupplierId()
+                ),
+                request.getCategoryId(),
+                request.getSupplierId()
         );
 
         ProductDTO dto = ProductMapper.toDTO(created);
@@ -62,8 +68,14 @@ public class ProductController {
             @PathVariable Long id,
             @Valid @RequestBody ProductUpdateRequest request) {
         Product updated = productUseCase.update(id,
-                ProductMapper.toDomainForCreate(request.getName(), request.getPrice(), request.getQuantity()),
-                request.getCategoryId()
+                ProductMapper.toDomainForCreate(
+                        request.getName(),
+                        request.getPrice(),
+                        request.getQuantity(),
+                        request.getSupplierId()
+                ),
+                request.getCategoryId(),
+                request.getSupplierId()
         );
 
         ProductDTO dto = ProductMapper.toDTO(updated);
