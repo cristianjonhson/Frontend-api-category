@@ -9,16 +9,20 @@ public class ProductDTO {
     private Integer quantity;
     private Long categoryId;
     private String categoryName;
+    private Long supplierId;
+    private String supplierName;
 
     public ProductDTO() {}
 
-    public ProductDTO(Long id, String name, BigDecimal price, Integer quantity, Long categoryId, String categoryName) {
+    public ProductDTO(Long id, String name, BigDecimal price, Integer quantity, Long categoryId, String categoryName, Long supplierId, String supplierName) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+        this.supplierId = supplierId;
+        this.supplierName = supplierName;
     }
 
     public Long getId() { return id; }
@@ -38,4 +42,10 @@ public class ProductDTO {
 
     public String getCategoryName() { return categoryName; }
     public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
+
+    public Long getSupplierId() { return supplierId; }
+    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
+
+    public String getSupplierName() { return supplierName; }
+    public void setSupplierName(String supplierName) { this.supplierName = supplierName; }
 }
