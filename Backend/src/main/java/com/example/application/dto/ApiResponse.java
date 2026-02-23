@@ -7,6 +7,7 @@ public class ApiResponse<T> {
     private List<Metadata> metadata;
     private CategoryResponse<T> categoryResponse;
     private ProductResponse<T> productResponse;
+    private SupplierResponse<T> supplierResponse;
 
     public ApiResponse() {}
 
@@ -20,6 +21,11 @@ public class ApiResponse<T> {
         this.productResponse = productResponse;
     }
 
+    public ApiResponse(List<Metadata> metadata, SupplierResponse<T> supplierResponse) {
+        this.metadata = metadata;
+        this.supplierResponse = supplierResponse;
+    }
+
     public List<Metadata> getMetadata() { return metadata; }
     public void setMetadata(List<Metadata> metadata) { this.metadata = metadata; }
 
@@ -28,6 +34,9 @@ public class ApiResponse<T> {
 
     public ProductResponse<T> getProductResponse() { return productResponse; }
     public void setProductResponse(ProductResponse<T> productResponse) { this.productResponse = productResponse; }
+
+    public SupplierResponse<T> getSupplierResponse() { return supplierResponse; }
+    public void setSupplierResponse(SupplierResponse<T> supplierResponse) { this.supplierResponse = supplierResponse; }
 
     public static class Metadata {
         private String code;
@@ -57,5 +66,15 @@ public class ApiResponse<T> {
 
         public List<T> getProduct() { return product; }
         public void setProduct(List<T> product) { this.product = product; }
+    }
+
+    public static class SupplierResponse<T> {
+        private List<T> supplier;
+
+        public SupplierResponse() {}
+        public SupplierResponse(List<T> supplier) { this.supplier = supplier; }
+
+        public List<T> getSupplier() { return supplier; }
+        public void setSupplier(List<T> supplier) { this.supplier = supplier; }
     }
 }
