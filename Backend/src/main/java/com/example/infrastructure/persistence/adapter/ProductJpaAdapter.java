@@ -3,10 +3,13 @@ package com.example.infrastructure.persistence.adapter;
 import com.example.application.port.out.ProductPersistencePort;
 import com.example.domain.model.Category;
 import com.example.domain.model.Product;
+import com.example.domain.model.Supplier;
 import com.example.infrastructure.persistence.jpa.entity.CategoryJpaEntity;
 import com.example.infrastructure.persistence.jpa.entity.ProductJpaEntity;
+import com.example.infrastructure.persistence.jpa.entity.SupplierJpaEntity;
 import com.example.infrastructure.persistence.jpa.repository.CategoryJpaRepository;
 import com.example.infrastructure.persistence.jpa.repository.ProductJpaRepository;
+import com.example.infrastructure.persistence.jpa.repository.SupplierJpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,15 +21,28 @@ public class ProductJpaAdapter implements ProductPersistencePort {
 
     private final ProductJpaRepository productRepo;
     private final CategoryJpaRepository categoryRepo;
+    private final SupplierJpaRepository supplierRepo;
 
-    public ProductJpaAdapter(ProductJpaRepository productRepo, CategoryJpaRepository categoryRepo) {
+    public ProductJpaAdapter(
+            ProductJpaRepository productRepo,
+            CategoryJpaRepository categoryRepo,
+            SupplierJpaRepository supplierRepo
+    ) {
         this.productRepo = productRepo;
         this.categoryRepo = categoryRepo;
+        this.supplierRepo = supplierRepo;
     }
 
     @Override
     public List<Product> findAll() {
         return productRepo.findAll().stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Product> findBySupplierId(Long supplierId) {
+        return productRepo.findBySupplierId(supplierId).stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -55,25 +71,42 @@ public class ProductJpaAdapter implements ProductPersistencePort {
                 categoryEntity.getDescription()
         );
 
+        Supplier supplier = null;
+        SupplierJpaEntity supplierEntity = e.getSupplier();
+        if (supplierEntity != null) {
+            supplier = new Supplier(
+                supplierEntity.getId(),
+                supplierEntity.getName(),
+                supplierEntity.getEmail(),
+                supplierEntity.getPhone()
+            );
+        }
+
         return new Product(
                 e.getId(),
                 e.getName(),
                 e.getPrice(),
                 e.getQuantity(),
-                category
+            category,
+            supplier
         );
     }
 
     private ProductJpaEntity toEntity(Product d) {
         Category category = d.getCategory();
         CategoryJpaEntity categoryEntity = categoryRepo.getReferenceById(category.getId());
+        SupplierJpaEntity supplierEntity = null;
+        if (d.getSupplier() != null && d.getSupplier().getId() != null) {
+            supplierEntity = supplierRepo.getReferenceById(d.getSupplier().getId());
+        }
 
         return new ProductJpaEntity(
                 d.getId(),
                 d.getName(),
                 d.getPrice(),
                 d.getQuantity(),
-                categoryEntity
+            categoryEntity,
+            supplierEntity
         );
     }
 }
