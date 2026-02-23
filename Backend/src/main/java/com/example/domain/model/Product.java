@@ -8,6 +8,7 @@ public class Product {
     private BigDecimal price;
     private Integer quantity;
     private Category category;
+    private Supplier supplier;
 
     public Product() {}
 
@@ -17,6 +18,16 @@ public class Product {
         this.price = price;
         this.quantity = quantity;
         this.category = category;
+        this.supplier = null;
+    }
+
+    public Product(Long id, String name, BigDecimal price, Integer quantity, Category category, Supplier supplier) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.category = category;
+        this.supplier = supplier;
     }
 
     public Long getId() { return id; }
@@ -33,4 +44,7 @@ public class Product {
 
     public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
+
+    public Supplier getSupplier() { return supplier; }
+    public void setSupplier(Supplier supplier) { this.supplier = supplier; }
 }
