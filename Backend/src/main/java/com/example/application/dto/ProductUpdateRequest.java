@@ -22,13 +22,16 @@ public class ProductUpdateRequest {
     @NotNull
     private Long categoryId;
 
+    private Long supplierId;
+
     public ProductUpdateRequest() {}
 
-    public ProductUpdateRequest(String name, BigDecimal price, Integer quantity, Long categoryId) {
+    public ProductUpdateRequest(String name, BigDecimal price, Integer quantity, Long categoryId, Long supplierId) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.categoryId = categoryId;
+        this.supplierId = supplierId;
     }
 
     public String getName() { return name; }
@@ -42,4 +45,7 @@ public class ProductUpdateRequest {
 
     public Long getCategoryId() { return categoryId; }
     public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
+
+    public Long getSupplierId() { return supplierId; }
+    public void setSupplierId(Long supplierId) { this.supplierId = supplierId; }
 }
