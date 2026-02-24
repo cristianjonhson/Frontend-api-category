@@ -1,0 +1,18 @@
+.supplier-container {
+  padding: 16px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.loading {
+  padding: 16px 0;
+  color: #666;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 8px;
+}
