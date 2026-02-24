@@ -5,7 +5,8 @@ export const API_CONFIG = {
   /** Endpoints de la API */
   ENDPOINTS: {
     CATEGORIES: '/categories',
-    PRODUCTS: '/products'
+    PRODUCTS: '/products',
+    SUPPLIERS: '/suppliers'
   },
   /** Headers técnicos para control interno del frontend */
   HEADERS: {
