@@ -5,6 +5,8 @@ export interface IProduct {
   quantity: number;
   categoryId?: number;
   categoryName?: string;
+  supplierId?: number;
+  supplierName?: string;
   category?: string | { id?: number; name?: string };
 }
 
@@ -13,4 +15,5 @@ export interface IProductRequest {
   price: number;
   quantity: number;
   categoryId: number;
+  supplierId?: number;
 }
