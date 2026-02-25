@@ -35,7 +35,8 @@ export class ProductService {
       name: payload?.name,
       price: payload?.price,
       quantity: payload?.quantity,
-      categoryId: payload?.categoryId
+      categoryId: payload?.categoryId,
+      supplierId: payload?.supplierId
     };
 
     return this.http.post<ApiResponse<any>>(endpoint, requestBody, options).pipe(
@@ -55,7 +56,8 @@ export class ProductService {
       name: payload?.name,
       price: payload?.price,
       quantity: payload?.quantity,
-      categoryId: payload?.categoryId
+      categoryId: payload?.categoryId,
+      supplierId: payload?.supplierId
     };
 
     return this.http.put<ApiResponse<any>>(endpoint, requestBody, options).pipe(
@@ -114,6 +116,8 @@ export class ProductService {
       quantity: product?.quantity,
       categoryId: product?.categoryId ?? product?.category?.id,
       categoryName,
+      supplierId: product?.supplierId,
+      supplierName: product?.supplierName,
       category: categoryName
     };
   }
