@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import { CategoryComponent } from '../category/components/list-category/category.component';
 import { ProductListComponent } from '../product/components/product-list/product-list.component';
 import { StockManagementComponent } from '../product/components/stock-management/stock-management.component';
+import { SupplierListComponent } from '../supplier/components/supplier-list/supplier-list.component';
 import { ROUTES } from '../../shared/constants/routes.constants';
 
 /**
@@ -36,6 +37,10 @@ const routes: Routes = [
       {
         path: ROUTES.STOCK,
         component: StockManagementComponent
+      },
+      {
+        path: ROUTES.SUPPLIER,
+        component: SupplierListComponent
       }
     ]
   }
