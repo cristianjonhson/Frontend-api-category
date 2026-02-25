@@ -1,0 +1,13 @@
+.w-100 {
+  width: 100%;
+}
+
+.dialog-content {
+  min-width: 420px;
+}
+
+.form-error {
+  color: #d32f2f;
+  margin-right: auto;
+  font-size: 12px;
+}
