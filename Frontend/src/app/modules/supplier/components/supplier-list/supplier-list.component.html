@@ -2,6 +2,12 @@
   <h2>Proveedores</h2>
   <p class="subtitle">Datos de proveedores y relación con productos.</p>
 
+  <div class="actions">
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      Añadir proveedor
+    </button>
+  </div>
+
   <div class="loading" *ngIf="loading">Cargando proveedores...</div>
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" *ngIf="!loading">
