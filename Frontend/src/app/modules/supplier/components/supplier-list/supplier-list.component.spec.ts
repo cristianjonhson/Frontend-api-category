@@ -4,8 +4,9 @@ import { of } from 'rxjs';
 
 import { SupplierListComponent } from './supplier-list.component';
 import { SupplierService } from '../../services/supplier.service';
-import { PaginatorService } from '../../../../shared/services';
+import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('SupplierListComponent', () => {
   let component: SupplierListComponent;
@@ -23,12 +24,24 @@ describe('SupplierListComponent', () => {
     handlePageChange: jasmine.createSpy('handlePageChange')
   };
 
+  const dialogMock = {
+    open: jasmine.createSpy('open').and.returnValue({
+      afterClosed: () => of(null)
+    })
+  };
+
+  const sweetAlertMock = {
+    showSuccess: jasmine.createSpy('showSuccess')
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SupplierListComponent],
       providers: [
         { provide: SupplierService, useValue: supplierServiceMock },
-        { provide: PaginatorService, useValue: paginatorServiceMock }
+        { provide: PaginatorService, useValue: paginatorServiceMock },
+        { provide: MatDialog, useValue: dialogMock },
+        { provide: SweetAlertService, useValue: sweetAlertMock }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
