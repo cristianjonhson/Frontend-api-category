@@ -1,12 +1,17 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 
 import { PaginatorService } from '../../../../shared/services';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 import { ISupplier } from '../../../../shared/interfaces/supplier.interface';
 import { SupplierService } from '../../services/supplier.service';
+import { SupplierCreateDialogComponent } from '../supplier-add/supplier-create-dialog.component';
+import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
+import { SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
+import { SweetAlertService } from '../../../../shared/services';
 
 interface ISupplierRow {
   name: string;
@@ -32,7 +37,9 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private supplierService: SupplierService,
-    private paginatorService: PaginatorService
+    private paginatorService: PaginatorService,
+    private dialog: MatDialog,
+    private sweetAlert: SweetAlertService
   ) {
     this.dataSource = this.paginatorService.createDataSource<ISupplierRow>();
   }
@@ -47,6 +54,19 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
 
   onPageChange(event: PageEvent): void {
     this.paginatorService.handlePageChange(event, this.dataSource, this.sharedPaginator?.paginator);
+  }
+
+  openCreateDialog(): void {
+    const dialogRef = this.dialog.open(SupplierCreateDialogComponent, DIALOG_CONFIG.SUPPLIER_FORM);
+
+    dialogRef.afterClosed().subscribe((created) => {
+      if (!created) {
+        return;
+      }
+
+      this.loadSuppliers();
+      this.sweetAlert.showSuccess(SUCCESS_MESSAGES.SUPPLIER_CREATED, SWEET_ALERT_TEXTS.TITLE_CREATED);
+    });
   }
 
   private loadSuppliers(): void {
