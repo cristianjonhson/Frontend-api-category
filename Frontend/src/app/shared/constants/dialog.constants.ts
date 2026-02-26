@@ -16,5 +16,10 @@ export const DIALOG_CONFIG = {
   PRODUCT_FORM: {
     width: '520px',
     disableClose: false
+  },
+  /** Dimensiones para diálogos de creación de proveedores */
+  SUPPLIER_FORM: {
+    width: '520px',
+    disableClose: false
   }
 } as const;
