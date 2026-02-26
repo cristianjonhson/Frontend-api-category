@@ -16,6 +16,11 @@ export const SUCCESS_MESSAGES = {
   PRODUCT_UPDATED: 'Producto actualizado exitosamente',
   PRODUCT_DELETED: 'Producto eliminado exitosamente',
 
+  // Proveedores
+  SUPPLIER_CREATED: 'Proveedor agregado exitosamente',
+  SUPPLIER_UPDATED: 'Proveedor actualizado exitosamente',
+  SUPPLIER_DELETED: 'Proveedor eliminado exitosamente',
+
   // Genéricos
   SAVE_SUCCESS: 'Cambios guardados exitosamente',
   OPERATION_SUCCESS: 'Operación completada exitosamente'
@@ -51,6 +56,11 @@ export const ERROR_MESSAGES = {
   PRODUCT_CREATE_ERROR: 'Error al crear producto',
   PRODUCT_UPDATE_ERROR: 'Error al actualizar producto',
   PRODUCT_DELETE_ERROR: 'Error al eliminar producto',
+
+  SUPPLIER_LOAD_ERROR: 'Error al cargar proveedores',
+  SUPPLIER_CREATE_ERROR: 'Error al crear proveedor',
+  SUPPLIER_UPDATE_ERROR: 'Error al actualizar proveedor',
+  SUPPLIER_DELETE_ERROR: 'Error al eliminar proveedor',
 
   // Genéricos
   UNKNOWN_ERROR: 'Ocurrió un error inesperado.',
