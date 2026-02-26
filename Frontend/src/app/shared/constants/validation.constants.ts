@@ -6,5 +6,9 @@ export const VALIDATION_RULES = {
     NAME_MIN_LENGTH: 2,
     PRICE_MIN: 0,
     QUANTITY_MIN: 0
+  },
+  SUPPLIER: {
+    NAME_MIN_LENGTH: 2,
+    PHONE_MIN_LENGTH: 7
   }
 } as const;
