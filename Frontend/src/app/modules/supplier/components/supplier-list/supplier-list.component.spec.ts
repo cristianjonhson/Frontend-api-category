@@ -71,4 +71,20 @@ describe('SupplierListComponent', () => {
       paginatorRef
     );
   });
+
+  it('should open edit dialog', () => {
+    const row = {
+      id: 1,
+      name: 'Proveedor 1',
+      email: 'p1@test.com',
+      phone: '3001234567',
+      productsCount: 0,
+      productsLabel: 'Sin productos asignados',
+      products: []
+    };
+
+    component.openEditDialog(row);
+
+    expect(dialogMock.open).toHaveBeenCalled();
+  });
 });
