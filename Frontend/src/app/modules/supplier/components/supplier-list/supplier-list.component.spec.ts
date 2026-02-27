@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
@@ -13,7 +13,8 @@ describe('SupplierListComponent', () => {
   let fixture: ComponentFixture<SupplierListComponent>;
 
   const supplierServiceMock = {
-    getSuppliers: jasmine.createSpy('getSuppliers').and.returnValue(of([]))
+    getSuppliers: jasmine.createSpy('getSuppliers').and.returnValue(of([])),
+    deleteSupplier: jasmine.createSpy('deleteSupplier').and.returnValue(of(void 0))
   };
 
   const paginatorServiceMock = {
@@ -31,7 +32,10 @@ describe('SupplierListComponent', () => {
   };
 
   const sweetAlertMock = {
-    showSuccess: jasmine.createSpy('showSuccess')
+    showSuccess: jasmine.createSpy('showSuccess'),
+    confirmDelete: jasmine.createSpy('confirmDelete').and.returnValue(Promise.resolve(true)),
+    showDeleting: jasmine.createSpy('showDeleting'),
+    showError: jasmine.createSpy('showError')
   };
 
   beforeEach(async () => {
@@ -87,4 +91,23 @@ describe('SupplierListComponent', () => {
 
     expect(dialogMock.open).toHaveBeenCalled();
   });
+
+  it('should delete supplier after confirmation', fakeAsync(() => {
+    const row = {
+      id: 1,
+      name: 'Proveedor 1',
+      email: 'p1@test.com',
+      phone: '3001234567',
+      productsCount: 0,
+      productsLabel: 'Sin productos asignados',
+      products: []
+    };
+
+    component.onDeleteSupplier(row);
+    flushMicrotasks();
+
+    expect(sweetAlertMock.confirmDelete).toHaveBeenCalled();
+    expect(sweetAlertMock.showDeleting).toHaveBeenCalledWith('proveedor');
+    expect(supplierServiceMock.deleteSupplier).toHaveBeenCalledWith(1);
+  }));
 });
