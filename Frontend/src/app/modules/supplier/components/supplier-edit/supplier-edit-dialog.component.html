@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Editar proveedor</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content class="dialog-content">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error *ngIf="form.controls.name.touched && form.controls.name.invalid">
+        Nombre requerido (mínimo 2 caracteres)
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+      <mat-error *ngIf="form.controls.email.touched && form.controls.email.invalid">
+        Email inválido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="phone" />
+      <mat-error *ngIf="form.controls.phone.touched && form.controls.phone.invalid">
+        Teléfono requerido (mínimo 7 caracteres)
+      </mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <div class="form-error" *ngIf="errorMessage" role="alert" aria-live="polite">
+      {{ errorMessage }}
+    </div>
+    <button mat-button type="button" (click)="close()">Cerrar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+      Guardar cambios
+    </button>
+  </mat-dialog-actions>
+</form>
