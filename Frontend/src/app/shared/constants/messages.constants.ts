@@ -99,6 +99,13 @@ export const CONFIRMATION_MESSAGES = {
   DELETE_PRODUCT: (productName: string) => `¿Eliminar el producto "${productName}"?`,
 
   /**
+   * Genera un mensaje de confirmación para eliminar un proveedor
+   * @param supplierName Nombre del proveedor
+   * @returns Mensaje de confirmación
+   */
+  DELETE_SUPPLIER: (supplierName: string) => `¿Eliminar el proveedor "${supplierName}"?`,
+
+  /**
    * Mensaje genérico de confirmación de eliminación
    */
   CONFIRM_DELETE: '¿Está seguro de que desea eliminar este elemento?',
