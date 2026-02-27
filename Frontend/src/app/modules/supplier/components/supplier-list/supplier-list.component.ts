@@ -11,7 +11,7 @@ import { SupplierService } from '../../services/supplier.service';
 import { SupplierCreateDialogComponent } from '../supplier-add/supplier-create-dialog.component';
 import { SupplierEditDialogComponent } from '../supplier-edit/supplier-edit-dialog.component';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
-import { SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
+import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
 import { SweetAlertService } from '../../../../shared/services';
 
 interface ISupplierRow {
@@ -94,6 +94,34 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
       this.loadSuppliers();
       this.sweetAlert.showSuccess(SUCCESS_MESSAGES.SUPPLIER_UPDATED, SWEET_ALERT_TEXTS.TITLE_UPDATED);
     });
+  }
+
+  onDeleteSupplier(row: ISupplierRow): void {
+    this.sweetAlert.confirmDelete(CONFIRMATION_MESSAGES.DELETE_SUPPLIER(row.name))
+      .then((confirmed) => {
+        if (!confirmed) {
+          return;
+        }
+
+        this.sweetAlert.showDeleting('proveedor');
+
+        if (!row.id) {
+          this.sweetAlert.showError(ERROR_MESSAGES.SUPPLIER_DELETE_ERROR);
+          return;
+        }
+
+        this.supplierService.deleteSupplier(row.id)
+          .subscribe({
+            next: () => {
+              this.loadSuppliers();
+              this.sweetAlert.showSuccess(SUCCESS_MESSAGES.SUPPLIER_DELETED);
+            },
+            error: (error) => {
+              const message = error?.message || ERROR_MESSAGES.SUPPLIER_DELETE_ERROR;
+              this.sweetAlert.showError(message);
+            }
+          });
+      });
   }
 
   private loadSuppliers(): void {
