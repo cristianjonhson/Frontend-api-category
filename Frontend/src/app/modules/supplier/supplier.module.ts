@@ -8,9 +8,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { SupplierListComponent } from './components/supplier-list/supplier-list.component';
 import { SupplierCreateDialogComponent } from './components/supplier-add/supplier-create-dialog.component';
+import { SupplierEditDialogComponent } from './components/supplier-edit/supplier-edit-dialog.component';
 
 @NgModule({
-  declarations: [SupplierListComponent, SupplierCreateDialogComponent],
+  declarations: [SupplierListComponent, SupplierCreateDialogComponent, SupplierEditDialogComponent],
   imports: [
     CommonModule,
     SharedModule,
