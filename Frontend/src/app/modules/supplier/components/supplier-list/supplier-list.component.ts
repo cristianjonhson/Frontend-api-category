@@ -9,16 +9,19 @@ import { SharedPaginatorComponent } from '../../../shared/components/paginator/s
 import { ISupplier } from '../../../../shared/interfaces/supplier.interface';
 import { SupplierService } from '../../services/supplier.service';
 import { SupplierCreateDialogComponent } from '../supplier-add/supplier-create-dialog.component';
+import { SupplierEditDialogComponent } from '../supplier-edit/supplier-edit-dialog.component';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
 import { SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
 import { SweetAlertService } from '../../../../shared/services';
 
 interface ISupplierRow {
+  id?: number;
   name: string;
   email: string;
   phone: string;
   productsCount: number;
   productsLabel: string;
+  products: ISupplier['products'];
 }
 
 @Component({
@@ -29,7 +32,7 @@ interface ISupplierRow {
 export class SupplierListComponent implements OnInit, AfterViewInit {
   @ViewChild('sharedPaginator') sharedPaginator!: SharedPaginatorComponent;
 
-  readonly displayedColumns: string[] = ['name', 'email', 'phone', 'productsCount', 'productsLabel'];
+  readonly displayedColumns: string[] = ['name', 'email', 'phone', 'productsCount', 'productsLabel', 'actions'];
   readonly dataSource: MatTableDataSource<ISupplierRow>;
   readonly paginatorConfig = PAGINATOR_CONFIG;
 
@@ -69,6 +72,30 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
     });
   }
 
+  openEditDialog(row: ISupplierRow): void {
+    const dialogRef = this.dialog.open(SupplierEditDialogComponent, {
+      ...DIALOG_CONFIG.SUPPLIER_FORM,
+      data: {
+        supplier: {
+          id: row.id,
+          name: row.name,
+          email: row.email,
+          phone: row.phone,
+          products: row.products ?? []
+        }
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (!updated) {
+        return;
+      }
+
+      this.loadSuppliers();
+      this.sweetAlert.showSuccess(SUCCESS_MESSAGES.SUPPLIER_UPDATED, SWEET_ALERT_TEXTS.TITLE_UPDATED);
+    });
+  }
+
   private loadSuppliers(): void {
     this.loading = true;
 
@@ -94,11 +121,13 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
         : 'Sin productos asignados';
 
       return {
+        id: supplier.id,
         name: supplier.name,
         email: supplier.email,
         phone: supplier.phone,
         productsCount: products.length,
-        productsLabel
+        productsLabel,
+        products
       };
     });
   }
