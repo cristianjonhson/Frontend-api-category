@@ -38,6 +38,11 @@
       <mat-cell *matCellDef="let product"> {{product.categoryName || product.category?.name || product.category}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="supplier">
+      <mat-header-cell *matHeaderCellDef> Proveedor </mat-header-cell>
+      <mat-cell *matCellDef="let product"> {{product.supplierName || 'Sin proveedor'}} </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="quantity">
       <mat-header-cell *matHeaderCellDef> Cantidad </mat-header-cell>
       <mat-cell *matCellDef="let product"> {{product.quantity}} </mat-cell>
