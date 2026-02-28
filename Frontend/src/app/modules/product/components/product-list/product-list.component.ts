@@ -9,8 +9,9 @@ import { ProductCreateDialogComponent } from '../product-add/product-create-dial
 import { ProductEditDialogComponent } from '../product-edit/product-edit-dialog.component';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { CategoryService } from '../../../shared/services/category.service';
+import { SupplierService } from '../../../supplier/services/supplier.service';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
-import { ICategory, IProduct } from '../../../../shared/interfaces';
+import { ICategory, IProduct, ISupplier } from '../../../../shared/interfaces';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
 import { TIMING } from '../../../../shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
@@ -33,13 +34,15 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   categoryControl = new FormControl('');
   categories: string[] = [];
   realCategories: ICategory[] = [];
+  realSuppliers: ISupplier[] = [];
   readonly paginatorConfig = PAGINATOR_CONFIG;
 
-  displayedColumns: string[] = ['name', 'price', 'category', 'quantity', 'actions'];
+  displayedColumns: string[] = ['name', 'price', 'category', 'supplier', 'quantity', 'actions'];
 
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
+    private supplierService: SupplierService,
     private dialog: MatDialog,
     private sweetAlert: SweetAlertService,
     private paginatorService: PaginatorService
@@ -49,6 +52,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadCategories();
+    this.loadSuppliers();
     this.loadProducts();
 
     this.searchControl.valueChanges
@@ -72,7 +76,10 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(ProductCreateDialogComponent, {
       ...DIALOG_CONFIG.PRODUCT_FORM,
-      data: { categories: this.realCategories }
+      data: {
+        categories: this.realCategories,
+        suppliers: this.realSuppliers
+      }
     });
 
     dialogRef.afterClosed().subscribe((created) => {
@@ -95,7 +102,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       ...DIALOG_CONFIG.PRODUCT_FORM,
       data: {
         product,
-        categories: this.realCategories
+        categories: this.realCategories,
+        suppliers: this.realSuppliers
       }
     });
 
@@ -120,6 +128,12 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       if (this.categories.length === 0) {
         this.buildCategoriesFallback();
       }
+    });
+  }
+
+  private loadSuppliers(): void {
+    this.supplierService.getSuppliers().subscribe((suppliers) => {
+      this.realSuppliers = suppliers ?? [];
     });
   }
 
