@@ -36,7 +36,8 @@ describe('ProductEditDialogComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: {
             product: { id: 1, name: 'Prod', price: 10, quantity: 1, categoryId: 1, categoryName: 'Cat' },
-            categories: [{ id: 1, name: 'Cat', description: 'Desc' }]
+            categories: [{ id: 1, name: 'Cat', description: 'Desc' }],
+            suppliers: []
           }
         }
       ],
