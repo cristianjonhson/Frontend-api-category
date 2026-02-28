@@ -17,6 +17,14 @@
       </mat-select>
     </mat-form-field>
 
+    <mat-form-field appearance="outline" class="filter">
+      <mat-label>Proveedor</mat-label>
+      <mat-select [formControl]="supplierControl">
+        <mat-option value="">Todos</mat-option>
+        <mat-option *ngFor="let supplier of suppliers" [value]="supplier">{{ supplier }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <button mat-raised-button color="primary" (click)="openCreateDialog()">
       Añadir producto
     </button>
