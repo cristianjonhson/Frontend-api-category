@@ -92,4 +92,46 @@ describe('ProductListComponent', () => {
       paginatorRef
     );
   });
+
+  it('should filter products by supplier and category', () => {
+    component.products = [
+      {
+        id: 1,
+        name: 'Laptop',
+        price: 100,
+        quantity: 5,
+        categoryId: 1,
+        categoryName: 'Tecnologia',
+        supplierId: 10,
+        supplierName: 'Acme'
+      },
+      {
+        id: 2,
+        name: 'Mouse',
+        price: 20,
+        quantity: 8,
+        categoryId: 1,
+        categoryName: 'Tecnologia',
+        supplierId: 11,
+        supplierName: 'Globex'
+      },
+      {
+        id: 3,
+        name: 'Silla',
+        price: 50,
+        quantity: 2,
+        categoryId: 2,
+        categoryName: 'Oficina',
+        supplierId: 10,
+        supplierName: 'Acme'
+      }
+    ];
+
+    component.searchControl.setValue('lap');
+    component.categoryControl.setValue('Tecnologia');
+    component.supplierControl.setValue('Acme');
+
+    expect(component.filteredProducts.length).toBe(1);
+    expect(component.filteredProducts[0].name).toBe('Laptop');
+  });
 });
