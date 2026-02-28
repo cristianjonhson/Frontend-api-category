@@ -32,7 +32,9 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   searchControl = new FormControl('');
   categoryControl = new FormControl('');
+  supplierControl = new FormControl('');
   categories: string[] = [];
+  suppliers: string[] = [];
   realCategories: ICategory[] = [];
   realSuppliers: ISupplier[] = [];
   readonly paginatorConfig = PAGINATOR_CONFIG;
@@ -59,12 +61,14 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       .pipe(debounceTime(TIMING.SEARCH_DEBOUNCE))
       .subscribe(() => this.applyFilters());
     this.categoryControl.valueChanges.subscribe(() => this.applyFilters());
+    this.supplierControl.valueChanges.subscribe(() => this.applyFilters());
   }
 
   private loadProducts(): void {
     this.productService.getProducts().subscribe((data) => {
       this.products = data ?? [];
       this.buildCategoriesFallback();
+      this.buildSuppliersFallback();
       this.applyFilters();
     });
   }
@@ -134,6 +138,14 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   private loadSuppliers(): void {
     this.supplierService.getSuppliers().subscribe((suppliers) => {
       this.realSuppliers = suppliers ?? [];
+      this.suppliers = this.realSuppliers
+        .map((supplier) => (supplier?.name ?? '').toString().trim())
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b));
+
+      if (this.suppliers.length === 0) {
+        this.buildSuppliersFallback();
+      }
     });
   }
 
@@ -155,18 +167,39 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       .sort((a, b) => a.localeCompare(b));
   }
 
+  private buildSuppliersFallback(): void {
+    const derivedSuppliers = Array.from(
+      new Set(
+        this.products
+          .map((product: IProduct) => this.getSupplierName(product))
+          .filter(Boolean)
+      )
+    ).sort();
+
+    if (this.suppliers.length === 0) {
+      this.suppliers = derivedSuppliers;
+      return;
+    }
+
+    this.suppliers = Array.from(new Set([...this.suppliers, ...derivedSuppliers]))
+      .sort((a, b) => a.localeCompare(b));
+  }
+
   private applyFilters(): void {
     const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
     const selectedCategory = (this.categoryControl.value ?? '').toString().trim();
+    const selectedSupplier = (this.supplierControl.value ?? '').toString().trim();
 
     this.filteredProducts = this.products.filter((p: IProduct) => {
       const name = (p?.name ?? '').toString().toLowerCase();
       const category = this.getCategoryName(p);
+      const supplier = this.getSupplierName(p);
 
       const matchesName = !term || name.includes(term);
       const matchesCategory = !selectedCategory || category === selectedCategory;
+      const matchesSupplier = !selectedSupplier || supplier === selectedSupplier;
 
-      return matchesName && matchesCategory;
+      return matchesName && matchesCategory && matchesSupplier;
     });
 
     this.paginatorService.setData(this.dataSource, this.filteredProducts, this.sharedPaginator?.paginator);
@@ -179,6 +212,10 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     }
 
     return (product?.categoryName ?? product?.category?.name ?? '').toString().trim();
+  }
+
+  private getSupplierName(product: IProduct): string {
+    return (product?.supplierName ?? '').toString().trim();
   }
 
   onDeleteProduct(product: IProduct): void {
