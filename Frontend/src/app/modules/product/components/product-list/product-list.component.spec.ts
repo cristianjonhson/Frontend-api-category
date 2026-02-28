@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import { ProductListComponent } from './product-list.component';
 import { ProductService } from '../../services/product.service';
 import { CategoryService } from '../../../shared/services/category.service';
+import { SupplierService } from '../../../supplier/services/supplier.service';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
 
@@ -20,6 +21,10 @@ describe('ProductListComponent', () => {
 
   const categoryServiceMock = {
     getCategories: jasmine.createSpy('getCategories').and.returnValue(of([]))
+  };
+
+  const supplierServiceMock = {
+    getSuppliers: jasmine.createSpy('getSuppliers').and.returnValue(of([]))
   };
 
   const dialogMock = {
@@ -49,6 +54,7 @@ describe('ProductListComponent', () => {
       providers: [
         { provide: ProductService, useValue: productServiceMock },
         { provide: CategoryService, useValue: categoryServiceMock },
+        { provide: SupplierService, useValue: supplierServiceMock },
         { provide: MatDialog, useValue: dialogMock },
         { provide: SweetAlertService, useValue: sweetAlertMock },
         { provide: PaginatorService, useValue: paginatorServiceMock }
