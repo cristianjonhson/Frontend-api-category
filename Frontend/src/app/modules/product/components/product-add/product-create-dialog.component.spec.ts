@@ -32,7 +32,7 @@ describe('ProductCreateDialogComponent', () => {
         { provide: ProductService, useValue: productServiceMock },
         { provide: SweetAlertService, useValue: sweetAlertMock },
         { provide: MatDialogRef, useValue: dialogRefMock },
-        { provide: MAT_DIALOG_DATA, useValue: { categories: [] } }
+        { provide: MAT_DIALOG_DATA, useValue: { categories: [], suppliers: [] } }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
