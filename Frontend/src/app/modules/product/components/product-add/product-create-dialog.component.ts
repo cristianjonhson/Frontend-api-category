@@ -4,12 +4,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
 import { ERROR_MESSAGES, VALIDATION_RULES } from '../../../../shared/constants';
-import { ICategory } from '../../../../shared/interfaces/category.interface';
-import { IProductRequest } from '../../../../shared/interfaces/product.interface';
+import { ICategory, IProductRequest, ISupplier } from '../../../../shared/interfaces';
 import { SweetAlertService } from '../../../../shared/services';
 
 export interface ProductCreateDialogData {
   categories: ICategory[];
+  suppliers: ISupplier[];
 }
 
 @Component({
@@ -26,6 +26,7 @@ export class ProductCreateDialogComponent {
     name: ['', [Validators.required, Validators.minLength(VALIDATION_RULES.PRODUCT.NAME_MIN_LENGTH)]],
     price: [0, [Validators.required, Validators.min(VALIDATION_RULES.PRODUCT.PRICE_MIN)]],
     categoryId: [0, [Validators.required, Validators.min(1)]],
+    supplierId: [0],
     quantity: [0, [Validators.required, Validators.min(VALIDATION_RULES.PRODUCT.QUANTITY_MIN)]],
   });
 
@@ -50,7 +51,14 @@ export class ProductCreateDialogComponent {
       return;
     }
 
-    const payload: IProductRequest = this.form.getRawValue();
+    const formValue = this.form.getRawValue();
+    const payload: IProductRequest = {
+      name: formValue.name,
+      price: formValue.price,
+      categoryId: formValue.categoryId,
+      quantity: formValue.quantity,
+      supplierId: formValue.supplierId > 0 ? formValue.supplierId : undefined
+    };
 
     this.loading = true;
     this.form.disable();
