@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { of } from 'rxjs';
@@ -9,6 +9,8 @@ import { LoggerService } from '../../../../core/services/logger.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
+import { APP_CONFIG } from '../../../../shared/constants/app.constants';
+import { TIMING } from '../../../../shared/constants/ui.constants';
 
 describe('CategoryComponent', () => {
   let component: CategoryComponent;
@@ -48,6 +50,8 @@ describe('CategoryComponent', () => {
   };
 
   beforeEach(async () => {
+    localStorage.clear();
+
     await TestBed.configureTestingModule({
       declarations: [ CategoryComponent ],
       providers: [
@@ -67,6 +71,10 @@ describe('CategoryComponent', () => {
     fixture = TestBed.createComponent(CategoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   it('should create', () => {
@@ -92,4 +100,29 @@ describe('CategoryComponent', () => {
       paginatorRef
     );
   });
+
+  it('should restore persisted search filter on init', () => {
+    localStorage.setItem(
+      APP_CONFIG.STORAGE_KEYS.CATEGORY_LIST_FILTERS,
+      JSON.stringify({ search: 'electro' })
+    );
+
+    const restoredFixture = TestBed.createComponent(CategoryComponent);
+    const restoredComponent = restoredFixture.componentInstance;
+    restoredFixture.detectChanges();
+
+    expect(restoredComponent.searchControl.value).toBe('electro');
+  });
+
+  it('should remove persisted filter when search is cleared', fakeAsync(() => {
+    component.searchControl.setValue('tec');
+    tick(TIMING.SEARCH_DEBOUNCE);
+
+    expect(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.CATEGORY_LIST_FILTERS)).toContain('tec');
+
+    component.searchControl.setValue('');
+    tick(TIMING.SEARCH_DEBOUNCE);
+
+    expect(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.CATEGORY_LIST_FILTERS)).toBeNull();
+  }));
 });
