@@ -5,6 +5,7 @@ export const APP_CONFIG = {
   STORAGE_KEYS: {
     HOME_SHOW_TIPS: 'home_show_tips',
     PRODUCT_LIST_FILTERS: 'product_list_filters',
-    CATEGORY_LIST_FILTERS: 'category_list_filters'
+    CATEGORY_LIST_FILTERS: 'category_list_filters',
+    SUPPLIER_LIST_FILTERS: 'supplier_list_filters'
   }
 } as const;
