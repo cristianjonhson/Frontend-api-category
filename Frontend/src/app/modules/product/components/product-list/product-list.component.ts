@@ -12,10 +12,17 @@ import { CategoryService } from '../../../shared/services/category.service';
 import { SupplierService } from '../../../supplier/services/supplier.service';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 import { ICategory, IProduct, ISupplier } from '../../../../shared/interfaces';
+import { APP_CONFIG } from '../../../../shared/constants/app.constants';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
 import { TIMING } from '../../../../shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
+
+interface ProductListFilters {
+  search: string;
+  category: string;
+  supplier: string;
+}
 
 @Component({
   selector: 'app-product-list',
@@ -53,15 +60,25 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.restoreFilters();
     this.loadCategories();
     this.loadSuppliers();
     this.loadProducts();
 
     this.searchControl.valueChanges
       .pipe(debounceTime(TIMING.SEARCH_DEBOUNCE))
-      .subscribe(() => this.applyFilters());
-    this.categoryControl.valueChanges.subscribe(() => this.applyFilters());
-    this.supplierControl.valueChanges.subscribe(() => this.applyFilters());
+      .subscribe(() => {
+        this.saveFilters();
+        this.applyFilters();
+      });
+    this.categoryControl.valueChanges.subscribe(() => {
+      this.saveFilters();
+      this.applyFilters();
+    });
+    this.supplierControl.valueChanges.subscribe(() => {
+      this.saveFilters();
+      this.applyFilters();
+    });
   }
 
   private loadProducts(): void {
@@ -125,6 +142,36 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this.searchControl.setValue('');
     this.categoryControl.setValue('');
     this.supplierControl.setValue('');
+  }
+
+  private restoreFilters(): void {
+    try {
+      const rawFilters = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.PRODUCT_LIST_FILTERS);
+      const filters = rawFilters ? JSON.parse(rawFilters) as Partial<ProductListFilters> : null;
+
+      this.searchControl.setValue(filters?.search ?? '', { emitEvent: false });
+      this.categoryControl.setValue(filters?.category ?? '', { emitEvent: false });
+      this.supplierControl.setValue(filters?.supplier ?? '', { emitEvent: false });
+    } catch {
+      this.searchControl.setValue('', { emitEvent: false });
+      this.categoryControl.setValue('', { emitEvent: false });
+      this.supplierControl.setValue('', { emitEvent: false });
+    }
+  }
+
+  private saveFilters(): void {
+    const filters: ProductListFilters = {
+      search: (this.searchControl.value ?? '').toString(),
+      category: (this.categoryControl.value ?? '').toString(),
+      supplier: (this.supplierControl.value ?? '').toString()
+    };
+
+    if (!filters.search && !filters.category && !filters.supplier) {
+      localStorage.removeItem(APP_CONFIG.STORAGE_KEYS.PRODUCT_LIST_FILTERS);
+      return;
+    }
+
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCT_LIST_FILTERS, JSON.stringify(filters));
   }
 
   private loadCategories(): void {
