@@ -2,6 +2,17 @@
   <h2>Proveedores</h2>
   <p class="subtitle">Datos de proveedores y relación con productos.</p>
 
+  <div class="filters">
+    <mat-form-field appearance="outline" class="filter">
+      <mat-label>Buscar proveedor</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Nombre, email o teléfono" />
+    </mat-form-field>
+
+    <button mat-stroked-button type="button" (click)="clearFilters()">
+      Limpiar filtros
+    </button>
+  </div>
+
   <div class="actions">
     <button mat-raised-button color="primary" (click)="openCreateDialog()">
       Añadir proveedor
