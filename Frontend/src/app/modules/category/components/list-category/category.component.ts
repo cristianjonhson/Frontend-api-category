@@ -17,6 +17,7 @@ import { TIMING } from '../../../../shared/constants/ui.constants';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
 import { SUCCESS_MESSAGES, ERROR_MESSAGES, INFO_MESSAGES, CONFIRMATION_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
+import { APP_CONFIG } from '../../../../shared/constants/app.constants';
 
 /**
  * Componente para la gestión de categorías
@@ -71,6 +72,8 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   ngOnInit(): void {
+    this.restoreSearchFilter();
+
     this.dataSource.filterPredicate = (data: ICategory, filter: string) => {
       const term = (filter ?? '').toString().toLowerCase().trim();
       if (!term) {
@@ -87,7 +90,10 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
 
     this.searchControl.valueChanges
       .pipe(debounceTime(TIMING.SEARCH_DEBOUNCE), takeUntil(this.destroy$))
-      .subscribe(() => this.applyFilter());
+      .subscribe(() => {
+        this.saveSearchFilter();
+        this.applyFilter();
+      });
   }
 
   /**
@@ -128,6 +134,30 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
   applyFilter(): void {
     const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
     this.paginatorService.applyFilter(this.dataSource, term, this.sharedPaginator?.paginator);
+  }
+
+  private restoreSearchFilter(): void {
+    try {
+      const rawFilters = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.CATEGORY_LIST_FILTERS);
+      const filters = rawFilters ? JSON.parse(rawFilters) as { search?: string } : null;
+      this.searchControl.setValue(filters?.search ?? '', { emitEvent: false });
+    } catch {
+      this.searchControl.setValue('', { emitEvent: false });
+    }
+  }
+
+  private saveSearchFilter(): void {
+    const search = (this.searchControl.value ?? '').toString();
+
+    if (!search) {
+      localStorage.removeItem(APP_CONFIG.STORAGE_KEYS.CATEGORY_LIST_FILTERS);
+      return;
+    }
+
+    localStorage.setItem(
+      APP_CONFIG.STORAGE_KEYS.CATEGORY_LIST_FILTERS,
+      JSON.stringify({ search })
+    );
   }
 
   onPageChange(event: PageEvent): void {
