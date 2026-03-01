@@ -121,6 +121,12 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     });
   }
 
+  clearFilters(): void {
+    this.searchControl.setValue('');
+    this.categoryControl.setValue('');
+    this.supplierControl.setValue('');
+  }
+
   private loadCategories(): void {
     this.categoryService.getCategories().subscribe((categories) => {
       this.realCategories = categories ?? [];
