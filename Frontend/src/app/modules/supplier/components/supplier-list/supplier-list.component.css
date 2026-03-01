@@ -1,10 +1,23 @@
 .supplier-container {
-  padding: 16px;
+  margin: 20px;
 }
 
 .subtitle {
   color: #666;
   margin-bottom: 16px;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter {
+  min-width: 260px;
+  flex: 1;
 }
 
 .actions {
@@ -16,7 +29,13 @@
   color: #666;
 }
 
+mat-table,
 table {
   width: 100%;
   margin-bottom: 8px;
+}
+
+mat-header-cell,
+mat-cell {
+  padding: 8px;
 }
