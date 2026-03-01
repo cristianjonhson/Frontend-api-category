@@ -134,4 +134,16 @@ describe('ProductListComponent', () => {
     expect(component.filteredProducts.length).toBe(1);
     expect(component.filteredProducts[0].name).toBe('Laptop');
   });
+
+  it('should clear all filters', () => {
+    component.searchControl.setValue('lap');
+    component.categoryControl.setValue('Tecnologia');
+    component.supplierControl.setValue('Acme');
+
+    component.clearFilters();
+
+    expect(component.searchControl.value).toBe('');
+    expect(component.categoryControl.value).toBe('');
+    expect(component.supplierControl.value).toBe('');
+  });
 });
