@@ -2,6 +2,8 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 import { PaginatorService } from '../../../../shared/services';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
@@ -13,6 +15,8 @@ import { SupplierEditDialogComponent } from '../supplier-edit/supplier-edit-dial
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
 import { SweetAlertService } from '../../../../shared/services';
+import { APP_CONFIG } from '../../../../shared/constants/app.constants';
+import { TIMING } from '../../../../shared/constants/ui.constants';
 
 interface ISupplierRow {
   id?: number;
@@ -22,6 +26,10 @@ interface ISupplierRow {
   productsCount: number;
   productsLabel: string;
   products: ISupplier['products'];
+}
+
+interface SupplierListFilters {
+  search: string;
 }
 
 @Component({
@@ -36,6 +44,7 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
   readonly dataSource: MatTableDataSource<ISupplierRow>;
   readonly paginatorConfig = PAGINATOR_CONFIG;
 
+  searchControl = new FormControl('');
   loading = false;
 
   constructor(
@@ -48,7 +57,33 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.restoreSearchFilter();
+
+    this.dataSource.filterPredicate = (data: ISupplierRow, filter: string) => {
+      const term = (filter ?? '').toString().toLowerCase().trim();
+      if (!term) {
+        return true;
+      }
+
+      const supplierName = (data?.name ?? '').toString().toLowerCase();
+      const email = (data?.email ?? '').toString().toLowerCase();
+      const phone = (data?.phone ?? '').toString().toLowerCase();
+      const productsLabel = (data?.productsLabel ?? '').toString().toLowerCase();
+
+      return supplierName.includes(term)
+        || email.includes(term)
+        || phone.includes(term)
+        || productsLabel.includes(term);
+    };
+
     this.loadSuppliers();
+
+    this.searchControl.valueChanges
+      .pipe(debounceTime(TIMING.SEARCH_DEBOUNCE))
+      .subscribe(() => {
+        this.saveSearchFilter();
+        this.applyFilter();
+      });
   }
 
   ngAfterViewInit(): void {
@@ -57,6 +92,10 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
 
   onPageChange(event: PageEvent): void {
     this.paginatorService.handlePageChange(event, this.dataSource, this.sharedPaginator?.paginator);
+  }
+
+  clearFilters(): void {
+    this.searchControl.setValue('');
   }
 
   openCreateDialog(): void {
@@ -131,14 +170,44 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
       next: (suppliers) => {
         const rows = this.mapSuppliersToRows(suppliers ?? []);
         this.paginatorService.setData(this.dataSource, rows, this.sharedPaginator?.paginator);
-        this.paginatorService.resetToFirstPage(this.sharedPaginator?.paginator, this.dataSource);
+        this.applyFilter();
         this.loading = false;
       },
       error: () => {
         this.paginatorService.setData(this.dataSource, [], this.sharedPaginator?.paginator);
+        this.applyFilter();
         this.loading = false;
       }
     });
+  }
+
+  private applyFilter(): void {
+    const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
+    this.paginatorService.applyFilter(this.dataSource, term, this.sharedPaginator?.paginator);
+  }
+
+  private restoreSearchFilter(): void {
+    try {
+      const rawFilters = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.SUPPLIER_LIST_FILTERS);
+      const filters = rawFilters ? JSON.parse(rawFilters) as Partial<SupplierListFilters> : null;
+      this.searchControl.setValue(filters?.search ?? '', { emitEvent: false });
+    } catch {
+      this.searchControl.setValue('', { emitEvent: false });
+    }
+  }
+
+  private saveSearchFilter(): void {
+    const search = (this.searchControl.value ?? '').toString();
+
+    if (!search) {
+      localStorage.removeItem(APP_CONFIG.STORAGE_KEYS.SUPPLIER_LIST_FILTERS);
+      return;
+    }
+
+    localStorage.setItem(
+      APP_CONFIG.STORAGE_KEYS.SUPPLIER_LIST_FILTERS,
+      JSON.stringify({ search })
+    );
   }
 
   private mapSuppliersToRows(suppliers: ISupplier[]): ISupplierRow[] {
