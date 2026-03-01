@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
@@ -7,6 +7,8 @@ import { SupplierService } from '../../services/supplier.service';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
 import { MatDialog } from '@angular/material/dialog';
+import { APP_CONFIG } from '../../../../shared/constants/app.constants';
+import { TIMING } from '../../../../shared/constants/ui.constants';
 
 describe('SupplierListComponent', () => {
   let component: SupplierListComponent;
@@ -22,6 +24,7 @@ describe('SupplierListComponent', () => {
     connect: jasmine.createSpy('connect'),
     setData: jasmine.createSpy('setData'),
     resetToFirstPage: jasmine.createSpy('resetToFirstPage'),
+    applyFilter: jasmine.createSpy('applyFilter'),
     handlePageChange: jasmine.createSpy('handlePageChange')
   };
 
@@ -39,6 +42,8 @@ describe('SupplierListComponent', () => {
   };
 
   beforeEach(async () => {
+    localStorage.clear();
+
     await TestBed.configureTestingModule({
       declarations: [SupplierListComponent],
       providers: [
@@ -55,6 +60,10 @@ describe('SupplierListComponent', () => {
     fixture = TestBed.createComponent(SupplierListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   it('should create', () => {
@@ -136,4 +145,29 @@ describe('SupplierListComponent', () => {
     expect(sweetAlertMock.showDeleting).not.toHaveBeenCalled();
     expect(supplierServiceMock.deleteSupplier).not.toHaveBeenCalled();
   });
+
+  it('should restore persisted search filter on init', () => {
+    localStorage.setItem(
+      APP_CONFIG.STORAGE_KEYS.SUPPLIER_LIST_FILTERS,
+      JSON.stringify({ search: 'acme' })
+    );
+
+    const restoredFixture = TestBed.createComponent(SupplierListComponent);
+    const restoredComponent = restoredFixture.componentInstance;
+    restoredFixture.detectChanges();
+
+    expect(restoredComponent.searchControl.value).toBe('acme');
+  });
+
+  it('should remove persisted filter when search is cleared', fakeAsync(() => {
+    component.searchControl.setValue('acme');
+    tick(TIMING.SEARCH_DEBOUNCE);
+
+    expect(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.SUPPLIER_LIST_FILTERS)).toContain('acme');
+
+    component.searchControl.setValue('');
+    tick(TIMING.SEARCH_DEBOUNCE);
+
+    expect(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.SUPPLIER_LIST_FILTERS)).toBeNull();
+  }));
 });
