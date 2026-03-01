@@ -9,6 +9,7 @@ import { CategoryService } from '../../../shared/services/category.service';
 import { SupplierService } from '../../../supplier/services/supplier.service';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
+import { APP_CONFIG } from '../../../../shared/constants/app.constants';
 
 describe('ProductListComponent', () => {
   let component: ProductListComponent;
@@ -49,6 +50,8 @@ describe('ProductListComponent', () => {
   };
 
   beforeEach(async () => {
+    localStorage.clear();
+
     await TestBed.configureTestingModule({
       declarations: [ProductListComponent],
       providers: [
@@ -67,6 +70,10 @@ describe('ProductListComponent', () => {
     fixture = TestBed.createComponent(ProductListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   it('should create', () => {
@@ -145,5 +152,25 @@ describe('ProductListComponent', () => {
     expect(component.searchControl.value).toBe('');
     expect(component.categoryControl.value).toBe('');
     expect(component.supplierControl.value).toBe('');
+    expect(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.PRODUCT_LIST_FILTERS)).toBeNull();
+  });
+
+  it('should restore persisted filters on init', () => {
+    localStorage.setItem(
+      APP_CONFIG.STORAGE_KEYS.PRODUCT_LIST_FILTERS,
+      JSON.stringify({
+        search: 'lap',
+        category: 'Tecnologia',
+        supplier: 'Acme'
+      })
+    );
+
+    const restoredFixture = TestBed.createComponent(ProductListComponent);
+    const restoredComponent = restoredFixture.componentInstance;
+    restoredFixture.detectChanges();
+
+    expect(restoredComponent.searchControl.value).toBe('lap');
+    expect(restoredComponent.categoryControl.value).toBe('Tecnologia');
+    expect(restoredComponent.supplierControl.value).toBe('Acme');
   });
 });
