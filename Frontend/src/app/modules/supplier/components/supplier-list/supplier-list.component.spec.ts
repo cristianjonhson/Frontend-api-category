@@ -170,4 +170,14 @@ describe('SupplierListComponent', () => {
 
     expect(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.SUPPLIER_LIST_FILTERS)).toBeNull();
   }));
+
+  it('should detect active filters', () => {
+    component.searchControl.setValue('acme');
+
+    expect(component.hasActiveFilters()).toBeTrue();
+
+    component.searchControl.setValue('   ');
+
+    expect(component.hasActiveFilters()).toBeFalse();
+  });
 });
