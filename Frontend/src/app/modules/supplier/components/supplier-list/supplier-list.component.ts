@@ -98,6 +98,10 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
     this.searchControl.setValue('');
   }
 
+  hasActiveFilters(): boolean {
+    return (this.searchControl.value ?? '').toString().trim().length > 0;
+  }
+
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(SupplierCreateDialogComponent, DIALOG_CONFIG.SUPPLIER_FORM);
 
