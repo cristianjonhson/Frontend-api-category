@@ -173,4 +173,22 @@ describe('ProductListComponent', () => {
     expect(restoredComponent.categoryControl.value).toBe('Tecnologia');
     expect(restoredComponent.supplierControl.value).toBe('Acme');
   });
+
+  it('should detect active filters', () => {
+    expect(component.hasActiveFilters()).toBeFalse();
+
+    component.searchControl.setValue('lap');
+    expect(component.hasActiveFilters()).toBeTrue();
+
+    component.searchControl.setValue('');
+    component.categoryControl.setValue('Tecnologia');
+    expect(component.hasActiveFilters()).toBeTrue();
+
+    component.categoryControl.setValue('');
+    component.supplierControl.setValue('Acme');
+    expect(component.hasActiveFilters()).toBeTrue();
+
+    component.supplierControl.setValue('');
+    expect(component.hasActiveFilters()).toBeFalse();
+  });
 });
