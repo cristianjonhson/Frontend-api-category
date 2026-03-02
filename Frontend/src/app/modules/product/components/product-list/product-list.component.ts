@@ -144,6 +144,14 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this.supplierControl.setValue('');
   }
 
+  hasActiveFilters(): boolean {
+    const search = (this.searchControl.value ?? '').toString().trim();
+    const category = (this.categoryControl.value ?? '').toString().trim();
+    const supplier = (this.supplierControl.value ?? '').toString().trim();
+
+    return Boolean(search || category || supplier);
+  }
+
   private restoreFilters(): void {
     try {
       const rawFilters = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.PRODUCT_LIST_FILTERS);
