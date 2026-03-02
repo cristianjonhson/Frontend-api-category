@@ -8,7 +8,7 @@
       <input matInput [formControl]="searchControl" placeholder="Nombre, email o teléfono" />
     </mat-form-field>
 
-    <button mat-stroked-button type="button" (click)="clearFilters()">
+    <button mat-stroked-button type="button" (click)="clearFilters()" [disabled]="!hasActiveFilters()">
       Limpiar filtros
     </button>
   </div>
