@@ -3,6 +3,7 @@ package com.example.application.service;
 import com.example.application.port.in.CategoryUseCase;
 import com.example.application.port.out.CategoryPersistencePort;
 import com.example.domain.model.Category;
+import com.example.infrastructure.exception.ConflictException;
 import com.example.infrastructure.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,11 @@ public class CategoryService implements CategoryUseCase {
     public void delete(Long id) {
         persistence.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category not found"));
+
+        if (persistence.hasProducts(id)) {
+            throw new ConflictException("No se puede eliminar la categoria porque tiene productos asociados");
+        }
+
         persistence.delete(id);
     }
 }
