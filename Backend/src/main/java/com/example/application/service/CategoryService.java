@@ -6,6 +6,7 @@ import com.example.domain.model.Category;
 import com.example.infrastructure.exception.ConflictException;
 import com.example.infrastructure.exception.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class CategoryService implements CategoryUseCase {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         persistence.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category not found"));
