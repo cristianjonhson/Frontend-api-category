@@ -42,7 +42,7 @@
 
     <ng-container matColumnDef="price">
       <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
-      <mat-cell *matCellDef="let product"> {{product.price | currency}} </mat-cell>
+      <mat-cell *matCellDef="let product"> {{ product.price | clpCurrency }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="category">
