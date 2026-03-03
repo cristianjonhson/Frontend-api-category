@@ -1,5 +1,6 @@
 package com.example.infrastructure.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(Map.of(
                 "code", "BUSINESS_ERROR",
                 "message", ex.getMessage()
+        ));
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<?> handleConflict(ConflictException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "code", "CONFLICT",
+                "message", ex.getMessage()
+        ));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleDataIntegrity(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "code", "CONFLICT",
+                "message", "No se puede completar la operacion porque existen datos relacionados"
         ));
     }
 
