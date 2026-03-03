@@ -4,6 +4,7 @@ import com.example.application.port.out.CategoryPersistencePort;
 import com.example.domain.model.Category;
 import com.example.infrastructure.persistence.jpa.entity.CategoryJpaEntity;
 import com.example.infrastructure.persistence.jpa.repository.CategoryJpaRepository;
+import com.example.infrastructure.persistence.jpa.repository.ProductJpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,9 +15,11 @@ import java.util.stream.Collectors;
 public class CategoryJpaAdapter implements CategoryPersistencePort {
 
     private final CategoryJpaRepository repo;
+    private final ProductJpaRepository productRepo;
 
-    public CategoryJpaAdapter(CategoryJpaRepository repo) {
+    public CategoryJpaAdapter(CategoryJpaRepository repo, ProductJpaRepository productRepo) {
         this.repo = repo;
+        this.productRepo = productRepo;
     }
 
    @Override
@@ -35,6 +38,11 @@ public class CategoryJpaAdapter implements CategoryPersistencePort {
     public Category save(Category category) {
         CategoryJpaEntity saved = repo.save(toEntity(category));
         return toDomain(saved);
+    }
+
+    @Override
+    public boolean hasProducts(Long categoryId) {
+        return productRepo.existsByCategoryId(categoryId);
     }
 
     @Override
