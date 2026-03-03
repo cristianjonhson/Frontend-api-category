@@ -9,5 +9,6 @@ public interface CategoryPersistencePort {
     List<Category> findAll();
     Optional<Category> findById(Long id);
     Category save(Category category);
+    boolean hasProducts(Long categoryId);
     void delete(Long id);
 }
