@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ProductJpaRepository extends JpaRepository<ProductJpaEntity, Long> {
 	List<ProductJpaEntity> findBySupplierId(Long supplierId);
+	boolean existsByCategoryId(Long categoryId);
 }
