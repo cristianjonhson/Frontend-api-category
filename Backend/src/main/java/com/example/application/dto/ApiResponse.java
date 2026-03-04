@@ -8,6 +8,7 @@ public class ApiResponse<T> {
     private CategoryResponse<T> categoryResponse;
     private ProductResponse<T> productResponse;
     private SupplierResponse<T> supplierResponse;
+    private PurchaseOrderResponse<T> purchaseOrderResponse;
 
     public ApiResponse() {}
 
@@ -26,6 +27,11 @@ public class ApiResponse<T> {
         this.supplierResponse = supplierResponse;
     }
 
+    public ApiResponse(List<Metadata> metadata, PurchaseOrderResponse<T> purchaseOrderResponse) {
+        this.metadata = metadata;
+        this.purchaseOrderResponse = purchaseOrderResponse;
+    }
+
     public List<Metadata> getMetadata() { return metadata; }
     public void setMetadata(List<Metadata> metadata) { this.metadata = metadata; }
 
@@ -37,6 +43,9 @@ public class ApiResponse<T> {
 
     public SupplierResponse<T> getSupplierResponse() { return supplierResponse; }
     public void setSupplierResponse(SupplierResponse<T> supplierResponse) { this.supplierResponse = supplierResponse; }
+
+    public PurchaseOrderResponse<T> getPurchaseOrderResponse() { return purchaseOrderResponse; }
+    public void setPurchaseOrderResponse(PurchaseOrderResponse<T> purchaseOrderResponse) { this.purchaseOrderResponse = purchaseOrderResponse; }
 
     public static class Metadata {
         private String code;
@@ -76,5 +85,15 @@ public class ApiResponse<T> {
 
         public List<T> getSupplier() { return supplier; }
         public void setSupplier(List<T> supplier) { this.supplier = supplier; }
+    }
+
+    public static class PurchaseOrderResponse<T> {
+        private List<T> purchaseOrder;
+
+        public PurchaseOrderResponse() {}
+        public PurchaseOrderResponse(List<T> purchaseOrder) { this.purchaseOrder = purchaseOrder; }
+
+        public List<T> getPurchaseOrder() { return purchaseOrder; }
+        public void setPurchaseOrder(List<T> purchaseOrder) { this.purchaseOrder = purchaseOrder; }
     }
 }
