@@ -1,0 +1,111 @@
+<section class="purchase-container">
+  <h2>Compras / Abastecimiento</h2>
+  <p class="subtitle">Gestiona órdenes de compra, recepción de mercadería y validación de ingreso por producto.</p>
+
+  <mat-card class="purchase-card">
+    <h3>Nueva Orden de Compra</h3>
+
+    <form [formGroup]="form" (ngSubmit)="createOrder()">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Proveedor</mat-label>
+          <mat-select formControlName="supplierId">
+            <mat-option [value]="null">Seleccionar proveedor</mat-option>
+            <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Fecha estimada de recepción</mat-label>
+          <input matInput type="date" formControlName="expectedDate" />
+        </mat-form-field>
+      </div>
+
+      <div formArrayName="items" class="items-wrapper">
+        <div class="item-row" *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+          <mat-form-field appearance="outline" class="field product">
+            <mat-label>Producto</mat-label>
+            <mat-select formControlName="productId">
+              <mat-option [value]="null">Seleccionar producto</mat-option>
+              <mat-option *ngFor="let product of products" [value]="product.id">{{ product.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field qty">
+            <mat-label>Cantidad</mat-label>
+            <input matInput type="number" min="1" formControlName="quantity" />
+          </mat-form-field>
+
+          <button mat-icon-button color="warn" type="button" (click)="removeItem(i)" [disabled]="items.length <= 1">
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button mat-stroked-button type="button" (click)="addItem()">
+          Agregar producto
+        </button>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="creatingOrder">
+          Crear orden
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+  <mat-card class="purchase-card">
+    <h3>Órdenes de Compra</h3>
+
+    <div class="loading" *ngIf="loadingOrders">Cargando órdenes...</div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" *ngIf="!loadingOrders">
+      <ng-container matColumnDef="orderNumber">
+        <th mat-header-cell *matHeaderCellDef>Orden</th>
+        <td mat-cell *matCellDef="let row">{{ row.orderNumber }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="supplier">
+        <th mat-header-cell *matHeaderCellDef>Proveedor</th>
+        <td mat-cell *matCellDef="let row">{{ row.supplierName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="expectedDate">
+        <th mat-header-cell *matHeaderCellDef>Fecha estimada</th>
+        <td mat-cell *matCellDef="let row">{{ row.expectedDate || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Creada</th>
+        <td mat-cell *matCellDef="let row">{{ row.createdAt | date:'short' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="items">
+        <th mat-header-cell *matHeaderCellDef>Detalle</th>
+        <td mat-cell *matCellDef="let row">{{ getItemsSummary(row) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let row">
+          <button
+            mat-raised-button
+            color="accent"
+            type="button"
+            (click)="receiveOrder(row)"
+            [disabled]="!canReceive(row)">
+            Recibir ({{ getPendingCount(row) }})
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </mat-card>
+</section>
