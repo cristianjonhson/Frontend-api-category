@@ -6,6 +6,7 @@ import { CategoryComponent } from '../category/components/list-category/category
 import { ProductListComponent } from '../product/components/product-list/product-list.component';
 import { StockManagementComponent } from '../product/components/stock-management/stock-management.component';
 import { SupplierListComponent } from '../supplier/components/supplier-list/supplier-list.component';
+import { PurchaseManagementComponent } from '../purchase/components/purchase-management/purchase-management.component';
 import { ROUTES } from '../../shared/constants/routes.constants';
 
 /**
@@ -41,6 +42,10 @@ const routes: Routes = [
       {
         path: ROUTES.SUPPLIER,
         component: SupplierListComponent
+      },
+      {
+        path: ROUTES.PURCHASE,
+        component: PurchaseManagementComponent
       }
     ]
   }
