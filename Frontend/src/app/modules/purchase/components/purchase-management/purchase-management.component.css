@@ -1,0 +1,59 @@
+.purchase-container {
+  margin: 20px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.purchase-card {
+  margin-bottom: 20px;
+  padding: 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.items-wrapper {
+  margin-top: 8px;
+}
+
+.item-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.field {
+  min-width: 220px;
+  flex: 1;
+}
+
+.field.qty {
+  max-width: 140px;
+}
+
+.actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.loading {
+  padding: 16px 0;
+  color: #666;
+}
+
+table {
+  width: 100%;
+}
+
+mat-header-cell,
+mat-cell {
+  padding: 8px;
+}
