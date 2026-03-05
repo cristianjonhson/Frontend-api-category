@@ -9,6 +9,7 @@ export const ROUTES = {
   PRODUCT: 'product',
   STOCK: 'stock',
   SUPPLIER: 'supplier',
+  PURCHASE: 'purchase',
   WILDCARD: '**'
 } as const;
 
@@ -22,5 +23,6 @@ export const ROUTE_PATHS = {
   PRODUCT: `/${ROUTES.DASHBOARD}/${ROUTES.PRODUCT}`,
   STOCK: `/${ROUTES.DASHBOARD}/${ROUTES.STOCK}`,
   SUPPLIER: `/${ROUTES.DASHBOARD}/${ROUTES.SUPPLIER}`,
+  PURCHASE: `/${ROUTES.DASHBOARD}/${ROUTES.PURCHASE}`,
   CATEGORIES_NEW: '/categories/new'
 } as const;
