@@ -8,6 +8,7 @@ import { CategoryModule } from '../category/category.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { ProductModule } from '../product/product.module';
 import { SupplierModule } from '../supplier/supplier.module';
+import { PurchaseModule } from '../purchase/purchase.module';
 
 /**
  * Módulo principal del Dashboard
@@ -33,7 +34,8 @@ import { SupplierModule } from '../supplier/supplier.module';
     MaterialModuleOptimized,
     CategoryModule,
     ProductModule,
-    SupplierModule
+    SupplierModule,
+    PurchaseModule
   ]
 })
 export class DashboardModule { }
