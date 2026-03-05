@@ -6,7 +6,8 @@ export const API_CONFIG = {
   ENDPOINTS: {
     CATEGORIES: '/categories',
     PRODUCTS: '/products',
-    SUPPLIERS: '/suppliers'
+    SUPPLIERS: '/suppliers',
+    PURCHASE_ORDERS: '/purchase-orders'
   },
   /** Headers técnicos para control interno del frontend */
   HEADERS: {
