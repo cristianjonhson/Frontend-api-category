@@ -21,6 +21,10 @@ export const SUCCESS_MESSAGES = {
   SUPPLIER_UPDATED: 'Proveedor actualizado exitosamente',
   SUPPLIER_DELETED: 'Proveedor eliminado exitosamente',
 
+  // Compras
+  PURCHASE_ORDER_CREATED: 'Orden de compra creada exitosamente',
+  PURCHASE_ORDER_RECEIVED: 'Recepción de mercadería registrada exitosamente',
+
   // Genéricos
   SAVE_SUCCESS: 'Cambios guardados exitosamente',
   OPERATION_SUCCESS: 'Operación completada exitosamente'
@@ -61,6 +65,10 @@ export const ERROR_MESSAGES = {
   SUPPLIER_CREATE_ERROR: 'Error al crear proveedor',
   SUPPLIER_UPDATE_ERROR: 'Error al actualizar proveedor',
   SUPPLIER_DELETE_ERROR: 'Error al eliminar proveedor',
+
+  PURCHASE_ORDER_LOAD_ERROR: 'Error al cargar órdenes de compra',
+  PURCHASE_ORDER_CREATE_ERROR: 'Error al crear orden de compra',
+  PURCHASE_ORDER_RECEIVE_ERROR: 'Error al registrar recepción de mercadería',
 
   // Genéricos
   UNKNOWN_ERROR: 'Ocurrió un error inesperado.',
