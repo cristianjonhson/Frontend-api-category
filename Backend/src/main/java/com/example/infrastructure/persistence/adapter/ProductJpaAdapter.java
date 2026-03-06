@@ -93,9 +93,20 @@ public class ProductJpaAdapter implements ProductPersistencePort {
     }
 
     private ProductJpaEntity toEntity(Product d) {
-        Category category = d.getCategory();
-        CategoryJpaEntity categoryEntity = categoryRepo.getReferenceById(category.getId());
+        CategoryJpaEntity categoryEntity;
         SupplierJpaEntity supplierEntity = null;
+
+        if (d.getCategory() != null && d.getCategory().getId() != null) {
+            categoryEntity = categoryRepo.getReferenceById(d.getCategory().getId());
+        } else if (d.getId() != null) {
+            ProductJpaEntity existing = productRepo.findById(d.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado para actualizar"));
+            categoryEntity = existing.getCategory();
+            supplierEntity = existing.getSupplier();
+        } else {
+            throw new IllegalArgumentException("Categoria es requerida");
+        }
+
         if (d.getSupplier() != null && d.getSupplier().getId() != null) {
             supplierEntity = supplierRepo.getReferenceById(d.getSupplier().getId());
         }
