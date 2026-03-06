@@ -150,10 +150,11 @@ public class PurchaseOrderService implements PurchaseOrderUseCase {
 
             existingItem.setReceivedQuantity(currentReceived + receivedQuantity);
 
-            Product product = existingItem.getProduct();
-            int currentStock = product.getQuantity() != null ? product.getQuantity() : 0;
-            product.setQuantity(currentStock + receivedQuantity);
-            productPersistence.save(product);
+                Product productToUpdate = productPersistence.findById(productId)
+                    .orElseThrow(() -> new NotFoundException("Product not found"));
+                int currentStock = productToUpdate.getQuantity() != null ? productToUpdate.getQuantity() : 0;
+                productToUpdate.setQuantity(currentStock + receivedQuantity);
+                productPersistence.save(productToUpdate);
         }
 
         boolean allReceived = existingOrder.getItems().stream().allMatch(item -> {
