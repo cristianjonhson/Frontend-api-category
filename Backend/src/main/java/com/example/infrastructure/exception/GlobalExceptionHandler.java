@@ -53,9 +53,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception ex) {
+        String message = ex.getMessage() != null ? ex.getMessage() : "Error interno inesperado";
+
         return ResponseEntity.internalServerError().body(Map.of(
                 "code", "INTERNAL_ERROR",
-                "message", ex.getMessage()
+            "message", message
         ));
     }
 }
