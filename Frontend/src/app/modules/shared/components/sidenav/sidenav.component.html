@@ -12,6 +12,13 @@
           <li>
             <button mat-icon-button [mat-menu-trigger-for]="menu"><mat-icon>person_outline</mat-icon></button>
             <mat-menu #menu="matMenu">
+              <div class="profile-card menu-profile-card">
+                <div class="header">
+                  <h2>Cristian Jonhson</h2>
+                  <h4>cristian.jonhson@gmail.com</h4>
+                </div>
+              </div>
+              <mat-divider></mat-divider>
               <button mat-menu-item>
                 <mat-icon>exit_to_app</mat-icon> Cerrar Sesión
               </button>
@@ -25,22 +32,12 @@
 <!-- termina toolbar-->
 
 <!-- empieza sidenav-->
-<mat-sidenav-container class="sidenav-container" 
+<mat-sidenav-container class="sidenav-container"
 [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
 
-    <mat-sidenav #snav [mode]="mobileQuery.matches? 'over' : 'side'" 
+    <mat-sidenav #snav [mode]="mobileQuery.matches? 'over' : 'side'"
     [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
         <mat-nav-list>
-          <!-- profile -->
-          <div class="profile-card">
-            <div class="header">
-              <h2>Cristian Jonhson</h2>
-              <h4>cristian.jonhson@gmail.com</h4>
-            </div>
-          </div>
-
-          <mat-divider></mat-divider>
-
           <a
           mat-list-item [routerLink]="nav.route" *ngFor="let nav of menuNav">
             <mat-icon class="icono">{{ nav.icon }}</mat-icon>
@@ -48,11 +45,11 @@
           </a>
         </mat-nav-list>
     </mat-sidenav>
-   
+
     <!-- Body -->
 
     <mat-sidenav-container>
-       <router-outlet></router-outlet> 
+       <router-outlet></router-outlet>
     </mat-sidenav-container>
 
 </mat-sidenav-container>
