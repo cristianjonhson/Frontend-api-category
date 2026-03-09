@@ -12,7 +12,7 @@
     position: fixed;
     z-index: 2;
   }
- 
+
   span.app-name{
     margin-left: 8px;
   }
@@ -36,8 +36,17 @@ ul li {
   padding: 0 20px 20px 20px;
 }
 
+.menu-profile-card{
+  min-width: 220px;
+  padding: 12px 16px 8px 16px;
+}
+
 .header{
   margin-top: 20px;
+}
+
+.menu-profile-card .header{
+  margin-top: 0;
 }
 
 .icono{
