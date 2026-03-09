@@ -36,7 +36,7 @@
   </table>
 
   <app-shared-paginator
-    *ngIf="!loading"
+    [hidden]="loading"
     #sharedPaginator
     [pageSizeOptions]="paginatorConfig.PAGE_SIZE_OPTIONS"
     [showFirstLastButtons]="paginatorConfig.SHOW_FIRST_LAST_BUTTONS"
