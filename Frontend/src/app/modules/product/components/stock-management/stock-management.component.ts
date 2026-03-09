@@ -22,7 +22,7 @@ interface IStockRow {
   styleUrls: ['./stock-management.component.css']
 })
 export class StockManagementComponent implements OnInit, AfterViewInit {
-  @ViewChild('sharedPaginator') sharedPaginator!: SharedPaginatorComponent;
+  @ViewChild('sharedPaginator') sharedPaginator?: SharedPaginatorComponent;
 
   readonly displayedColumns: string[] = ['productName', 'currentStock', 'minStock', 'maxStock', 'availableStock'];
   readonly dataSource: MatTableDataSource<IStockRow>;
@@ -45,7 +45,7 @@ export class StockManagementComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.paginatorService.connect(this.dataSource, this.sharedPaginator.paginator);
+    this.syncPaginator();
   }
 
   private loadStock(): void {
@@ -54,11 +54,13 @@ export class StockManagementComponent implements OnInit, AfterViewInit {
     this.productService.getProducts().subscribe({
       next: (products) => {
         const stockRows = this.mapProductsToStockRows(products ?? []);
+        this.syncPaginator();
         this.paginatorService.setData(this.dataSource, stockRows, this.sharedPaginator?.paginator);
         this.paginatorService.resetToFirstPage(this.sharedPaginator?.paginator, this.dataSource);
         this.loading = false;
       },
       error: () => {
+        this.syncPaginator();
         this.paginatorService.setData(this.dataSource, [], this.sharedPaginator?.paginator);
         this.loading = false;
       }
@@ -82,5 +84,11 @@ export class StockManagementComponent implements OnInit, AfterViewInit {
 
   onPageChange(event: PageEvent): void {
     this.paginatorService.handlePageChange(event, this.dataSource, this.sharedPaginator?.paginator);
+  }
+
+  private syncPaginator(): void {
+    if (this.sharedPaginator?.paginator) {
+      this.paginatorService.connect(this.dataSource, this.sharedPaginator.paginator);
+    }
   }
 }
