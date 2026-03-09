@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SharedPaginatorComponent } from './components/paginator/shared-paginator.component';
+import { UserProfileCardComponent } from './components/user-profile-card/user-profile-card.component';
 import { ClpCurrencyPipe } from './pipes/clp-currency.pipe';
 import { MaterialModuleOptimized } from './material-optimized.module';
 
@@ -26,11 +27,13 @@ import { MaterialModuleOptimized } from './material-optimized.module';
   declarations: [
     SidenavComponent,
     SharedPaginatorComponent,
+    UserProfileCardComponent,
     ClpCurrencyPipe
   ],
   exports: [
     SidenavComponent,
     SharedPaginatorComponent,
+    UserProfileCardComponent,
     ClpCurrencyPipe,
     CommonModule,
     RouterModule,
