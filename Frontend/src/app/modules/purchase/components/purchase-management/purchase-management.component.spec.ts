@@ -6,7 +6,7 @@ import { PurchaseManagementComponent } from './purchase-management.component';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { SupplierService } from '../../../supplier/services/supplier.service';
 import { ProductService } from '../../../product/services/product.service';
-import { SweetAlertService } from '../../../../shared/services';
+import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 
 describe('PurchaseManagementComponent', () => {
   let component: PurchaseManagementComponent;
@@ -32,6 +32,12 @@ describe('PurchaseManagementComponent', () => {
     showError: jasmine.createSpy('showError')
   };
 
+  const paginatorServiceMock = {
+    connect: jasmine.createSpy('connect'),
+    setData: jasmine.createSpy('setData'),
+    handlePageChange: jasmine.createSpy('handlePageChange')
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PurchaseManagementComponent],
@@ -39,6 +45,7 @@ describe('PurchaseManagementComponent', () => {
         { provide: PurchaseOrderService, useValue: purchaseOrderServiceMock },
         { provide: SupplierService, useValue: supplierServiceMock },
         { provide: ProductService, useValue: productServiceMock },
+        { provide: PaginatorService, useValue: paginatorServiceMock },
         { provide: SweetAlertService, useValue: sweetAlertMock }
       ],
       schemas: [NO_ERRORS_SCHEMA]
