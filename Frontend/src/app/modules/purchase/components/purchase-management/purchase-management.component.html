@@ -107,5 +107,14 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+
+    <app-shared-paginator
+      [hidden]="loadingOrders"
+      #sharedPaginator
+      [pageSizeOptions]="paginatorConfig.PAGE_SIZE_OPTIONS"
+      [showFirstLastButtons]="paginatorConfig.SHOW_FIRST_LAST_BUTTONS"
+      [pageSize]="paginatorConfig.DEFAULT_PAGE_SIZE"
+      (page)="onPageChange($event)">
+    </app-shared-paginator>
   </mat-card>
 </section>
