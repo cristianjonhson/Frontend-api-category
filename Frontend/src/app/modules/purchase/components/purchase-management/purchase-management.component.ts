@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { ProductService } from '../../../product/services/product.service';
@@ -12,15 +13,19 @@ import {
   IProduct,
   ISupplier
 } from '../../../../shared/interfaces';
-import { SweetAlertService } from '../../../../shared/services';
+import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../../shared/constants/messages.constants';
+import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
+import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 
 @Component({
   selector: 'app-purchase-management',
   templateUrl: './purchase-management.component.html',
   styleUrls: ['./purchase-management.component.css']
 })
-export class PurchaseManagementComponent implements OnInit {
+export class PurchaseManagementComponent implements OnInit, AfterViewInit {
+  @ViewChild('sharedPaginator') sharedPaginator?: SharedPaginatorComponent;
+
   suppliers: ISupplier[] = [];
   products: IProduct[] = [];
 
@@ -29,6 +34,7 @@ export class PurchaseManagementComponent implements OnInit {
 
   displayedColumns: string[] = ['orderNumber', 'supplier', 'status', 'expectedDate', 'createdAt', 'items', 'actions'];
   dataSource = new MatTableDataSource<IPurchaseOrder>([]);
+  readonly paginatorConfig = PAGINATOR_CONFIG;
 
   form = this.fb.group({
     supplierId: [null as number | null, Validators.required],
@@ -41,6 +47,7 @@ export class PurchaseManagementComponent implements OnInit {
     private supplierService: SupplierService,
     private productService: ProductService,
     private purchaseOrderService: PurchaseOrderService,
+    private paginatorService: PaginatorService,
     private sweetAlert: SweetAlertService
   ) {}
 
@@ -49,6 +56,10 @@ export class PurchaseManagementComponent implements OnInit {
     this.loadSuppliers();
     this.loadProducts();
     this.loadOrders();
+  }
+
+  ngAfterViewInit(): void {
+    this.syncPaginator();
   }
 
   get items(): FormArray {
@@ -210,11 +221,13 @@ export class PurchaseManagementComponent implements OnInit {
 
     this.purchaseOrderService.getPurchaseOrders().subscribe({
       next: (orders) => {
-        this.dataSource.data = orders ?? [];
+        this.syncPaginator();
+        this.paginatorService.setData(this.dataSource, orders ?? [], this.sharedPaginator?.paginator);
         this.loadingOrders = false;
       },
       error: (error) => {
-        this.dataSource.data = [];
+        this.syncPaginator();
+        this.paginatorService.setData(this.dataSource, [], this.sharedPaginator?.paginator);
         this.loadingOrders = false;
 
         const message = error?.error?.message || error?.message || ERROR_MESSAGES.PURCHASE_ORDER_LOAD_ERROR;
@@ -231,5 +244,15 @@ export class PurchaseManagementComponent implements OnInit {
 
     this.items.clear();
     this.addItem();
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.paginatorService.handlePageChange(event, this.dataSource, this.sharedPaginator?.paginator);
+  }
+
+  private syncPaginator(): void {
+    if (this.sharedPaginator?.paginator) {
+      this.paginatorService.connect(this.dataSource, this.sharedPaginator.paginator);
+    }
   }
 }
