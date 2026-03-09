@@ -1,0 +1,61 @@
+package com.inventory.infrastructure.persistence.adapter;
+
+import com.inventory.application.port.out.CategoryPersistencePort;
+import com.inventory.domain.model.Category;
+import com.inventory.infrastructure.persistence.jpa.entity.CategoryJpaEntity;
+import com.inventory.infrastructure.persistence.jpa.repository.CategoryJpaRepository;
+import com.inventory.infrastructure.persistence.jpa.repository.ProductJpaRepository;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Component
+public class CategoryJpaAdapter implements CategoryPersistencePort {
+
+    private final CategoryJpaRepository repo;
+    private final ProductJpaRepository productRepo;
+
+    public CategoryJpaAdapter(CategoryJpaRepository repo, ProductJpaRepository productRepo) {
+        this.repo = repo;
+        this.productRepo = productRepo;
+    }
+
+   @Override
+    public List<Category> findAll() {
+        return repo.findAll().stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Category> findById(Long id) {
+        return repo.findById(id).map(this::toDomain);
+    }
+
+    @Override
+    public Category save(Category category) {
+        CategoryJpaEntity saved = repo.save(toEntity(category));
+        return toDomain(saved);
+    }
+
+    @Override
+    public boolean hasProducts(Long categoryId) {
+        return productRepo.existsByCategoryId(categoryId);
+    }
+
+    @Override
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
+
+    private Category toDomain(CategoryJpaEntity e) {
+        return new Category(e.getId(), e.getName(), e.getDescription());
+    }
+
+    private CategoryJpaEntity toEntity(Category d) {
+        // ✅ al crear id debe ser null; si llega id, igual lo respetamos para update
+        return new CategoryJpaEntity(d.getId(), d.getName(), d.getDescription());
+    }
+}

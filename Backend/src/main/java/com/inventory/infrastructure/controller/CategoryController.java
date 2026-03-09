@@ -1,0 +1,82 @@
+package com.inventory.infrastructure.controller;
+
+import com.inventory.application.dto.ApiResponse;
+import com.inventory.application.dto.CategoryCreateRequest;
+import com.inventory.application.dto.CategoryDTO;
+import com.inventory.application.dto.CategoryUpdateRequest;
+import com.inventory.application.mapper.CategoryMapper;
+import com.inventory.application.port.in.CategoryUseCase;
+import com.inventory.domain.model.Category;
+import javax.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/categories")
+public class CategoryController {
+
+    private final CategoryUseCase categoryUseCase;
+
+    public CategoryController(CategoryUseCase categoryUseCase) {
+        this.categoryUseCase = categoryUseCase;
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<CategoryDTO>> getAllCategories() {
+        List<CategoryDTO> dtos = categoryUseCase.getAll().stream()
+                .map(CategoryMapper::toDTO)
+                .collect(Collectors.toList());
+
+        ApiResponse<CategoryDTO> response = new ApiResponse<>(
+                List.of(new ApiResponse.Metadata("SUCCESS")),
+                new ApiResponse.CategoryResponse<>(dtos)
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponse<CategoryDTO>> createCategory(@Valid @RequestBody CategoryCreateRequest request) {
+        Category created = categoryUseCase.create(
+                CategoryMapper.toDomainForCreate(request.getName(), request.getDescription())
+        );
+
+        CategoryDTO dto = CategoryMapper.toDTO(created);
+        dto.setId(null); // No retornar el id en la respuesta de creación
+
+        ApiResponse<CategoryDTO> response = new ApiResponse<>(
+                List.of(new ApiResponse.Metadata("SUCCESS")),
+                new ApiResponse.CategoryResponse<>(List.of(dto))
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<CategoryDTO>> updateCategory(
+            @PathVariable Long id,
+            @Valid @RequestBody CategoryUpdateRequest request) {
+        Category updated = categoryUseCase.update(id,
+                new Category(null, request.getName(), request.getDescription())
+        );
+
+        CategoryDTO dto = CategoryMapper.toDTO(updated);
+        dto.setId(null); // No retornar el id en la respuesta de actualización
+
+        ApiResponse<CategoryDTO> response = new ApiResponse<>(
+                List.of(new ApiResponse.Metadata("SUCCESS")),
+                new ApiResponse.CategoryResponse<>(List.of(dto))
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        categoryUseCase.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}
