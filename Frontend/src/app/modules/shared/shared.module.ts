@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SharedPaginatorComponent } from './components/paginator/shared-paginator.component';
 import { UserProfileCardComponent } from './components/user-profile-card/user-profile-card.component';
+import { LogoutMenuItemComponent } from './components/logout-menu-item/logout-menu-item.component';
 import { ClpCurrencyPipe } from './pipes/clp-currency.pipe';
 import { MaterialModuleOptimized } from './material-optimized.module';
 
@@ -28,12 +29,14 @@ import { MaterialModuleOptimized } from './material-optimized.module';
     SidenavComponent,
     SharedPaginatorComponent,
     UserProfileCardComponent,
+    LogoutMenuItemComponent,
     ClpCurrencyPipe
   ],
   exports: [
     SidenavComponent,
     SharedPaginatorComponent,
     UserProfileCardComponent,
+    LogoutMenuItemComponent,
     ClpCurrencyPipe,
     CommonModule,
     RouterModule,
