@@ -12,12 +12,7 @@
           <li>
             <button mat-icon-button [mat-menu-trigger-for]="menu"><mat-icon>person_outline</mat-icon></button>
             <mat-menu #menu="matMenu">
-              <div class="profile-card menu-profile-card">
-                <div class="header">
-                  <h2>Cristian Jonhson</h2>
-                  <h4>cristian.jonhson@gmail.com</h4>
-                </div>
-              </div>
+              <app-user-profile-card></app-user-profile-card>
               <mat-divider></mat-divider>
               <button mat-menu-item>
                 <mat-icon>exit_to_app</mat-icon> Cerrar Sesión
