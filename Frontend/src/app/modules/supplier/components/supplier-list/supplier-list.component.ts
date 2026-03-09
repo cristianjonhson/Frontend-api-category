@@ -38,7 +38,7 @@ interface SupplierListFilters {
   styleUrls: ['./supplier-list.component.css']
 })
 export class SupplierListComponent implements OnInit, AfterViewInit {
-  @ViewChild('sharedPaginator') sharedPaginator!: SharedPaginatorComponent;
+  @ViewChild('sharedPaginator') sharedPaginator?: SharedPaginatorComponent;
 
   readonly displayedColumns: string[] = ['name', 'email', 'phone', 'productsCount', 'productsLabel', 'actions'];
   readonly dataSource: MatTableDataSource<ISupplierRow>;
@@ -87,7 +87,7 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.paginatorService.connect(this.dataSource, this.sharedPaginator.paginator);
+    this.syncPaginator();
   }
 
   onPageChange(event: PageEvent): void {
@@ -173,11 +173,13 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
     this.supplierService.getSuppliers().subscribe({
       next: (suppliers) => {
         const rows = this.mapSuppliersToRows(suppliers ?? []);
+        this.syncPaginator();
         this.paginatorService.setData(this.dataSource, rows, this.sharedPaginator?.paginator);
         this.applyFilter();
         this.loading = false;
       },
       error: () => {
+        this.syncPaginator();
         this.paginatorService.setData(this.dataSource, [], this.sharedPaginator?.paginator);
         this.applyFilter();
         this.loading = false;
@@ -231,5 +233,11 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
         products
       };
     });
+  }
+
+  private syncPaginator(): void {
+    if (this.sharedPaginator?.paginator) {
+      this.paginatorService.connect(this.dataSource, this.sharedPaginator.paginator);
+    }
   }
 }
