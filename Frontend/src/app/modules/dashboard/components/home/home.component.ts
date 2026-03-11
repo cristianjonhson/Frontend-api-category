@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit {
 
   categoriesCount: number | null = null;
   lastAction = '—';
+  lastUpdated = '—';
   apiStatus: ApiStatus = 'LOADING';
 
  swaggerUrl = environment.swagger_uri;
@@ -40,10 +41,12 @@ export class HomeComponent implements OnInit {
       next: (categories) => {
         this.categoriesCount = categories.length;
         this.apiStatus = 'ONLINE';
+        this.lastUpdated = new Date().toLocaleString();
       },
       error: () => {
         this.categoriesCount = 0;
         this.apiStatus = 'OFFLINE';
+        this.lastUpdated = new Date().toLocaleString();
       }
     });
   }
@@ -61,5 +64,37 @@ export class HomeComponent implements OnInit {
   goToNewCategory(): void {
     this.lastAction = 'Crear categoría';
     this.router.navigate([ROUTE_PATHS.CATEGORIES_NEW]);
+  }
+
+  goToProducts(): void {
+    this.lastAction = 'Ir a productos';
+    this.router.navigate([ROUTE_PATHS.PRODUCT]);
+  }
+
+  goToSuppliers(): void {
+    this.lastAction = 'Ir a proveedores';
+    this.router.navigate([ROUTE_PATHS.SUPPLIER]);
+  }
+
+  goToPurchases(): void {
+    this.lastAction = 'Ir a compras';
+    this.router.navigate([ROUTE_PATHS.PURCHASE]);
+  }
+
+  goToStock(): void {
+    this.lastAction = 'Ir a stock';
+    this.router.navigate([ROUTE_PATHS.STOCK]);
+  }
+
+  getStatusLabel(status: ApiStatus): string {
+    if (status === 'ONLINE') {
+      return 'Conectada';
+    }
+
+    if (status === 'OFFLINE') {
+      return 'Sin conexion';
+    }
+
+    return 'Verificando';
   }
 }
