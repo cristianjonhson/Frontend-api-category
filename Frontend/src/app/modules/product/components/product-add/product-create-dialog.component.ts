@@ -4,13 +4,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services/product.service';
 import { ERROR_MESSAGES, VALIDATION_RULES } from '../../../../shared/constants';
-import { ICategory, IProductRequest, ISupplier } from '../../../../shared/interfaces';
+import { IProductRequest } from '../../../../shared/interfaces';
 import { SweetAlertService } from '../../../../shared/services';
-
-export interface ProductCreateDialogData {
-  categories: ICategory[];
-  suppliers: ISupplier[];
-}
+import { ProductCreateDialogData } from './product-create-dialog-data.interface';
 
 @Component({
   selector: 'app-product-create-dialog',
