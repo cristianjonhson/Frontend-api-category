@@ -4,12 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { CategoryService } from '../../../shared/services/category.service';
 import { NotificationService } from '../../../../core/services/notification.service';
-import { ICategory } from '../../../../shared/interfaces/category.interface';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../../shared/constants';
-
-export interface EditCategoryDialogData {
-  category: ICategory;
-}
+import { EditCategoryDialogData } from './edit-category-dialog-data.interface';
 
 @Component({
   selector: 'app-edit-category',
