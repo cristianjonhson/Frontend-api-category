@@ -1,133 +1,116 @@
-<div class="container py-4">
+<div class="home-shell">
+  <section class="hero card rounded-4 border-0 shadow-sm">
+    <div class="card-body p-4 p-lg-5">
+      <div class="hero-top">
+        <div>
+          <p class="eyebrow mb-2">Panel principal</p>
+          <h1 class="display-6 fw-bold mb-2">Bienvenido al centro de control</h1>
+          <p class="text-muted mb-0">
+            Supervisa el estado del inventario y navega rápido a las tareas clave del sistema.
+          </p>
+        </div>
 
-  <div class="row align-items-center g-4">
-    <div class="col-12 col-lg-7">
-      <h1 class="display-6 fw-bold mb-2">Bienvenido 👋</h1>
-      <p class="text-muted mb-3">
-        Administra tus categorías y mantén el contenido organizado.
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" (click)="goToNewCategory()">
+            <i class="bi bi-plus-lg me-2"></i>
+            Nueva categoria
+          </button>
+          <button type="button" class="btn btn-outline-secondary" (click)="loadSummary()">
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            Actualizar resumen
+          </button>
+        </div>
+      </div>
+
+      <div class="quick-grid mt-4">
+        <button type="button" class="quick-card" (click)="goToCategories()">
+          <i class="bi bi-tags-fill"></i>
+          <span>Categorias</span>
+        </button>
+        <button type="button" class="quick-card" (click)="goToProducts()">
+          <i class="bi bi-box-seam"></i>
+          <span>Productos</span>
+        </button>
+        <button type="button" class="quick-card" (click)="goToStock()">
+          <i class="bi bi-clipboard-data"></i>
+          <span>Stock</span>
+        </button>
+        <button type="button" class="quick-card" (click)="goToSuppliers()">
+          <i class="bi bi-truck"></i>
+          <span>Proveedores</span>
+        </button>
+        <button type="button" class="quick-card" (click)="goToPurchases()">
+          <i class="bi bi-receipt"></i>
+          <span>Compras</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="metrics mt-4">
+    <article class="metric-card card rounded-4 border-0 shadow-sm">
+      <div class="card-body">
+        <p class="metric-label mb-1">Estado API</p>
+        <h2 class="metric-value mb-2">{{ getStatusLabel(apiStatus) }}</h2>
+        <span class="badge"
+              [ngClass]="{
+                'text-bg-secondary': apiStatus === 'LOADING',
+                'text-bg-success': apiStatus === 'ONLINE',
+                'text-bg-danger': apiStatus === 'OFFLINE'
+              }">
+          {{ apiStatus }}
+        </span>
+      </div>
+    </article>
+
+    <article class="metric-card card rounded-4 border-0 shadow-sm">
+      <div class="card-body">
+        <p class="metric-label mb-1">Categorias registradas</p>
+        <h2 class="metric-value mb-2">{{ categoriesCount ?? '—' }}</h2>
+        <p class="metric-help mb-0">Total cargado desde backend</p>
+      </div>
+    </article>
+
+    <article class="metric-card card rounded-4 border-0 shadow-sm">
+      <div class="card-body">
+        <p class="metric-label mb-1">Ultima accion</p>
+        <h2 class="metric-value mb-2">{{ lastAction }}</h2>
+        <p class="metric-help mb-0">Actualizado: {{ lastUpdated }}</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="tips card rounded-4 border-0 shadow-sm mt-4">
+    <div class="card-body p-4">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <h3 class="h5 fw-bold mb-0">Recomendaciones operativas</h3>
+        <a class="link-primary text-decoration-none" [href]="swaggerUrl" target="_blank" rel="noopener">
+          Abrir Swagger <i class="bi bi-box-arrow-up-right ms-1"></i>
+        </a>
+      </div>
+
+      <div class="form-check mb-3">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="homeTipsCheck"
+          [checked]="showTips"
+          (change)="toggleTips($any($event.target).checked)"
+        />
+        <label class="form-check-label" for="homeTipsCheck">
+          Mostrar recomendaciones en Home
+        </label>
+      </div>
+
+      <ul class="tip-list mb-0" *ngIf="showTips">
+        <li>Define nombres de categoria cortos y consistentes.</li>
+        <li>Revisa stock antes de registrar nuevas compras.</li>
+        <li>Mantén actualizados datos de proveedores para evitar errores de recepcion.</li>
+      </ul>
+
+      <p class="text-muted mb-0" *ngIf="!showTips">
+        Las recomendaciones estan ocultas. Puedes activarlas cuando quieras.
       </p>
-
-      <div class="d-flex flex-wrap gap-2">
-        <button type="button" class="btn btn-primary" (click)="goToNewCategory()">
-          <i class="bi bi-plus-lg me-2"></i>
-          Nueva categoría
-        </button>
-
-        <button type="button" class="btn btn-outline-secondary" (click)="goToCategories()">
-          <i class="bi bi-list-ul me-2"></i>
-          Ver categorías
-        </button>
-      </div>
-
-      <div class="mt-4 p-3 bg-light rounded-3 border">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            id="gridCheck"
-            [checked]="showTips"
-            (change)="toggleTips($any($event.target).checked)"
-          />
-          <label class="form-check-label fw-semibold" for="gridCheck">
-            Mostrar consejos y atajos en el Home
-          </label>
-        </div>
-        <small class="text-muted d-block mt-1">
-          Actívalo si quieres ver recomendaciones rápidas cada vez que entres.
-        </small>
-      </div>
     </div>
-
-    <div class="col-12 col-lg-5">
-      <div class="card shadow-sm border-0 rounded-4">
-        <div class="card-body p-4">
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <h2 class="h5 mb-0 fw-bold">Resumen</h2>
-
-            <span class="badge"
-                  [ngClass]="{
-                    'text-bg-secondary': apiStatus === 'LOADING',
-                    'text-bg-success': apiStatus === 'ONLINE',
-                    'text-bg-danger': apiStatus === 'OFFLINE'
-                  }">
-              {{ apiStatus }}
-            </span>
-          </div>
-
-          <div class="row g-3">
-            <div class="col-6">
-              <div class="p-3 rounded-3 border bg-white">
-                <div class="text-muted small">Categorías</div>
-                <div class="fs-4 fw-bold">{{ categoriesCount ?? '—' }}</div>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="p-3 rounded-3 border bg-white">
-                <div class="text-muted small">Última acción</div>
-                <div class="fw-semibold">{{ lastAction }}</div>
-              </div>
-            </div>
-
-            <div class="col-12" *ngIf="showTips">
-              <div class="alert alert-info mb-0">
-                <strong>Tip:</strong> crea categorías claras (nombre + descripción).
-              </div>
-            </div>
-          </div>
-
-          <hr class="my-4">
-
-          <div class="d-flex justify-content-between align-items-center">
-            <small class="text-muted">Estado de la API</small>
-
-            <!-- OJO: esto apunta al backend (no a la app Angular) -->
-            <a class="link-primary text-decoration-none" [href]="swaggerUrl" target="_blank" rel="noopener">
-              Swagger <i class="bi bi-box-arrow-up-right ms-1"></i>
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row g-3 mt-4" *ngIf="showTips">
-    <div class="col-12 col-md-4">
-      <div class="card h-100 border-0 shadow-sm rounded-4">
-        <div class="card-body p-4">
-          <div class="d-flex align-items-center gap-2 mb-2">
-            <i class="bi bi-tags fs-4"></i>
-            <h3 class="h6 fw-bold mb-0">Organiza por categorías</h3>
-          </div>
-          <p class="text-muted mb-0">Define un catálogo consistente.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12 col-md-4">
-      <div class="card h-100 border-0 shadow-sm rounded-4">
-        <div class="card-body p-4">
-          <div class="d-flex align-items-center gap-2 mb-2">
-            <i class="bi bi-shield-check fs-4"></i>
-            <h3 class="h6 fw-bold mb-0">Buenas prácticas</h3>
-          </div>
-          <p class="text-muted mb-0">Valida datos antes de guardar.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12 col-md-4">
-      <div class="card h-100 border-0 shadow-sm rounded-4">
-        <div class="card-body p-4">
-          <div class="d-flex align-items-center gap-2 mb-2">
-            <i class="bi bi-speedometer2 fs-4"></i>
-            <h3 class="h6 fw-bold mb-0">Acceso rápido</h3>
-          </div>
-          <p class="text-muted mb-0">Usa el Home como dashboard.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  </section>
 </div>
