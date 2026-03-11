@@ -17,20 +17,7 @@ import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES, SWEET_ALERT_TE
 import { SweetAlertService } from '../../../../shared/services';
 import { APP_CONFIG } from '../../../../shared/constants/app.constants';
 import { TIMING } from '../../../../shared/constants/ui.constants';
-
-interface ISupplierRow {
-  id?: number;
-  name: string;
-  email: string;
-  phone: string;
-  productsCount: number;
-  productsLabel: string;
-  products: ISupplier['products'];
-}
-
-interface SupplierListFilters {
-  search: string;
-}
+import { ISupplierRow, SupplierListFilters } from './supplier-list.interface';
 
 @Component({
   selector: 'app-supplier-list',
