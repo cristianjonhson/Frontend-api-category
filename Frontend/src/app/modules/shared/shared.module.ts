@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SharedPaginatorComponent } from './components/paginator/shared-paginator.component';
 import { UserProfileCardComponent } from './components/user-profile-card/user-profile-card.component';
@@ -44,13 +46,17 @@ import { MaterialModuleOptimized } from './material-optimized.module';
     CommonModule,
     RouterModule,
     FlexLayoutModule,
-    MaterialModuleOptimized
+    MaterialModuleOptimized,
+    MatMenuModule,
+    MatDividerModule
   ],
   imports: [
     CommonModule,
     RouterModule,
     FlexLayoutModule,
-    MaterialModuleOptimized
+    MaterialModuleOptimized,
+    MatMenuModule,
+    MatDividerModule
   ]
 })
 export class SharedModule { }
