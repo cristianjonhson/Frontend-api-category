@@ -9,6 +9,7 @@ import { SharedPaginatorComponent } from './components/paginator/shared-paginato
 import { UserProfileCardComponent } from './components/user-profile-card/user-profile-card.component';
 import { LogoutMenuItemComponent } from './components/logout-menu-item/logout-menu-item.component';
 import { ClpCurrencyPipe } from './pipes/clp-currency.pipe';
+import { ChileanDatePipe } from './pipes/chilean-date.pipe';
 import { PurchaseStatusEsPipe } from './pipes/purchase-status-es.pipe';
 import { MaterialModuleOptimized } from './material-optimized.module';
 
@@ -34,6 +35,7 @@ import { MaterialModuleOptimized } from './material-optimized.module';
     UserProfileCardComponent,
     LogoutMenuItemComponent,
     ClpCurrencyPipe,
+    ChileanDatePipe,
     PurchaseStatusEsPipe
   ],
   exports: [
@@ -42,6 +44,7 @@ import { MaterialModuleOptimized } from './material-optimized.module';
     UserProfileCardComponent,
     LogoutMenuItemComponent,
     ClpCurrencyPipe,
+    ChileanDatePipe,
     PurchaseStatusEsPipe,
     CommonModule,
     RouterModule,
