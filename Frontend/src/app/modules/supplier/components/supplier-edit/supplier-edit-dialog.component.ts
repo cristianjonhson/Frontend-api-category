@@ -7,10 +7,7 @@ import { SupplierService } from '../../services/supplier.service';
 import { ERROR_MESSAGES, VALIDATION_RULES } from '../../../../shared/constants';
 import { ISupplier, ISupplierRequest } from '../../../../shared/interfaces/supplier.interface';
 import { SweetAlertService } from '../../../../shared/services';
-
-export interface SupplierEditDialogData {
-  supplier: ISupplier;
-}
+import { SupplierEditDialogData } from './supplier-edit-dialog-data.interface';
 
 @Component({
   selector: 'app-supplier-edit-dialog',
