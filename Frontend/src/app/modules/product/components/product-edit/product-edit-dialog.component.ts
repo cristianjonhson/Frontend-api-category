@@ -6,12 +6,7 @@ import { ProductService } from '../../services/product.service';
 import { ERROR_MESSAGES, VALIDATION_RULES } from '../../../../shared/constants';
 import { ICategory, IProduct, IProductRequest, ISupplier } from '../../../../shared/interfaces';
 import { SweetAlertService } from '../../../../shared/services';
-
-export interface ProductEditDialogData {
-  product: IProduct;
-  categories: ICategory[];
-  suppliers: ISupplier[];
-}
+import { ProductEditDialogData } from './product-edit-dialog-data.interface';
 
 @Component({
   selector: 'app-product-edit-dialog',
