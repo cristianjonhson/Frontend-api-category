@@ -10,7 +10,7 @@
             <button mat-icon-button><mat-icon>help_outline</mat-icon></button>
           </li>
           <li>
-            <button mat-icon-button [mat-menu-trigger-for]="menu"><mat-icon>person_outline</mat-icon></button>
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>person_outline</mat-icon></button>
             <mat-menu #menu="matMenu">
               <app-user-profile-card></app-user-profile-card>
               <mat-divider></mat-divider>
