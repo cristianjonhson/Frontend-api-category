@@ -6,7 +6,7 @@ import { ProductService } from '../../services/product.service';
 import { ERROR_MESSAGES, VALIDATION_RULES } from '../../../../shared/constants';
 import { IProductRequest } from '../../../../shared/interfaces';
 import { SweetAlertService } from '../../../../shared/services';
-import { ProductCreateDialogData } from './product-create-dialog-data.interface';
+import { ProductCreateDialogData } from '../interfaces';
 
 @Component({
   selector: 'app-product-create-dialog',
