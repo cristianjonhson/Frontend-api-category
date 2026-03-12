@@ -6,9 +6,11 @@ import { SharedModule } from '../shared/shared.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-import { SupplierListComponent } from './components/supplier-list/supplier-list.component';
-import { SupplierCreateDialogComponent } from './components/supplier-add/supplier-create-dialog.component';
-import { SupplierEditDialogComponent } from './components/supplier-edit/supplier-edit-dialog.component';
+import {
+  SupplierCreateDialogComponent,
+  SupplierEditDialogComponent,
+  SupplierListComponent
+} from './components';
 
 @NgModule({
   declarations: [SupplierListComponent, SupplierCreateDialogComponent, SupplierEditDialogComponent],
