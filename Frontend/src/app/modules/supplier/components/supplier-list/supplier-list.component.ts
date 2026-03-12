@@ -17,7 +17,7 @@ import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES, SWEET_ALERT_TE
 import { SweetAlertService } from '../../../../shared/services';
 import { APP_CONFIG } from '../../../../shared/constants/app.constants';
 import { TIMING } from '../../../../shared/constants/ui.constants';
-import { ISupplierRow, SupplierListFilters } from './supplier-list.interface';
+import { ISupplierRow, SupplierListFilters } from '../interfaces';
 
 @Component({
   selector: 'app-supplier-list',
