@@ -5,7 +5,7 @@ import { finalize } from 'rxjs/operators';
 import { CategoryService } from '../../../shared/services/category.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../../shared/constants';
-import { EditCategoryDialogData } from './edit-category-dialog-data.interface';
+import { EditCategoryDialogData } from '../interfaces';
 
 @Component({
   selector: 'app-edit-category',
