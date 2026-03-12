@@ -7,7 +7,7 @@ import { SharedPaginatorComponent } from '../../../shared/components/paginator/s
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
 import { IProduct } from '../../../../shared/interfaces';
 import { PaginatorService } from '../../../../shared/services';
-import { IStockRow } from './stock-row.interface';
+import { IStockRow } from '../interfaces';
 
 @Component({
   selector: 'app-stock-management',
