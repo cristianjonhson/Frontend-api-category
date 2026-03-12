@@ -12,10 +12,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-import { ProductListComponent } from './components/product-list/product-list.component';
-import { ProductCreateDialogComponent } from './components/product-add/product-create-dialog.component';
-import { ProductEditDialogComponent } from './components/product-edit/product-edit-dialog.component';
-import { StockManagementComponent } from './components/stock-management/stock-management.component';
+import {
+  ProductCreateDialogComponent,
+  ProductEditDialogComponent,
+  ProductListComponent,
+  StockManagementComponent
+} from './components';
 
 @NgModule({
   declarations: [
