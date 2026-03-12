@@ -17,7 +17,7 @@ import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
 import { TIMING } from '../../../../shared/constants/ui.constants';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
-import { ProductListFilters } from './product-list-filters.interface';
+import { ProductListFilters } from '../interfaces';
 
 @Component({
   selector: 'app-product-list',
