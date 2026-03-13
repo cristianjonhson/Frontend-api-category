@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 import { ProductListComponent } from './product-list.component';
 import { ProductService } from '../../services/product.service';
-import { CategoryService } from '../../../shared/services/category.service';
+import { CategoryService } from '../../../category/services';
 import { SupplierService } from '../../../supplier/services/supplier.service';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
