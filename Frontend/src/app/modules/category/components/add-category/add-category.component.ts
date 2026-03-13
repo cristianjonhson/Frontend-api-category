@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CategoryService } from '../../../shared/services/category.service';
+import { CategoryService } from '../../services';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { finalize } from 'rxjs/operators';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../../shared/constants';
