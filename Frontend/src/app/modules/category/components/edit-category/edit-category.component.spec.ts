@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { EditCategoryComponent } from './edit-category.component';
-import { CategoryService } from '../../../shared/services/category.service';
+import { CategoryService } from '../../services';
 import { NotificationService } from '../../../../core/services/notification.service';
 
 describe('EditCategoryComponent', () => {
