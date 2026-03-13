@@ -8,7 +8,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ProductCreateDialogComponent } from '../product-add/product-create-dialog.component';
 import { ProductEditDialogComponent } from '../product-edit/product-edit-dialog.component';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
-import { CategoryService } from '../../../shared/services/category.service';
+import { CategoryService } from '../../../category/services';
 import { SupplierService } from '../../../supplier/services/supplier.service';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 import { ICategory, IProduct, ISupplier } from '../../../../shared/interfaces';
