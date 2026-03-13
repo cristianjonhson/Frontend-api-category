@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { HomeComponent } from './home.component';
-import { CategoryService } from '../../../shared/services/category.service'; 
+import { CategoryService } from '../../../category/services';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
