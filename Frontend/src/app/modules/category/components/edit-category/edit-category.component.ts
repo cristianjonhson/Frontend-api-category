@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
-import { CategoryService } from '../../../shared/services/category.service';
+import { CategoryService } from '../../services';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../../shared/constants';
 import { EditCategoryDialogData } from '../interfaces';
