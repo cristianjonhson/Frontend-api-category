@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
 
 import { AddCategoryComponent } from './add-category.component';
-import { CategoryService } from '../../../shared/services/category.service';
+import { CategoryService } from '../../services';
 import { NotificationService } from '../../../../core/services/notification.service';
 
 describe('AddCategoryComponent', () => {
