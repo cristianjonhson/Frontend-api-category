@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
-import { CategoryService } from '../../../shared/services/category.service'; // ajusta el path si es distinto
+import { CategoryService } from '../../../category/services';
 import { APP_CONFIG } from '../../../../shared/constants/app.constants';
 import { ROUTE_PATHS } from '../../../../shared/constants/routes.constants';
 
