@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { EditCategoryComponent } from '../edit-category/edit-category.component';
-import { CategoryService } from '../../../shared/services/category.service';
+import { CategoryService } from '../../services';
 import { ICategory } from '../../../../shared/interfaces/category.interface';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { NotificationService } from '../../../../core/services/notification.service';
