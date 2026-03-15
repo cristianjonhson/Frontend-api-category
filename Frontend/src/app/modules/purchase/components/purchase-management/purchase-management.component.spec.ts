@@ -3,9 +3,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
 import { PurchaseManagementComponent } from './purchase-management.component';
-import { PurchaseOrderService } from '../../services/purchase-order.service';
-import { SupplierService } from '../../../supplier/services/supplier.service';
-import { ProductService } from '../../../product/services/product.service';
+import { PurchaseOrderService } from '../../services';
+import { SupplierService } from '../../../supplier/services';
+import { ProductService } from '../../../product/services';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 
 describe('PurchaseManagementComponent', () => {
