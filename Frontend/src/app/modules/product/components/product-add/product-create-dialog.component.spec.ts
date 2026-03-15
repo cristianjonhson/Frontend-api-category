@@ -5,7 +5,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
 import { ProductCreateDialogComponent } from './product-create-dialog.component';
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../services';
 import { SweetAlertService } from '../../../../shared/services';
 
 describe('ProductCreateDialogComponent', () => {
