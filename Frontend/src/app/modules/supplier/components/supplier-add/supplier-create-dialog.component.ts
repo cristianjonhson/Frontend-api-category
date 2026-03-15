@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 
-import { SupplierService } from '../../services/supplier.service';
+import { SupplierService } from '../../services';
 import { ERROR_MESSAGES, VALIDATION_RULES } from '../../../../shared/constants';
 import { ISupplierRequest } from '../../../../shared/interfaces/supplier.interface';
 import { SweetAlertService } from '../../../../shared/services';
