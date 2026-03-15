@@ -9,7 +9,7 @@ import { PaginatorService } from '../../../../shared/services';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 import { ISupplier } from '../../../../shared/interfaces/supplier.interface';
-import { SupplierService } from '../../services/supplier.service';
+import { SupplierService } from '../../services';
 import { SupplierCreateDialogComponent } from '../supplier-add/supplier-create-dialog.component';
 import { SupplierEditDialogComponent } from '../supplier-edit/supplier-edit-dialog.component';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
