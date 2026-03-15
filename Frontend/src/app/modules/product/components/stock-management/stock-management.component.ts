@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../services';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
 import { IProduct } from '../../../../shared/interfaces';
