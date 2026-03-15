@@ -3,9 +3,9 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { ProductService } from '../../../product/services/product.service';
-import { SupplierService } from '../../../supplier/services/supplier.service';
-import { PurchaseOrderService } from '../../services/purchase-order.service';
+import { ProductService } from '../../../product/services';
+import { SupplierService } from '../../../supplier/services';
+import { PurchaseOrderService } from '../../services';
 import {
   IPurchaseOrder,
   IPurchaseOrderCreateRequest,
