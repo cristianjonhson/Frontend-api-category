@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../services';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,7 +9,7 @@ import { ProductCreateDialogComponent } from '../product-add/product-create-dial
 import { ProductEditDialogComponent } from '../product-edit/product-edit-dialog.component';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { CategoryService } from '../../../category/services';
-import { SupplierService } from '../../../supplier/services/supplier.service';
+import { SupplierService } from '../../../supplier/services';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 import { ICategory, IProduct, ISupplier } from '../../../../shared/interfaces';
 import { APP_CONFIG } from '../../../../shared/constants/app.constants';
