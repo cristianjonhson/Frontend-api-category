@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
 import { StockManagementComponent } from './stock-management.component';
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../services';
 import { PaginatorService } from '../../../../shared/services';
 import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
 
