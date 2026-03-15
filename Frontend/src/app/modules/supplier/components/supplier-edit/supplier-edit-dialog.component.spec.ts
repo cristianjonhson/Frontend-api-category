@@ -5,7 +5,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
 import { SupplierEditDialogComponent } from './supplier-edit-dialog.component';
-import { SupplierService } from '../../services/supplier.service';
+import { SupplierService } from '../../services';
 import { SweetAlertService } from '../../../../shared/services';
 
 describe('SupplierEditDialogComponent', () => {
