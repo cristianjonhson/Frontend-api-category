@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
 import { SupplierListComponent } from './supplier-list.component';
-import { SupplierService } from '../../services/supplier.service';
+import { SupplierService } from '../../services';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
 import { MatDialog } from '@angular/material/dialog';
