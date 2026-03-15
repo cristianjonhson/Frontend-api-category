@@ -4,9 +4,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
 import { ProductListComponent } from './product-list.component';
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../services';
 import { CategoryService } from '../../../category/services';
-import { SupplierService } from '../../../supplier/services/supplier.service';
+import { SupplierService } from '../../../supplier/services';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { createPageEvent } from '../../../../../testing/helpers/page-event.helper';
 import { APP_CONFIG } from '../../../../shared/constants/app.constants';
