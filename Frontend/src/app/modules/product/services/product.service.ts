@@ -7,6 +7,30 @@ import { ApiResponse } from '../../../shared/models/api-response.model';
 import { API_CONFIG } from '../../../shared/constants';
 import { IProduct, IProductRequest } from '../../../shared/interfaces/product.interface';
 
+// Shapes internos de la respuesta de la API — no exportados
+interface RawProductCategory {
+  id?: number;
+  name?: string;
+}
+
+interface RawProduct {
+  id?: number;
+  name?: string;
+  price?: number;
+  quantity?: number;
+  categoryId?: number;
+  categoryName?: string;
+  supplierId?: number;
+  supplierName?: string;
+  category?: string | RawProductCategory;
+}
+
+interface ProductApiBody {
+  productResponse?: {
+    product?: RawProduct[] | RawProduct;
+  };
+}
+
 const base_url = environment.base_uri;
 
 @Injectable({
@@ -18,7 +42,7 @@ export class ProductService {
   getProducts(): Observable<IProduct[]> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}`;
 
-    return this.http.get<ApiResponse<any>>(endpoint).pipe(
+    return this.http.get<ApiResponse<ProductApiBody>>(endpoint).pipe(
       map((response) => this.processGetProductsResponse(response)),
       catchError((err) => throwError(() => err))
     );
@@ -39,7 +63,7 @@ export class ProductService {
       supplierId: payload?.supplierId
     };
 
-    return this.http.post<ApiResponse<any>>(endpoint, requestBody, options).pipe(
+    return this.http.post<ApiResponse<ProductApiBody>>(endpoint, requestBody, options).pipe(
       map((response) => this.processCreateProductResponse(response, requestBody)),
       catchError((err) => throwError(() => err))
     );
@@ -60,7 +84,7 @@ export class ProductService {
       supplierId: payload?.supplierId
     };
 
-    return this.http.put<ApiResponse<any>>(endpoint, requestBody, options).pipe(
+    return this.http.put<ApiResponse<ProductApiBody>>(endpoint, requestBody, options).pipe(
       map((response) => this.processCreateProductResponse(response, requestBody)),
       catchError((err) => throwError(() => err))
     );
@@ -79,45 +103,41 @@ export class ProductService {
     );
   }
 
-  private processGetProductsResponse(response: ApiResponse<any>): IProduct[] {
-    const products = response?.productResponse?.product ?? [];
-    return products.map((product: any) => this.normalizeProduct(product));
+  private processGetProductsResponse(response: ApiResponse<ProductApiBody>): IProduct[] {
+    const body = response as unknown as ProductApiBody;
+    const raw = body?.productResponse?.product;
+    const list: RawProduct[] = Array.isArray(raw) ? raw : [];
+    return list.map((product) => this.normalizeProduct(product));
   }
 
-  private processCreateProductResponse(response: ApiResponse<any>, fallback: IProductRequest): IProduct {
-    const created = response?.productResponse?.product?.[0]
-      ?? response?.productResponse?.product
-      ?? response?.productResponse
-      ?? fallback;
-
-    return this.normalizeProduct(created);
+  private processCreateProductResponse(response: ApiResponse<ProductApiBody>, fallback: IProductRequest): IProduct {
+    const body = response as unknown as ProductApiBody;
+    const raw = body?.productResponse?.product;
+    const single: RawProduct | undefined = Array.isArray(raw) ? raw[0] : raw;
+    return this.normalizeProduct(single ?? fallback);
   }
 
-  private normalizeProduct(product: any): IProduct {
+  private normalizeProduct(product: RawProduct): IProduct {
     if (!product) {
-      return {
-        name: '',
-        price: 0,
-        quantity: 0,
-        categoryName: '',
-        category: ''
-      };
+      return { name: '', price: 0, quantity: 0, categoryName: '', category: '' };
     }
 
-    const categoryName = product?.categoryName
-      ?? product?.category?.name
-      ?? product?.category
+    const cat = product.category;
+    const catObj = typeof cat === 'object' ? cat : undefined;
+    const categoryName = product.categoryName
+      ?? catObj?.name
+      ?? (typeof cat === 'string' ? cat : undefined)
       ?? '';
 
     return {
-      id: product?.id,
-      name: product?.name,
-      price: product?.price,
-      quantity: product?.quantity,
-      categoryId: product?.categoryId ?? product?.category?.id,
+      id: product.id,
+      name: product.name ?? '',
+      price: product.price ?? 0,
+      quantity: product.quantity ?? 0,
+      categoryId: product.categoryId ?? catObj?.id,
       categoryName,
-      supplierId: product?.supplierId,
-      supplierName: product?.supplierName,
+      supplierId: product.supplierId,
+      supplierName: product.supplierName,
       category: categoryName
     };
   }
