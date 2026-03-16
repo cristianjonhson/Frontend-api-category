@@ -119,7 +119,7 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
 
     this.purchaseOrderService.createPurchaseOrder(payload).subscribe({
       next: () => {
-        this.logger.info('[Purchase] Orden de compra creada');
+        this.logger.info('[Purchase][PurchaseManagementComponent] Orden de compra creada');
         this.creatingOrder = false;
         this.resetForm();
         this.loadOrders();
@@ -127,7 +127,7 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
       },
       error: (error) => {
         this.creatingOrder = false;
-        this.logger.error('[Purchase] Error al crear orden de compra', error);
+        this.logger.error('[Purchase][PurchaseManagementComponent] Error al crear orden de compra', error);
         const message = error?.error?.message || error?.message || ERROR_MESSAGES.PURCHASE_ORDER_CREATE_ERROR;
         this.sweetAlert.showError(message);
       }
@@ -163,12 +163,12 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
 
         this.purchaseOrderService.receivePurchaseOrder(orderId, payload).subscribe({
           next: () => {
-            this.logger.info('[Purchase] Recepción registrada para orden', orderId);
+            this.logger.info('[Purchase][PurchaseManagementComponent] Recepción registrada para orden', orderId);
             this.loadOrders();
             this.sweetAlert.showSuccess(SUCCESS_MESSAGES.PURCHASE_ORDER_RECEIVED, 'Actualizado');
           },
           error: (error) => {
-            this.logger.error('[Purchase] Error al recibir orden de compra', error);
+            this.logger.error('[Purchase][PurchaseManagementComponent] Error al recibir orden de compra', error);
             const message = error?.error?.message || error?.message || ERROR_MESSAGES.PURCHASE_ORDER_RECEIVE_ERROR;
             this.sweetAlert.showError(message);
           }
@@ -206,7 +206,7 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
         this.suppliers = suppliers ?? [];
       },
       error: (error) => {
-        this.logger.error('[Purchase] Error al cargar proveedores', error);
+        this.logger.error('[Purchase][PurchaseManagementComponent] Error al cargar proveedores', error);
         this.suppliers = [];
       }
     });
@@ -218,7 +218,7 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
         this.products = products ?? [];
       },
       error: (error) => {
-        this.logger.error('[Purchase] Error al cargar productos', error);
+        this.logger.error('[Purchase][PurchaseManagementComponent] Error al cargar productos', error);
         this.products = [];
       }
     });
@@ -229,13 +229,13 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
 
     this.purchaseOrderService.getPurchaseOrders().subscribe({
       next: (orders) => {
-        this.logger.info('[Purchase] Órdenes cargadas:', (orders ?? []).length);
+        this.logger.info('[Purchase][PurchaseManagementComponent] Órdenes cargadas:', (orders ?? []).length);
         this.syncPaginator();
         this.paginatorService.setData(this.dataSource, orders ?? [], this.sharedPaginator?.paginator);
         this.loadingOrders = false;
       },
       error: (error) => {
-        this.logger.error('[Purchase] Error al cargar órdenes', error);
+        this.logger.error('[Purchase][PurchaseManagementComponent] Error al cargar órdenes', error);
         this.syncPaginator();
         this.paginatorService.setData(this.dataSource, [], this.sharedPaginator?.paginator);
         this.loadingOrders = false;

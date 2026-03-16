@@ -25,7 +25,7 @@ export class SupplierService {
     return this.http.get<ApiResponse<any>>(endpoint).pipe(
       map((response) => this.processGetSuppliersResponse(response)),
       catchError((err) => {
-        this.logger.error('[Supplier] Error al obtener proveedores', err);
+        this.logger.error('[Supplier][SupplierService] Error al obtener proveedores', err);
         return throwError(() => err);
       })
     );
@@ -42,7 +42,7 @@ export class SupplierService {
     return this.http.post<ApiResponse<any>>(endpoint, payload, options).pipe(
       map((response) => this.processSingleSupplierResponse(response, payload)),
       catchError((err) => {
-        this.logger.error('[Supplier] Error al crear proveedor', err);
+        this.logger.error('[Supplier][SupplierService] Error al crear proveedor', err);
         return throwError(() => err);
       })
     );
@@ -59,7 +59,7 @@ export class SupplierService {
     return this.http.put<ApiResponse<any>>(endpoint, payload, options).pipe(
       map((response) => this.processSingleSupplierResponse(response, payload)),
       catchError((err) => {
-        this.logger.error('[Supplier] Error al actualizar proveedor', err);
+        this.logger.error('[Supplier][SupplierService] Error al actualizar proveedor', err);
         return throwError(() => err);
       })
     );
@@ -75,7 +75,7 @@ export class SupplierService {
 
     return this.http.delete<void>(endpoint, options).pipe(
       catchError((err) => {
-        this.logger.error('[Supplier] Error al eliminar proveedor', err);
+        this.logger.error('[Supplier][SupplierService] Error al eliminar proveedor', err);
         return throwError(() => err);
       })
     );

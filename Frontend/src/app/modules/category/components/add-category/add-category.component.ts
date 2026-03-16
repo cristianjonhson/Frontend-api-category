@@ -59,7 +59,7 @@ export class AddCategoryComponent {
           const message = err?.error?.message || err?.message || ERROR_MESSAGES.CATEGORY_CREATE_ERROR;
           this.errorMessage = message;
           this.notification.error(message);
-          this.logger.error('[Category] Error al crear categoría', err);
+          this.logger.error('[Category][AddCategoryComponent] Error al crear categoría', err);
         }
       });
   }

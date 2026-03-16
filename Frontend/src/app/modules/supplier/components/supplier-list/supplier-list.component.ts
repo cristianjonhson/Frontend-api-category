@@ -99,7 +99,7 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      this.logger.info('[Supplier] Proveedor creado, recargando lista');
+      this.logger.info('[Supplier][SupplierListComponent] Proveedor creado, recargando lista');
       this.loadSuppliers();
       this.sweetAlert.showSuccess(SUCCESS_MESSAGES.SUPPLIER_CREATED, SWEET_ALERT_TEXTS.TITLE_CREATED);
     });
@@ -124,7 +124,7 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      this.logger.info('[Supplier] Proveedor actualizado, recargando lista');
+      this.logger.info('[Supplier][SupplierListComponent] Proveedor actualizado, recargando lista');
       this.loadSuppliers();
       this.sweetAlert.showSuccess(SUCCESS_MESSAGES.SUPPLIER_UPDATED, SWEET_ALERT_TEXTS.TITLE_UPDATED);
     });
@@ -152,7 +152,7 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
             },
             error: (error) => {
               const message = error?.message || ERROR_MESSAGES.SUPPLIER_DELETE_ERROR;
-              this.logger.error('[Supplier] Error al eliminar proveedor', error);
+              this.logger.error('[Supplier][SupplierListComponent] Error al eliminar proveedor', error);
               this.sweetAlert.showError(message);
             }
           });
@@ -165,14 +165,14 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
     this.supplierService.getSuppliers().subscribe({
       next: (suppliers) => {
         const rows = this.mapSuppliersToRows(suppliers ?? []);
-        this.logger.info('[Supplier] Proveedores cargados:', rows.length);
+        this.logger.info('[Supplier][SupplierListComponent] Proveedores cargados:', rows.length);
         this.syncPaginator();
         this.paginatorService.setData(this.dataSource, rows, this.sharedPaginator?.paginator);
         this.applyFilter();
         this.loading = false;
       },
       error: (error) => {
-        this.logger.error('[Supplier] Error al cargar proveedores', error);
+        this.logger.error('[Supplier][SupplierListComponent] Error al cargar proveedores', error);
         this.syncPaginator();
         this.paginatorService.setData(this.dataSource, [], this.sharedPaginator?.paginator);
         this.applyFilter();

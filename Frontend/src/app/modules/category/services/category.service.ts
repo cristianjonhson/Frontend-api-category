@@ -31,7 +31,7 @@ export class CategoryService {
     return this.http.get<ApiResponse<CategoryResponse>>(endpoint).pipe(
       map(res => this.processGetCategoriesResponse(res)),
       catchError(err => {
-        this.logger.error('[Category] Error al obtener categorías:', err);
+        this.logger.error('[Category][CategoryService] Error al obtener categorías:', err);
         return of([]);
       })
     );
@@ -51,9 +51,9 @@ export class CategoryService {
     };
 
     return this.http.post<ApiResponse<CategoryResponse>>(endpoint, body, options).pipe(
-      tap(() => this.logger.info('[Category] Creando nueva categoría:', body)),
+      tap(() => this.logger.info('[Category][CategoryService] Creando nueva categoría:', body)),
       catchError(err => {
-        this.logger.error('[Category] Error al crear categoría:', err);
+        this.logger.error('[Category][CategoryService] Error al crear categoría:', err);
         return throwError(() => err);
       })
     );
@@ -73,9 +73,9 @@ export class CategoryService {
     };
 
     return this.http.put<ApiResponse<CategoryResponse>>(endpoint, body, options).pipe(
-      tap(() => this.logger.info('[Category] Actualizando categoría:', id)),
+      tap(() => this.logger.info('[Category][CategoryService] Actualizando categoría:', id)),
       catchError(err => {
-        this.logger.error('[Category] Error al actualizar categoría:', err);
+        this.logger.error('[Category][CategoryService] Error al actualizar categoría:', err);
         return throwError(() => err);
       })
     );
@@ -94,9 +94,9 @@ export class CategoryService {
     };
 
     return this.http.delete<void>(endpoint, options).pipe(
-      tap(() => this.logger.info('[Category] Eliminando categoría:', id)),
+      tap(() => this.logger.info('[Category][CategoryService] Eliminando categoría:', id)),
       catchError(err => {
-        this.logger.error('[Category] Error al eliminar categoría:', err);
+        this.logger.error('[Category][CategoryService] Error al eliminar categoría:', err);
         return throwError(() => err);
       })
     );
@@ -112,7 +112,7 @@ export class CategoryService {
     const code = response?.metadata?.[0]?.code;
 
     if (code !== ApiResponseCode.SUCCESS) {
-      this.logger.warn('[Category] Respuesta no exitosa:', code);
+      this.logger.warn('[Category][CategoryService] Respuesta no exitosa:', code);
       return [];
     }
 

@@ -65,7 +65,7 @@ export class EditCategoryComponent {
           const message = err?.error?.message || err?.message || ERROR_MESSAGES.CATEGORY_UPDATE_ERROR;
           this.errorMessage = message;
           this.notification.error(message);
-          this.logger.error('[Category] Error al actualizar categoría', err);
+          this.logger.error('[Category][EditCategoryComponent] Error al actualizar categoría', err);
         }
       });
   }

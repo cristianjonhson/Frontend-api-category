@@ -113,7 +113,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (categories) => {
-          this.logger.info('[Category] Categorías recibidas:', categories.length);
+          this.logger.info('[Category][CategoryComponent] Categorías recibidas:', categories.length);
           this.paginatorService.setData(this.dataSource, categories, this.sharedPaginator?.paginator);
           this.applyFilter();
 
@@ -122,7 +122,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
           }
         },
         error: (error) => {
-          this.logger.error('[Category] Error al obtener categorías:', error);
+          this.logger.error('[Category][CategoryComponent] Error al obtener categorías:', error);
           this.notification.error(error.message || ERROR_MESSAGES.CATEGORY_LOAD_ERROR);
         }
       });
@@ -176,7 +176,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
         if (result) {
-          this.logger.info('[Category] Nueva categoría agregada, recargando lista');
+          this.logger.info('[Category][CategoryComponent] Nueva categoría agregada, recargando lista');
           this.sweetAlert.showSuccess(SUCCESS_MESSAGES.CATEGORY_CREATED, SWEET_ALERT_TEXTS.TITLE_CREATED);
           this.getCategories();
         }
@@ -196,7 +196,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => {
         if (result) {
-          this.logger.info('[Category] Categoría actualizada, recargando lista');
+          this.logger.info('[Category][CategoryComponent] Categoría actualizada, recargando lista');
           this.sweetAlert.showSuccess(SUCCESS_MESSAGES.CATEGORY_UPDATED, SWEET_ALERT_TEXTS.TITLE_UPDATED);
           this.getCategories();
         }
@@ -225,7 +225,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
           },
           error: (error) => {
             const message = error.message || ERROR_MESSAGES.CATEGORY_DELETE_ERROR;
-            this.logger.error('[Category] Error al eliminar categoría:', error);
+            this.logger.error('[Category][CategoryComponent] Error al eliminar categoría:', error);
             this.sweetAlert.showError(message);
           }
         });
