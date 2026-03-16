@@ -14,6 +14,8 @@ const baseUrl = environment.base_uri;
   providedIn: 'root'
 })
 export class SupplierService {
+  private readonly logCtx = '[Supplier][SupplierService]';
+
   constructor(
     private http: HttpClient,
     private logger: LoggerService
@@ -25,7 +27,7 @@ export class SupplierService {
     return this.http.get<ApiResponse<any>>(endpoint).pipe(
       map((response) => this.processGetSuppliersResponse(response)),
       catchError((err) => {
-        this.logger.error('[Supplier][SupplierService] Error al obtener proveedores', err);
+        this.logger.error(`${this.logCtx} Error al obtener proveedores`, err);
         return throwError(() => err);
       })
     );
@@ -42,7 +44,7 @@ export class SupplierService {
     return this.http.post<ApiResponse<any>>(endpoint, payload, options).pipe(
       map((response) => this.processSingleSupplierResponse(response, payload)),
       catchError((err) => {
-        this.logger.error('[Supplier][SupplierService] Error al crear proveedor', err);
+        this.logger.error(`${this.logCtx} Error al crear proveedor`, err);
         return throwError(() => err);
       })
     );
@@ -59,7 +61,7 @@ export class SupplierService {
     return this.http.put<ApiResponse<any>>(endpoint, payload, options).pipe(
       map((response) => this.processSingleSupplierResponse(response, payload)),
       catchError((err) => {
-        this.logger.error('[Supplier][SupplierService] Error al actualizar proveedor', err);
+        this.logger.error(`${this.logCtx} Error al actualizar proveedor`, err);
         return throwError(() => err);
       })
     );
@@ -75,7 +77,7 @@ export class SupplierService {
 
     return this.http.delete<void>(endpoint, options).pipe(
       catchError((err) => {
-        this.logger.error('[Supplier][SupplierService] Error al eliminar proveedor', err);
+        this.logger.error(`${this.logCtx} Error al eliminar proveedor`, err);
         return throwError(() => err);
       })
     );
