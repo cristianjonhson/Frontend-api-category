@@ -13,6 +13,8 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../../shared/constants';
   styleUrls: ['./add-category.component.css']
 })
 export class AddCategoryComponent {
+  private readonly logCtx = '[Category][AddCategoryComponent]';
+
   categoryForm: FormGroup;
   loading = false;
   errorMessage = '';
@@ -59,7 +61,7 @@ export class AddCategoryComponent {
           const message = err?.error?.message || err?.message || ERROR_MESSAGES.CATEGORY_CREATE_ERROR;
           this.errorMessage = message;
           this.notification.error(message);
-          this.logger.error('[Category][AddCategoryComponent] Error al crear categoría', err);
+          this.logger.error(`${this.logCtx} Error al crear categoría`, err);
         }
       });
   }
