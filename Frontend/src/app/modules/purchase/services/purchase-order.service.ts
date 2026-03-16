@@ -12,34 +12,7 @@ import {
   IPurchaseOrderCreateRequest,
   IPurchaseOrderReceiveRequest
 } from '../../../shared/interfaces/purchase.interface';
-
-// Shapes internos de la respuesta de la API — no exportados
-interface RawPurchaseOrderItem {
-  id?: number;
-  productId?: number;
-  productName?: string;
-  orderedQuantity?: number;
-  receivedQuantity?: number;
-  pendingQuantity?: number;
-}
-
-interface RawPurchaseOrder {
-  id?: number;
-  orderNumber?: string;
-  supplierId?: number;
-  supplierName?: string;
-  status?: string;
-  expectedDate?: string;
-  createdAt?: string;
-  receivedAt?: string;
-  items?: RawPurchaseOrderItem[];
-}
-
-interface PurchaseOrderApiBody {
-  purchaseOrderResponse?: {
-    purchaseOrder?: RawPurchaseOrder[] | RawPurchaseOrder;
-  };
-}
+import { PurchaseOrderApiBody, RawPurchaseOrder } from '../../../shared/interfaces/purchase-api-response.interface';
 
 const baseUrl = environment.base_uri;
 
