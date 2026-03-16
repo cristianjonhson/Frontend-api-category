@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { API_CONFIG } from '../../../shared/constants';
 import { ApiResponse } from '../../../shared/models/api-response.model';
+import { LoggerService } from '../../../core/services/logger.service';
 import {
   IPurchaseOrder,
   IPurchaseOrderCreateRequest,
@@ -18,14 +19,20 @@ const baseUrl = environment.base_uri;
   providedIn: 'root'
 })
 export class PurchaseOrderService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private logger: LoggerService
+  ) {}
 
   getPurchaseOrders(): Observable<IPurchaseOrder[]> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.PURCHASE_ORDERS}`;
 
     return this.http.get<ApiResponse<any>>(endpoint).pipe(
       map((response) => this.processGetPurchaseOrdersResponse(response)),
-      catchError((err) => throwError(() => err))
+      catchError((err) => {
+        this.logger.error('[Purchase] Error al obtener órdenes de compra', err);
+        return throwError(() => err);
+      })
     );
   }
 
@@ -39,7 +46,10 @@ export class PurchaseOrderService {
 
     return this.http.post<ApiResponse<any>>(endpoint, payload, options).pipe(
       map((response) => this.processSinglePurchaseOrderResponse(response)),
-      catchError((err) => throwError(() => err))
+      catchError((err) => {
+        this.logger.error('[Purchase] Error al crear orden de compra', err);
+        return throwError(() => err);
+      })
     );
   }
 
@@ -53,7 +63,10 @@ export class PurchaseOrderService {
 
     return this.http.post<ApiResponse<any>>(endpoint, payload, options).pipe(
       map((response) => this.processSinglePurchaseOrderResponse(response)),
-      catchError((err) => throwError(() => err))
+      catchError((err) => {
+        this.logger.error('[Purchase] Error al recibir orden de compra', err);
+        return throwError(() => err);
+      })
     );
   }
 
