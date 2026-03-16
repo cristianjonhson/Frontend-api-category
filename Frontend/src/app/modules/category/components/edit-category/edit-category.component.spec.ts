@@ -6,6 +6,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { EditCategoryComponent } from './edit-category.component';
 import { CategoryService } from '../../services';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 
 describe('EditCategoryComponent', () => {
@@ -21,6 +22,10 @@ describe('EditCategoryComponent', () => {
     error: jasmine.createSpy('error')
   };
 
+  const loggerMock = {
+    error: jasmine.createSpy('error')
+  };
+
   const dialogRefMock = {
     close: jasmine.createSpy('close')
   };
@@ -31,6 +36,7 @@ describe('EditCategoryComponent', () => {
       providers: [
         FormBuilder,
         { provide: CategoryService, useValue: categoryServiceMock },
+        { provide: LoggerService, useValue: loggerMock },
         { provide: NotificationService, useValue: notificationMock },
         { provide: MatDialogRef, useValue: dialogRefMock },
         {
