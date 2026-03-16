@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { CategoryService } from '../../services';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../../shared/constants';
 import { EditCategoryDialogData } from '../interfaces';
@@ -20,6 +21,7 @@ export class EditCategoryComponent {
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoryService,
+    private logger: LoggerService,
     private notification: NotificationService,
     private dialogRef: MatDialogRef<EditCategoryComponent>,
     @Inject(MAT_DIALOG_DATA) public data: EditCategoryDialogData
@@ -63,7 +65,7 @@ export class EditCategoryComponent {
           const message = err?.error?.message || err?.message || ERROR_MESSAGES.CATEGORY_UPDATE_ERROR;
           this.errorMessage = message;
           this.notification.error(message);
-          console.error(err);
+          this.logger.error('Error al actualizar categoría', err);
         }
       });
   }
