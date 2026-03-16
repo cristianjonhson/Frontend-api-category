@@ -13,6 +13,34 @@ import {
   IPurchaseOrderReceiveRequest
 } from '../../../shared/interfaces/purchase.interface';
 
+// Shapes internos de la respuesta de la API — no exportados
+interface RawPurchaseOrderItem {
+  id?: number;
+  productId?: number;
+  productName?: string;
+  orderedQuantity?: number;
+  receivedQuantity?: number;
+  pendingQuantity?: number;
+}
+
+interface RawPurchaseOrder {
+  id?: number;
+  orderNumber?: string;
+  supplierId?: number;
+  supplierName?: string;
+  status?: string;
+  expectedDate?: string;
+  createdAt?: string;
+  receivedAt?: string;
+  items?: RawPurchaseOrderItem[];
+}
+
+interface PurchaseOrderApiBody {
+  purchaseOrderResponse?: {
+    purchaseOrder?: RawPurchaseOrder[] | RawPurchaseOrder;
+  };
+}
+
 const baseUrl = environment.base_uri;
 
 @Injectable({
@@ -29,7 +57,7 @@ export class PurchaseOrderService {
   getPurchaseOrders(): Observable<IPurchaseOrder[]> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.PURCHASE_ORDERS}`;
 
-    return this.http.get<ApiResponse<any>>(endpoint).pipe(
+    return this.http.get<ApiResponse<PurchaseOrderApiBody>>(endpoint).pipe(
       map((response) => this.processGetPurchaseOrdersResponse(response)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al obtener órdenes de compra`, err);
@@ -46,7 +74,7 @@ export class PurchaseOrderService {
       }
     };
 
-    return this.http.post<ApiResponse<any>>(endpoint, payload, options).pipe(
+    return this.http.post<ApiResponse<PurchaseOrderApiBody>>(endpoint, payload, options).pipe(
       map((response) => this.processSinglePurchaseOrderResponse(response)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al crear orden de compra`, err);
@@ -63,7 +91,7 @@ export class PurchaseOrderService {
       }
     };
 
-    return this.http.post<ApiResponse<any>>(endpoint, payload, options).pipe(
+    return this.http.post<ApiResponse<PurchaseOrderApiBody>>(endpoint, payload, options).pipe(
       map((response) => this.processSinglePurchaseOrderResponse(response)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al recibir orden de compra`, err);
@@ -72,34 +100,35 @@ export class PurchaseOrderService {
     );
   }
 
-  private processGetPurchaseOrdersResponse(response: ApiResponse<any>): IPurchaseOrder[] {
-    const orders = response?.purchaseOrderResponse?.purchaseOrder ?? [];
-    return orders.map((order: any) => this.normalizeOrder(order));
+  private processGetPurchaseOrdersResponse(response: ApiResponse<PurchaseOrderApiBody>): IPurchaseOrder[] {
+    const body = response as unknown as PurchaseOrderApiBody;
+    const raw = body?.purchaseOrderResponse?.purchaseOrder;
+    const list: RawPurchaseOrder[] = Array.isArray(raw) ? raw : [];
+    return list.map((order) => this.normalizeOrder(order));
   }
 
-  private processSinglePurchaseOrderResponse(response: ApiResponse<any>): IPurchaseOrder {
-    const order = response?.purchaseOrderResponse?.purchaseOrder?.[0]
-      ?? response?.purchaseOrderResponse?.purchaseOrder
-      ?? response?.purchaseOrderResponse;
-
-    return this.normalizeOrder(order);
+  private processSinglePurchaseOrderResponse(response: ApiResponse<PurchaseOrderApiBody>): IPurchaseOrder {
+    const body = response as unknown as PurchaseOrderApiBody;
+    const raw = body?.purchaseOrderResponse?.purchaseOrder;
+    const single: RawPurchaseOrder | undefined = Array.isArray(raw) ? raw[0] : raw;
+    return this.normalizeOrder(single ?? ({} as RawPurchaseOrder));
   }
 
-  private normalizeOrder(order: any): IPurchaseOrder {
+  private normalizeOrder(order: RawPurchaseOrder): IPurchaseOrder {
     const items = Array.isArray(order?.items) ? order.items : [];
 
     return {
       id: order?.id,
       orderNumber: order?.orderNumber ?? '',
-      supplierId: order?.supplierId,
+      supplierId: order?.supplierId ?? 0,
       supplierName: order?.supplierName ?? '',
       status: order?.status ?? 'PENDING',
       expectedDate: order?.expectedDate,
       createdAt: order?.createdAt,
       receivedAt: order?.receivedAt,
-      items: items.map((item: any) => ({
+      items: items.map((item) => ({
         id: item?.id,
-        productId: item?.productId,
+        productId: item?.productId ?? 0,
         productName: item?.productName ?? '',
         orderedQuantity: item?.orderedQuantity ?? 0,
         receivedQuantity: item?.receivedQuantity ?? 0,
