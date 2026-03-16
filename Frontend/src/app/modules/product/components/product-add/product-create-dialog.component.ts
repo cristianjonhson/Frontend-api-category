@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { ProductService } from '../../services';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ERROR_MESSAGES, VALIDATION_RULES } from '../../../../shared/constants';
 import { IProductRequest } from '../../../../shared/interfaces';
 import { SweetAlertService } from '../../../../shared/services';
@@ -29,13 +30,14 @@ export class ProductCreateDialogComponent {
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
+    private logger: LoggerService,
     private sweetAlert: SweetAlertService,
     private dialogRef: MatDialogRef<ProductCreateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ProductCreateDialogData
   ) {}
 
   close(): void {
-    console.log('Dialog: close');
+    this.logger.debug('Cierre de diálogo de creación de producto');
     this.dialogRef.close(null);
   }
 
