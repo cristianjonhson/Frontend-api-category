@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 import { SupplierListComponent } from './supplier-list.component';
 import { SupplierService } from '../../services';
@@ -41,6 +42,11 @@ describe('SupplierListComponent', () => {
     showError: jasmine.createSpy('showError')
   };
 
+  const loggerMock = {
+    info: jasmine.createSpy('info'),
+    error: jasmine.createSpy('error')
+  };
+
   beforeEach(async () => {
     localStorage.clear();
 
@@ -48,6 +54,7 @@ describe('SupplierListComponent', () => {
       declarations: [SupplierListComponent],
       providers: [
         { provide: SupplierService, useValue: supplierServiceMock },
+        { provide: LoggerService, useValue: loggerMock },
         { provide: PaginatorService, useValue: paginatorServiceMock },
         { provide: MatDialog, useValue: dialogMock },
         { provide: SweetAlertService, useValue: sweetAlertMock }
