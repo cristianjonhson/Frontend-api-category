@@ -15,6 +15,8 @@ import { ProductCreateDialogData } from '../interfaces';
   styleUrls: ['./product-create-dialog.component.css']
 })
 export class ProductCreateDialogComponent {
+  private readonly logCtx = '[Product][ProductCreateDialogComponent]';
+
   loading = false;
   errorMessage = '';
 
@@ -37,7 +39,7 @@ export class ProductCreateDialogComponent {
   ) {}
 
   close(): void {
-    this.logger.debug('[Product][ProductCreateDialogComponent] Cierre de diálogo de creación de producto');
+    this.logger.debug(`${this.logCtx} Cierre de diálogo de creación de producto`);
     this.dialogRef.close(null);
   }
 
