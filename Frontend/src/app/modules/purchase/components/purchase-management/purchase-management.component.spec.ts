@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 import { PurchaseManagementComponent } from './purchase-management.component';
 import { PurchaseOrderService } from '../../services';
@@ -38,6 +39,11 @@ describe('PurchaseManagementComponent', () => {
     handlePageChange: jasmine.createSpy('handlePageChange')
   };
 
+  const loggerMock = {
+    info: jasmine.createSpy('info'),
+    error: jasmine.createSpy('error')
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PurchaseManagementComponent],
@@ -46,6 +52,7 @@ describe('PurchaseManagementComponent', () => {
         { provide: SupplierService, useValue: supplierServiceMock },
         { provide: ProductService, useValue: productServiceMock },
         { provide: PaginatorService, useValue: paginatorServiceMock },
+        { provide: LoggerService, useValue: loggerMock },
         { provide: SweetAlertService, useValue: sweetAlertMock }
       ],
       schemas: [NO_ERRORS_SCHEMA]
