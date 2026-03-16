@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 
 import { ProductCreateDialogComponent } from './product-create-dialog.component';
 import { ProductService } from '../../services';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SweetAlertService } from '../../../../shared/services';
 
 describe('ProductCreateDialogComponent', () => {
@@ -20,6 +21,10 @@ describe('ProductCreateDialogComponent', () => {
     showError: jasmine.createSpy('showError')
   };
 
+  const loggerMock = {
+    debug: jasmine.createSpy('debug')
+  };
+
   const dialogRefMock = {
     close: jasmine.createSpy('close')
   };
@@ -30,6 +35,7 @@ describe('ProductCreateDialogComponent', () => {
       providers: [
         FormBuilder,
         { provide: ProductService, useValue: productServiceMock },
+        { provide: LoggerService, useValue: loggerMock },
         { provide: SweetAlertService, useValue: sweetAlertMock },
         { provide: MatDialogRef, useValue: dialogRefMock },
         { provide: MAT_DIALOG_DATA, useValue: { categories: [], suppliers: [] } }
