@@ -6,30 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { ApiResponse } from '../../../shared/models/api-response.model';
 import { API_CONFIG } from '../../../shared/constants';
 import { IProduct, IProductRequest } from '../../../shared/interfaces/product.interface';
-
-// Shapes internos de la respuesta de la API — no exportados
-interface RawProductCategory {
-  id?: number;
-  name?: string;
-}
-
-interface RawProduct {
-  id?: number;
-  name?: string;
-  price?: number;
-  quantity?: number;
-  categoryId?: number;
-  categoryName?: string;
-  supplierId?: number;
-  supplierName?: string;
-  category?: string | RawProductCategory;
-}
-
-interface ProductApiBody {
-  productResponse?: {
-    product?: RawProduct[] | RawProduct;
-  };
-}
+import { ProductApiBody, RawProduct } from '../../../shared/interfaces/product-api-response.interface';
 
 const base_url = environment.base_uri;
 
