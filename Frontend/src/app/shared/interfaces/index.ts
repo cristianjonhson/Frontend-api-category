@@ -6,3 +6,6 @@ export * from './category.interface';
 export * from './product.interface';
 export * from './supplier.interface';
 export * from './purchase.interface';
+export * from './product-api-response.interface';
+export * from './supplier-api-response.interface';
+export * from './purchase-api-response.interface';
