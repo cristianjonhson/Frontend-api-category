@@ -8,6 +8,27 @@ import { ApiResponse } from '../../../shared/models/api-response.model';
 import { ISupplier, ISupplierRequest } from '../../../shared/interfaces/supplier.interface';
 import { LoggerService } from '../../../core/services/logger.service';
 
+// Shapes internos de la respuesta de la API — no exportados
+interface RawSupplierProduct {
+  id?: number;
+  name?: string;
+  categoryName?: string;
+}
+
+interface RawSupplier {
+  id?: number;
+  name?: string;
+  email?: string;
+  phone?: string;
+  products?: RawSupplierProduct[];
+}
+
+interface SupplierApiBody {
+  supplierResponse?: {
+    supplier?: RawSupplier[] | RawSupplier;
+  };
+}
+
 const baseUrl = environment.base_uri;
 
 @Injectable({
@@ -24,7 +45,7 @@ export class SupplierService {
   getSuppliers(): Observable<ISupplier[]> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.SUPPLIERS}`;
 
-    return this.http.get<ApiResponse<any>>(endpoint).pipe(
+    return this.http.get<ApiResponse<SupplierApiBody>>(endpoint).pipe(
       map((response) => this.processGetSuppliersResponse(response)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al obtener proveedores`, err);
@@ -41,7 +62,7 @@ export class SupplierService {
       }
     };
 
-    return this.http.post<ApiResponse<any>>(endpoint, payload, options).pipe(
+    return this.http.post<ApiResponse<SupplierApiBody>>(endpoint, payload, options).pipe(
       map((response) => this.processSingleSupplierResponse(response, payload)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al crear proveedor`, err);
@@ -58,7 +79,7 @@ export class SupplierService {
       }
     };
 
-    return this.http.put<ApiResponse<any>>(endpoint, payload, options).pipe(
+    return this.http.put<ApiResponse<SupplierApiBody>>(endpoint, payload, options).pipe(
       map((response) => this.processSingleSupplierResponse(response, payload)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al actualizar proveedor`, err);
@@ -83,20 +104,21 @@ export class SupplierService {
     );
   }
 
-  private processGetSuppliersResponse(response: ApiResponse<any>): ISupplier[] {
-    const suppliers = response?.supplierResponse?.supplier ?? [];
-    return suppliers.map((supplier: any) => this.normalizeSupplier(supplier));
+  private processGetSuppliersResponse(response: ApiResponse<SupplierApiBody>): ISupplier[] {
+    const body = response as unknown as SupplierApiBody;
+    const raw = body?.supplierResponse?.supplier;
+    const list: RawSupplier[] = Array.isArray(raw) ? raw : [];
+    return list.map((supplier) => this.normalizeSupplier(supplier));
   }
 
-  private processSingleSupplierResponse(response: ApiResponse<any>, fallback: ISupplierRequest): ISupplier {
-    const supplier = response?.supplierResponse?.supplier?.[0]
-      ?? response?.supplierResponse?.supplier
-      ?? fallback;
-
-    return this.normalizeSupplier(supplier);
+  private processSingleSupplierResponse(response: ApiResponse<SupplierApiBody>, fallback: ISupplierRequest): ISupplier {
+    const body = response as unknown as SupplierApiBody;
+    const raw = body?.supplierResponse?.supplier;
+    const single: RawSupplier | undefined = Array.isArray(raw) ? raw[0] : raw;
+    return this.normalizeSupplier(single ?? fallback);
   }
 
-  private normalizeSupplier(supplier: any): ISupplier {
+  private normalizeSupplier(supplier: RawSupplier): ISupplier {
     const products = Array.isArray(supplier?.products) ? supplier.products : [];
 
     return {
@@ -104,7 +126,7 @@ export class SupplierService {
       name: supplier?.name ?? '',
       email: supplier?.email ?? '',
       phone: supplier?.phone ?? '',
-      products: products.map((product: any) => ({
+      products: products.map((product) => ({
         id: product?.id,
         name: product?.name ?? '',
         categoryName: product?.categoryName ?? ''
