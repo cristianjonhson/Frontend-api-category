@@ -6,28 +6,8 @@ import { environment } from '../../../../environments/environment';
 import { API_CONFIG } from '../../../shared/constants/api.constants';
 import { ApiResponse } from '../../../shared/models/api-response.model';
 import { ISupplier, ISupplierRequest } from '../../../shared/interfaces/supplier.interface';
+import { RawSupplier, SupplierApiBody } from '../../../shared/interfaces/supplier-api-response.interface';
 import { LoggerService } from '../../../core/services/logger.service';
-
-// Shapes internos de la respuesta de la API — no exportados
-interface RawSupplierProduct {
-  id?: number;
-  name?: string;
-  categoryName?: string;
-}
-
-interface RawSupplier {
-  id?: number;
-  name?: string;
-  email?: string;
-  phone?: string;
-  products?: RawSupplierProduct[];
-}
-
-interface SupplierApiBody {
-  supplierResponse?: {
-    supplier?: RawSupplier[] | RawSupplier;
-  };
-}
 
 const baseUrl = environment.base_uri;
 
