@@ -37,7 +37,7 @@ export class ProductCreateDialogComponent {
   ) {}
 
   close(): void {
-    this.logger.debug('Cierre de diálogo de creación de producto');
+    this.logger.debug('[Product] Cierre de diálogo de creación de producto');
     this.dialogRef.close(null);
   }
 
