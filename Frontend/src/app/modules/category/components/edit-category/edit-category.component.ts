@@ -14,6 +14,8 @@ import { EditCategoryDialogData } from '../interfaces';
   styleUrls: ['./edit-category.component.css']
 })
 export class EditCategoryComponent {
+  private readonly logCtx = '[Category][EditCategoryComponent]';
+
   categoryForm: FormGroup;
   loading = false;
   errorMessage = '';
@@ -65,7 +67,7 @@ export class EditCategoryComponent {
           const message = err?.error?.message || err?.message || ERROR_MESSAGES.CATEGORY_UPDATE_ERROR;
           this.errorMessage = message;
           this.notification.error(message);
-          this.logger.error('[Category][EditCategoryComponent] Error al actualizar categoría', err);
+          this.logger.error(`${this.logCtx} Error al actualizar categoría`, err);
         }
       });
   }
