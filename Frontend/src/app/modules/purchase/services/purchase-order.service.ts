@@ -19,6 +19,8 @@ const baseUrl = environment.base_uri;
   providedIn: 'root'
 })
 export class PurchaseOrderService {
+  private readonly logCtx = '[Purchase][PurchaseOrderService]';
+
   constructor(
     private http: HttpClient,
     private logger: LoggerService
@@ -30,7 +32,7 @@ export class PurchaseOrderService {
     return this.http.get<ApiResponse<any>>(endpoint).pipe(
       map((response) => this.processGetPurchaseOrdersResponse(response)),
       catchError((err) => {
-        this.logger.error('[Purchase][PurchaseOrderService] Error al obtener órdenes de compra', err);
+        this.logger.error(`${this.logCtx} Error al obtener órdenes de compra`, err);
         return throwError(() => err);
       })
     );
@@ -47,7 +49,7 @@ export class PurchaseOrderService {
     return this.http.post<ApiResponse<any>>(endpoint, payload, options).pipe(
       map((response) => this.processSinglePurchaseOrderResponse(response)),
       catchError((err) => {
-        this.logger.error('[Purchase][PurchaseOrderService] Error al crear orden de compra', err);
+        this.logger.error(`${this.logCtx} Error al crear orden de compra`, err);
         return throwError(() => err);
       })
     );
@@ -64,7 +66,7 @@ export class PurchaseOrderService {
     return this.http.post<ApiResponse<any>>(endpoint, payload, options).pipe(
       map((response) => this.processSinglePurchaseOrderResponse(response)),
       catchError((err) => {
-        this.logger.error('[Purchase][PurchaseOrderService] Error al recibir orden de compra', err);
+        this.logger.error(`${this.logCtx} Error al recibir orden de compra`, err);
         return throwError(() => err);
       })
     );
