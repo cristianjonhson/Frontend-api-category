@@ -12,7 +12,7 @@ import {
   IPurchaseOrderCreateRequest,
   IPurchaseOrderReceiveRequest
 } from '../../../shared/interfaces/purchase.interface';
-import { PurchaseOrderApiBody, RawPurchaseOrder } from '../../../shared/interfaces/purchase-api-response.interface';
+import { PurchaseOrderApiBody, RawPurchaseOrder } from '../../../shared/interfaces';
 
 const baseUrl = environment.base_uri;
 
