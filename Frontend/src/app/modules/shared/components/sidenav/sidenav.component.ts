@@ -1,6 +1,12 @@
 import { MediaMatcher } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 
+interface SidenavNavItem {
+  readonly name: string;
+  readonly route: string;
+  readonly icon: string;
+}
+
 /**
  * Componente de navegación lateral
  *
@@ -23,14 +29,14 @@ export class SidenavComponent implements OnInit {
    * Configuración de elementos del menú de navegación
    * Cada item contiene nombre, ruta e ícono Material
    */
-  menuNav = [
-    {name: "Home", route: "home", icon: "home"},
-    {name: "Categorias", route: "category", icon: "category"},
-    {name: "Productos", route: "product", icon: "production_quantity_limits"},
-    {name: "Stock", route: "stock", icon: "inventory_2"},
-    {name: "Proveedores", route: "supplier", icon: "local_shipping"},
-    {name: "Compras", route: "purchase", icon: "receipt_long"}
-  ]
+  readonly menuNav: ReadonlyArray<SidenavNavItem> = [
+    { name: 'Home', route: 'home', icon: 'home' },
+    { name: 'Categorias', route: 'category', icon: 'category' },
+    { name: 'Productos', route: 'product', icon: 'production_quantity_limits' },
+    { name: 'Stock', route: 'stock', icon: 'inventory_2' },
+    { name: 'Proveedores', route: 'supplier', icon: 'local_shipping' },
+    { name: 'Compras', route: 'purchase', icon: 'receipt_long' }
+  ];
 
   /**
    * Constructor del componente
