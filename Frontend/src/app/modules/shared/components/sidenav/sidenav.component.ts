@@ -16,9 +16,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sidenav.component.css']
 })
 export class SidenavComponent implements OnInit {
-  /** Propiedad del menú (sin uso actual) */
-  menu: any;
-
   /** Query para detectar si es dispositivo móvil (max-width: 600px) */
   mobileQuery: MediaQueryList;
 
