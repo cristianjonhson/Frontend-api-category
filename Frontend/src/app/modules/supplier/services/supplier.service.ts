@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { API_CONFIG } from '../../../shared/constants/api.constants';
 import { ApiResponse } from '../../../shared/models/api-response.model';
 import { ISupplier, ISupplierRequest } from '../../../shared/interfaces/supplier.interface';
-import { RawSupplier, SupplierApiBody } from '../../../shared/interfaces/supplier-api-response.interface';
+import { RawSupplier, SupplierApiBody } from '../../../shared/interfaces';
 import { LoggerService } from '../../../core/services/logger.service';
 
 const baseUrl = environment.base_uri;
