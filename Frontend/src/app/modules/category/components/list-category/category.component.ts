@@ -115,7 +115,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (categories) => {
-          this.logger.info(`${this.logCtx} Categorías recibidas:`, categories.length);
+          //this.logger.info(`${this.logCtx} Categorías recibidas:`, categories.length);
           this.paginatorService.setData(this.dataSource, categories, this.sharedPaginator?.paginator);
           this.applyFilter();
 
