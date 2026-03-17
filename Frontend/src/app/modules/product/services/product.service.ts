@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { ApiResponse } from '../../../shared/models/api-response.model';
 import { API_CONFIG } from '../../../shared/constants';
 import { IProduct, IProductRequest } from '../../../shared/interfaces/product.interface';
-import { ProductApiBody, RawProduct } from '../../../shared/interfaces/product-api-response.interface';
+import { ProductApiBody, RawProduct } from '../../../shared/interfaces';
 
 const base_url = environment.base_uri;
 
