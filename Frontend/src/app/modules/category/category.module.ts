@@ -4,6 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModuleOptimized } from '../shared/material-optimized.module';
 import { SharedModule } from '../shared/shared.module';
+import { CategoryRoutingModule } from './category-routing.module';
 import {
   AddCategoryComponent,
   CategoryComponent,
@@ -30,10 +31,8 @@ import {
     MaterialModuleOptimized,
     FlexLayoutModule,
     FormsModule,
-    ReactiveFormsModule
-  ],
-  exports: [
-    CategoryComponent
+    ReactiveFormsModule,
+    CategoryRoutingModule
   ]
 })
 export class CategoryModule { }
