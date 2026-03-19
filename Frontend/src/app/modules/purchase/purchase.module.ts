@@ -5,6 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { SharedModule } from '../shared/shared.module';
 import { PurchaseManagementComponent } from './components/purchase-management/purchase-management.component';
+import { PurchaseRoutingModule } from './purchase-routing.module';
 
 @NgModule({
   declarations: [PurchaseManagementComponent],
@@ -12,8 +13,8 @@ import { PurchaseManagementComponent } from './components/purchase-management/pu
     CommonModule,
     SharedModule,
     ReactiveFormsModule,
-    MatSelectModule
-  ],
-  exports: [PurchaseManagementComponent]
+    MatSelectModule,
+    PurchaseRoutingModule
+  ]
 })
 export class PurchaseModule { }
