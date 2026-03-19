@@ -2,11 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
-import { CategoryComponent } from '../category/components/list-category/category.component';
-import { ProductListComponent } from '../product/components/product-list/product-list.component';
-import { StockManagementComponent } from '../product/components/stock-management/stock-management.component';
-import { SupplierListComponent } from '../supplier/components/supplier-list/supplier-list.component';
-import { PurchaseManagementComponent } from '../purchase/components/purchase-management/purchase-management.component';
 import { ROUTES } from '../../shared/constants/routes.constants';
 
 /**
@@ -29,23 +24,23 @@ const routes: Routes = [
       },
       {
         path: ROUTES.CATEGORY,
-        component: CategoryComponent
+        loadChildren: () => import('../category/category.module').then(m => m.CategoryModule)
       },
       {
         path: ROUTES.PRODUCT,
-        component: ProductListComponent
+        loadChildren: () => import('../product/product.module').then(m => m.ProductModule)
       },
       {
         path: ROUTES.STOCK,
-        component: StockManagementComponent
+        loadChildren: () => import('../product/stock.module').then(m => m.StockModule)
       },
       {
         path: ROUTES.SUPPLIER,
-        component: SupplierListComponent
+        loadChildren: () => import('../supplier/supplier.module').then(m => m.SupplierModule)
       },
       {
         path: ROUTES.PURCHASE,
-        component: PurchaseManagementComponent
+        loadChildren: () => import('../purchase/purchase.module').then(m => m.PurchaseModule)
       }
     ]
   }
