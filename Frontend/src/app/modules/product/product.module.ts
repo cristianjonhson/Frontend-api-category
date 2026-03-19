@@ -12,19 +12,18 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
+import { ProductRoutingModule } from './product-routing.module';
 import {
   ProductCreateDialogComponent,
   ProductEditDialogComponent,
-  ProductListComponent,
-  StockManagementComponent
+  ProductListComponent
 } from './components';
 
 @NgModule({
   declarations: [
     ProductListComponent,
     ProductCreateDialogComponent,
-    ProductEditDialogComponent,
-    StockManagementComponent
+    ProductEditDialogComponent
   ],
   imports: [
     CommonModule,
@@ -37,8 +36,8 @@ import {
     MatSelectModule,
     MatDialogModule,
     MatButtonModule,
-    MatPaginatorModule
-  ],
-  exports: [ProductListComponent, StockManagementComponent]
+    MatPaginatorModule,
+    ProductRoutingModule
+  ]
 })
 export class ProductModule { }
