@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
+import { SupplierRoutingModule } from './supplier-routing.module';
 import {
   SupplierCreateDialogComponent,
   SupplierEditDialogComponent,
@@ -19,8 +20,8 @@ import {
     SharedModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatPaginatorModule
-  ],
-  exports: [SupplierListComponent]
+    MatPaginatorModule,
+    SupplierRoutingModule
+  ]
 })
 export class SupplierModule { }
