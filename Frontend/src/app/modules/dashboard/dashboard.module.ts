@@ -4,11 +4,7 @@ import { DashboardComponent } from './pages/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModuleOptimized } from '../shared/material-optimized.module';
-import { CategoryModule } from '../category/category.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
-import { ProductModule } from '../product/product.module';
-import { SupplierModule } from '../supplier/supplier.module';
-import { PurchaseModule } from '../purchase/purchase.module';
 
 /**
  * Módulo principal del Dashboard
@@ -31,11 +27,7 @@ import { PurchaseModule } from '../purchase/purchase.module';
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
-    MaterialModuleOptimized,
-    CategoryModule,
-    ProductModule,
-    SupplierModule,
-    PurchaseModule
+    MaterialModuleOptimized
   ]
 })
 export class DashboardModule { }
