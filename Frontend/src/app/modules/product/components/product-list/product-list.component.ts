@@ -79,8 +79,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   private loadProducts(): void {
     this.productService.getProducts().subscribe((data) => {
       this.products = data ?? [];
-      this.buildCategoriesFallback();
-      this.buildSuppliersFallback();
+      this.categories = this.productService.buildCategoriesFallback(this.products, this.categories);
+      this.suppliers = this.productService.buildSuppliersFallback(this.products, this.suppliers);
       this.applyFilters();
     });
   }
@@ -186,7 +186,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
         .sort((a, b) => a.localeCompare(b));
 
       if (this.categories.length === 0) {
-        this.buildCategoriesFallback();
+        this.categories = this.productService.buildCategoriesFallback(this.products, this.categories);
       }
     });
   }
@@ -200,78 +200,25 @@ export class ProductListComponent implements OnInit, AfterViewInit {
         .sort((a, b) => a.localeCompare(b));
 
       if (this.suppliers.length === 0) {
-        this.buildSuppliersFallback();
+        this.suppliers = this.productService.buildSuppliersFallback(this.products, this.suppliers);
       }
     });
   }
 
-  private buildCategoriesFallback(): void {
-    const derivedCategories = Array.from(
-      new Set(
-        this.products
-          .map((product: IProduct) => this.getCategoryName(product))
-          .filter(Boolean)
-      )
-    ).sort();
-
-    if (this.categories.length === 0) {
-      this.categories = derivedCategories;
-      return;
-    }
-
-    this.categories = Array.from(new Set([...this.categories, ...derivedCategories]))
-      .sort((a, b) => a.localeCompare(b));
-  }
-
-  private buildSuppliersFallback(): void {
-    const derivedSuppliers = Array.from(
-      new Set(
-        this.products
-          .map((product: IProduct) => this.getSupplierName(product))
-          .filter(Boolean)
-      )
-    ).sort();
-
-    if (this.suppliers.length === 0) {
-      this.suppliers = derivedSuppliers;
-      return;
-    }
-
-    this.suppliers = Array.from(new Set([...this.suppliers, ...derivedSuppliers]))
-      .sort((a, b) => a.localeCompare(b));
-  }
-
   private applyFilters(): void {
-    const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
+    const term = (this.searchControl.value ?? '').toString();
     const selectedCategory = (this.categoryControl.value ?? '').toString().trim();
     const selectedSupplier = (this.supplierControl.value ?? '').toString().trim();
 
-    this.filteredProducts = this.products.filter((p: IProduct) => {
-      const name = (p?.name ?? '').toString().toLowerCase();
-      const category = this.getCategoryName(p);
-      const supplier = this.getSupplierName(p);
-
-      const matchesName = !term || name.includes(term);
-      const matchesCategory = !selectedCategory || category === selectedCategory;
-      const matchesSupplier = !selectedSupplier || supplier === selectedSupplier;
-
-      return matchesName && matchesCategory && matchesSupplier;
-    });
+    this.filteredProducts = this.productService.filterProducts(
+      this.products,
+      term,
+      selectedCategory,
+      selectedSupplier
+    );
 
     this.paginatorService.setData(this.dataSource, this.filteredProducts, this.sharedPaginator?.paginator);
     this.paginatorService.resetToFirstPage(this.sharedPaginator?.paginator, this.dataSource);
-  }
-
-  private getCategoryName(product: IProduct): string {
-    if (typeof product?.category === 'string') {
-      return product.category.trim();
-    }
-
-    return (product?.categoryName ?? product?.category?.name ?? '').toString().trim();
-  }
-
-  private getSupplierName(product: IProduct): string {
-    return (product?.supplierName ?? '').toString().trim();
   }
 
   onDeleteProduct(product: IProduct): void {
