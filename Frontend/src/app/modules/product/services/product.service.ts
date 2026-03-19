@@ -16,6 +16,70 @@ const base_url = environment.base_uri;
 export class ProductService {
   constructor(private http: HttpClient) {}
 
+  getCategoryName(product: IProduct): string {
+    if (typeof product?.category === 'string') {
+      return product.category.trim();
+    }
+
+    return (product?.categoryName ?? product?.category?.name ?? '').toString().trim();
+  }
+
+  getSupplierName(product: IProduct): string {
+    return (product?.supplierName ?? '').toString().trim();
+  }
+
+  buildCategoriesFallback(products: IProduct[], categories: string[]): string[] {
+    const derivedCategories = Array.from(
+      new Set(
+        products
+          .map((product: IProduct) => this.getCategoryName(product))
+          .filter(Boolean)
+      )
+    ).sort();
+
+    if (categories.length === 0) {
+      return derivedCategories;
+    }
+
+    return Array.from(new Set([...categories, ...derivedCategories]))
+      .sort((a, b) => a.localeCompare(b));
+  }
+
+  buildSuppliersFallback(products: IProduct[], suppliers: string[]): string[] {
+    const derivedSuppliers = Array.from(
+      new Set(
+        products
+          .map((product: IProduct) => this.getSupplierName(product))
+          .filter(Boolean)
+      )
+    ).sort();
+
+    if (suppliers.length === 0) {
+      return derivedSuppliers;
+    }
+
+    return Array.from(new Set([...suppliers, ...derivedSuppliers]))
+      .sort((a, b) => a.localeCompare(b));
+  }
+
+  filterProducts(products: IProduct[], search: string, category: string, supplier: string): IProduct[] {
+    const normalizedTerm = search.toLowerCase().trim();
+    const selectedCategory = category.trim();
+    const selectedSupplier = supplier.trim();
+
+    return products.filter((product: IProduct) => {
+      const name = (product?.name ?? '').toString().toLowerCase();
+      const categoryName = this.getCategoryName(product);
+      const supplierName = this.getSupplierName(product);
+
+      const matchesName = !normalizedTerm || name.includes(normalizedTerm);
+      const matchesCategory = !selectedCategory || categoryName === selectedCategory;
+      const matchesSupplier = !selectedSupplier || supplierName === selectedSupplier;
+
+      return matchesName && matchesCategory && matchesSupplier;
+    });
+  }
+
   getProducts(): Observable<IProduct[]> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}`;
 
