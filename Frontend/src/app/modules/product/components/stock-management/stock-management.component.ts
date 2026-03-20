@@ -5,7 +5,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ProductService } from '../../services';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
-import { IProduct } from '../../../../shared/interfaces';
 import { PaginatorService } from '../../../../shared/services';
 import { IStockRow } from '../interfaces';
 
@@ -46,7 +45,11 @@ export class StockManagementComponent implements OnInit, AfterViewInit {
 
     this.productService.getProducts().subscribe({
       next: (products) => {
-        const stockRows = this.mapProductsToStockRows(products ?? []);
+        const stockRows = this.productService.mapProductsToStockRows(
+          products ?? [],
+          this.defaultMinStock,
+          this.defaultMaxStock
+        );
         this.syncPaginator();
         this.paginatorService.setData(this.dataSource, stockRows, this.sharedPaginator?.paginator);
         this.paginatorService.resetToFirstPage(this.sharedPaginator?.paginator, this.dataSource);
@@ -57,21 +60,6 @@ export class StockManagementComponent implements OnInit, AfterViewInit {
         this.paginatorService.setData(this.dataSource, [], this.sharedPaginator?.paginator);
         this.loading = false;
       }
-    });
-  }
-
-  private mapProductsToStockRows(products: IProduct[]): IStockRow[] {
-    return products.map((product) => {
-      const currentStock = Number(product?.quantity ?? 0);
-      const availableStock = Math.max(currentStock - this.defaultMinStock, 0);
-
-      return {
-        productName: (product?.name ?? '').toString(),
-        currentStock,
-        minStock: this.defaultMinStock,
-        maxStock: this.defaultMaxStock,
-        availableStock
-      };
     });
   }
 
