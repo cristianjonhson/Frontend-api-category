@@ -10,6 +10,7 @@ import { LoggerService } from '../../../core/services/logger.service';
 import {
   IPurchaseOrder,
   IPurchaseOrderCreateRequest,
+  IPurchaseOrderItem,
   IPurchaseOrderReceiveRequest
 } from '../../../shared/interfaces/purchase.interface';
 import { PurchaseOrderApiBody, RawPurchaseOrder } from '../../../shared/interfaces';
@@ -26,6 +27,53 @@ export class PurchaseOrderService {
     private http: HttpClient,
     private logger: LoggerService
   ) {}
+
+  buildCreateOrderItems(rawItems: Array<{ productId?: number | null; quantity?: number | null }>): Array<{ productId: number; quantity: number }> {
+    return rawItems
+      .filter((item) => item?.productId && item?.quantity)
+      .map((item) => ({
+        productId: Number(item.productId),
+        quantity: Number(item.quantity)
+      }))
+      .filter((item) => item.quantity > 0);
+  }
+
+  buildReceiveOrderPayload(order: IPurchaseOrder): IPurchaseOrderReceiveRequest {
+    const items = (order.items ?? [])
+      .map((item) => ({
+        productId: item.productId,
+        quantity: this.getPendingItemQuantity(item)
+      }))
+      .filter((item) => item.quantity > 0);
+
+    return { items };
+  }
+
+  canReceiveOrder(order: IPurchaseOrder): boolean {
+    return (order?.status ?? '').toUpperCase() !== 'RECEIVED' && this.getPendingCount(order) > 0;
+  }
+
+  getPendingCount(order: IPurchaseOrder): number {
+    return (order.items ?? []).reduce((acc, item) => acc + this.getPendingItemQuantity(item), 0);
+  }
+
+  getItemsSummary(order: IPurchaseOrder): string {
+    if (!order.items || order.items.length === 0) {
+      return 'Sin items';
+    }
+
+    return order.items
+      .map((item) => {
+        const pending = this.getPendingItemQuantity(item);
+        return `${item.productName}: ${item.receivedQuantity}/${item.orderedQuantity} (pendiente: ${pending})`;
+      })
+      .join(' | ');
+  }
+
+  private getPendingItemQuantity(item: IPurchaseOrderItem): number {
+    const pending = item.pendingQuantity ?? Math.max((item.orderedQuantity ?? 0) - (item.receivedQuantity ?? 0), 0);
+    return Math.max(pending, 0);
+  }
 
   getPurchaseOrders(): Observable<IPurchaseOrder[]> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.PURCHASE_ORDERS}`;
