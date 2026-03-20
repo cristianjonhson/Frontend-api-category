@@ -10,7 +10,6 @@ import { PurchaseOrderService } from '../../services';
 import {
   IPurchaseOrder,
   IPurchaseOrderCreateRequest,
-  IPurchaseOrderReceiveRequest,
   IProduct,
   ISupplier
 } from '../../../../shared/interfaces';
@@ -98,13 +97,7 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
     const expectedDate = (this.form.value.expectedDate ?? '').toString();
     const rawItems = this.items.controls.map((control) => control.value);
 
-    const items = rawItems
-      .filter((item) => item?.productId && item?.quantity)
-      .map((item) => ({
-        productId: Number(item.productId),
-        quantity: Number(item.quantity)
-      }))
-      .filter((item) => item.quantity > 0);
+    const items = this.purchaseOrderService.buildCreateOrderItems(rawItems);
 
     if (items.length === 0) {
       this.sweetAlert.showError(ERROR_MESSAGES.PURCHASE_ORDER_CREATE_ERROR);
@@ -143,12 +136,8 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const receiveItems = (order.items ?? [])
-      .map((item) => ({
-        productId: item.productId,
-        quantity: item.pendingQuantity ?? Math.max((item.orderedQuantity ?? 0) - (item.receivedQuantity ?? 0), 0)
-      }))
-      .filter((item) => item.quantity > 0);
+    const payload = this.purchaseOrderService.buildReceiveOrderPayload(order);
+    const receiveItems = payload.items;
 
     if (receiveItems.length === 0) {
       this.sweetAlert.showError('La orden ya no tiene cantidades pendientes por recibir');
@@ -160,8 +149,6 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
         if (!confirmed) {
           return;
         }
-
-        const payload: IPurchaseOrderReceiveRequest = { items: receiveItems };
 
         this.purchaseOrderService.receivePurchaseOrder(orderId, payload).subscribe({
           next: () => {
@@ -179,27 +166,15 @@ export class PurchaseManagementComponent implements OnInit, AfterViewInit {
   }
 
   canReceive(order: IPurchaseOrder): boolean {
-    return (order?.status ?? '').toUpperCase() !== 'RECEIVED' && this.getPendingCount(order) > 0;
+    return this.purchaseOrderService.canReceiveOrder(order);
   }
 
   getPendingCount(order: IPurchaseOrder): number {
-    return (order.items ?? []).reduce((acc, item) => {
-      const pending = item.pendingQuantity ?? Math.max((item.orderedQuantity ?? 0) - (item.receivedQuantity ?? 0), 0);
-      return acc + Math.max(pending, 0);
-    }, 0);
+    return this.purchaseOrderService.getPendingCount(order);
   }
 
   getItemsSummary(order: IPurchaseOrder): string {
-    if (!order.items || order.items.length === 0) {
-      return 'Sin items';
-    }
-
-    return order.items
-      .map((item) => {
-        const pending = item.pendingQuantity ?? Math.max((item.orderedQuantity ?? 0) - (item.receivedQuantity ?? 0), 0);
-        return `${item.productName}: ${item.receivedQuantity}/${item.orderedQuantity} (pendiente: ${pending})`;
-      })
-      .join(' | ');
+    return this.purchaseOrderService.getItemsSummary(order);
   }
 
   private loadSuppliers(): void {
