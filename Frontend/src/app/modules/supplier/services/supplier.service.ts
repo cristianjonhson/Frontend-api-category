@@ -8,6 +8,7 @@ import { ApiResponse } from '../../../shared/models/api-response.model';
 import { ISupplier, ISupplierRequest } from '../../../shared/interfaces/supplier.interface';
 import { RawSupplier, SupplierApiBody } from '../../../shared/interfaces';
 import { LoggerService } from '../../../core/services/logger.service';
+import { ISupplierRow } from '../components/supplier-list/supplier-list.interface';
 
 const baseUrl = environment.base_uri;
 
@@ -21,6 +22,46 @@ export class SupplierService {
     private http: HttpClient,
     private logger: LoggerService
   ) {}
+
+  mapSuppliersToRows(suppliers: ISupplier[]): ISupplierRow[] {
+    return suppliers.map((supplier) => {
+      const products = supplier.products ?? [];
+      const productsLabel = products.length > 0
+        ? products.map((product) => product.name).join(', ')
+        : 'Sin productos asignados';
+
+      return {
+        id: supplier.id,
+        name: supplier.name,
+        email: supplier.email,
+        phone: supplier.phone,
+        productsCount: products.length,
+        productsLabel,
+        products
+      };
+    });
+  }
+
+  matchesSupplierFilter(data: ISupplierRow, filter: string): boolean {
+    const term = this.normalizeFilterTerm(filter);
+    if (!term) {
+      return true;
+    }
+
+    const supplierName = (data?.name ?? '').toString().toLowerCase();
+    const email = (data?.email ?? '').toString().toLowerCase();
+    const phone = (data?.phone ?? '').toString().toLowerCase();
+    const productsLabel = (data?.productsLabel ?? '').toString().toLowerCase();
+
+    return supplierName.includes(term)
+      || email.includes(term)
+      || phone.includes(term)
+      || productsLabel.includes(term);
+  }
+
+  normalizeFilterTerm(term: string): string {
+    return (term ?? '').toString().toLowerCase().trim();
+  }
 
   getSuppliers(): Observable<ISupplier[]> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.SUPPLIERS}`;
