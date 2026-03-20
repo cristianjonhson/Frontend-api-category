@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ROUTES } from '../../../shared/constants/routes.constants';
 
 /**
  * Componente principal del Dashboard
@@ -16,13 +18,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   /**
    * Inicialización del componente
    * Se ejecuta después de la creación del componente
    */
   ngOnInit(): void {
+    // Fallback defensivo: si no hay ruta hija activa, dirigir a Home.
+    if (!this.route.snapshot.firstChild) {
+      this.router.navigate([ROUTES.HOME], { relativeTo: this.route });
+    }
   }
 
 }
