@@ -9,7 +9,6 @@ import { LoggerService } from '../../../../core/services/logger.service';
 import { PaginatorService } from '../../../../shared/services';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
-import { ISupplier } from '../../../../shared/interfaces/supplier.interface';
 import { SupplierService } from '../../services';
 import { SupplierCreateDialogComponent } from '../supplier-add/supplier-create-dialog.component';
 import { SupplierEditDialogComponent } from '../supplier-edit/supplier-edit-dialog.component';
@@ -50,22 +49,7 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.restoreSearchFilter();
 
-    this.dataSource.filterPredicate = (data: ISupplierRow, filter: string) => {
-      const term = (filter ?? '').toString().toLowerCase().trim();
-      if (!term) {
-        return true;
-      }
-
-      const supplierName = (data?.name ?? '').toString().toLowerCase();
-      const email = (data?.email ?? '').toString().toLowerCase();
-      const phone = (data?.phone ?? '').toString().toLowerCase();
-      const productsLabel = (data?.productsLabel ?? '').toString().toLowerCase();
-
-      return supplierName.includes(term)
-        || email.includes(term)
-        || phone.includes(term)
-        || productsLabel.includes(term);
-    };
+    this.dataSource.filterPredicate = (data: ISupplierRow, filter: string) => this.supplierService.matchesSupplierFilter(data, filter);
 
     this.loadSuppliers();
 
@@ -166,7 +150,7 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
 
     this.supplierService.getSuppliers().subscribe({
       next: (suppliers) => {
-        const rows = this.mapSuppliersToRows(suppliers ?? []);
+        const rows = this.supplierService.mapSuppliersToRows(suppliers ?? []);
         this.logger.info(`${this.logCtx} Proveedores cargados:`, rows.length);
         this.syncPaginator();
         this.paginatorService.setData(this.dataSource, rows, this.sharedPaginator?.paginator);
@@ -184,7 +168,7 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
   }
 
   private applyFilter(): void {
-    const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
+    const term = this.supplierService.normalizeFilterTerm((this.searchControl.value ?? '').toString());
     this.paginatorService.applyFilter(this.dataSource, term, this.sharedPaginator?.paginator);
   }
 
@@ -210,25 +194,6 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
       APP_CONFIG.STORAGE_KEYS.SUPPLIER_LIST_FILTERS,
       JSON.stringify({ search })
     );
-  }
-
-  private mapSuppliersToRows(suppliers: ISupplier[]): ISupplierRow[] {
-    return suppliers.map((supplier) => {
-      const products = supplier.products ?? [];
-      const productsLabel = products.length > 0
-        ? products.map((product) => product.name).join(', ')
-        : 'Sin productos asignados';
-
-      return {
-        id: supplier.id,
-        name: supplier.name,
-        email: supplier.email,
-        phone: supplier.phone,
-        productsCount: products.length,
-        productsLabel,
-        products
-      };
-    });
   }
 
   private syncPaginator(): void {
