@@ -3,10 +3,8 @@ import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { CategoryService } from '../../../category/services';
-import { APP_CONFIG } from '../../../../shared/constants/app.constants';
+import { ApiStatus, HomeService } from '../../services/home.service';
 import { ROUTE_PATHS } from '../../../../shared/constants/routes.constants';
-
-type ApiStatus = 'LOADING' | 'ONLINE' | 'OFFLINE';
 
 @Component({
   selector: 'app-home',
@@ -26,11 +24,12 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    public homeService: HomeService
   ) {}
 
   ngOnInit(): void {
-    this.showTips = JSON.parse(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.HOME_SHOW_TIPS) ?? 'true');
+    this.showTips = this.homeService.getShowTipsPreference();
     this.loadSummary();
   }
 
@@ -41,19 +40,19 @@ export class HomeComponent implements OnInit {
       next: (categories) => {
         this.categoriesCount = categories.length;
         this.apiStatus = 'ONLINE';
-        this.lastUpdated = new Date().toLocaleString();
+        this.lastUpdated = this.homeService.getCurrentTimestamp();
       },
       error: () => {
         this.categoriesCount = 0;
         this.apiStatus = 'OFFLINE';
-        this.lastUpdated = new Date().toLocaleString();
+        this.lastUpdated = this.homeService.getCurrentTimestamp();
       }
     });
   }
 
   toggleTips(value: boolean): void {
     this.showTips = value;
-    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.HOME_SHOW_TIPS, JSON.stringify(value));
+    this.homeService.setShowTipsPreference(value);
   }
 
   goToCategories(): void {
@@ -84,17 +83,5 @@ export class HomeComponent implements OnInit {
   goToStock(): void {
     this.lastAction = 'Ir a stock';
     this.router.navigate([ROUTE_PATHS.STOCK]);
-  }
-
-  getStatusLabel(status: ApiStatus): string {
-    if (status === 'ONLINE') {
-      return 'Conectada';
-    }
-
-    if (status === 'OFFLINE') {
-      return 'Sin conexion';
-    }
-
-    return 'Verificando';
   }
 }
