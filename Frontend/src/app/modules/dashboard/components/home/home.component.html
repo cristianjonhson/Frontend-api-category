@@ -51,7 +51,7 @@
     <article class="metric-card card rounded-4 border-0 shadow-sm">
       <div class="card-body">
         <p class="metric-label mb-1">Estado API</p>
-        <h2 class="metric-value mb-2">{{ getStatusLabel(apiStatus) }}</h2>
+        <h2 class="metric-value mb-2">{{ homeService.getStatusLabel(apiStatus) }}</h2>
         <span class="badge"
               [ngClass]="{
                 'text-bg-secondary': apiStatus === 'LOADING',
