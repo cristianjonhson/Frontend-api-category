@@ -13,6 +13,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 import { BaseComponent } from '../../../../shared/components/base.component';
 import { PaginatorService, SweetAlertService } from '../../../../shared/services';
 import { SharedPaginatorComponent } from '../../../shared/components/paginator/shared-paginator.component';
+import { normalizeFilterTerm } from '../../../../shared/utils';
 import { TIMING } from '../../../../shared/constants/ui.constants';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
 import { PAGINATOR_CONFIG } from '../../../../shared/constants/pagination.constants';
@@ -124,7 +125,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    * Aplica el filtro de búsqueda a la tabla
    */
   applyFilter(): void {
-    const term = this.categoryService.normalizeFilterTerm((this.searchControl.value ?? '').toString());
+    const term = normalizeFilterTerm((this.searchControl.value ?? '').toString());
     this.paginatorService.applyFilter(this.dataSource, term, this.sharedPaginator?.paginator);
   }
 
