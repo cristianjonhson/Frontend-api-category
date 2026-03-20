@@ -23,6 +23,22 @@ export class CategoryService {
     private logger: LoggerService
   ) {}
 
+  matchesCategoryFilter(category: ICategory, filter: string): boolean {
+    const term = this.normalizeFilterTerm(filter);
+    if (!term) {
+      return true;
+    }
+
+    const name = (category?.name ?? '').toString().toLowerCase();
+    const description = (category?.description ?? '').toString().toLowerCase();
+
+    return name.includes(term) || description.includes(term);
+  }
+
+  normalizeFilterTerm(term: string): string {
+    return (term ?? '').toString().toLowerCase().trim();
+  }
+
   /**
    * Obtiene todas las categorías
    * @returns Observable con array de categorías procesadas
