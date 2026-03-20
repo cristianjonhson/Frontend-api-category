@@ -7,6 +7,7 @@ import { ApiResponse } from '../../../shared/models/api-response.model';
 import { API_CONFIG } from '../../../shared/constants';
 import { IProduct, IProductRequest } from '../../../shared/interfaces/product.interface';
 import { ProductApiBody, RawProduct } from '../../../shared/interfaces';
+import { IStockRow } from '../components/interfaces';
 
 const base_url = environment.base_uri;
 
@@ -15,6 +16,21 @@ const base_url = environment.base_uri;
 })
 export class ProductService {
   constructor(private http: HttpClient) {}
+
+  mapProductsToStockRows(products: IProduct[], defaultMinStock: number, defaultMaxStock: number): IStockRow[] {
+    return products.map((product) => {
+      const currentStock = Number(product?.quantity ?? 0);
+      const availableStock = Math.max(currentStock - defaultMinStock, 0);
+
+      return {
+        productName: (product?.name ?? '').toString(),
+        currentStock,
+        minStock: defaultMinStock,
+        maxStock: defaultMaxStock,
+        availableStock
+      };
+    });
+  }
 
   getCategoryName(product: IProduct): string {
     if (typeof product?.category === 'string') {
