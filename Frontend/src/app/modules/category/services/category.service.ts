@@ -9,6 +9,7 @@ import { ICategory } from '../../../shared/interfaces/category.interface';
 import { API_CONFIG } from '../../../shared/constants/api.constants';
 import { ApiResponseCode } from '../../../shared/enums/api-response-code.enum';
 import { LoggerService } from '../../../core/services/logger.service';
+import { normalizeFilterTerm } from '../../../shared/utils';
 
 // Call environment, declare constant
 const base_url = environment.base_uri;
@@ -24,7 +25,7 @@ export class CategoryService {
   ) {}
 
   matchesCategoryFilter(category: ICategory, filter: string): boolean {
-    const term = this.normalizeFilterTerm(filter);
+    const term = normalizeFilterTerm(filter);
     if (!term) {
       return true;
     }
@@ -33,10 +34,6 @@ export class CategoryService {
     const description = (category?.description ?? '').toString().toLowerCase();
 
     return name.includes(term) || description.includes(term);
-  }
-
-  normalizeFilterTerm(term: string): string {
-    return (term ?? '').toString().toLowerCase().trim();
   }
 
   /**
