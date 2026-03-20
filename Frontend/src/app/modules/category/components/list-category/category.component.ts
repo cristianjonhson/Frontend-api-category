@@ -76,17 +76,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
   ngOnInit(): void {
     this.restoreSearchFilter();
 
-    this.dataSource.filterPredicate = (data: ICategory, filter: string) => {
-      const term = (filter ?? '').toString().toLowerCase().trim();
-      if (!term) {
-        return true;
-      }
-
-      const name = (data?.name ?? '').toString().toLowerCase();
-      const description = (data?.description ?? '').toString().toLowerCase();
-
-      return name.includes(term) || description.includes(term);
-    };
+    this.dataSource.filterPredicate = (data: ICategory, filter: string) => this.categoryService.matchesCategoryFilter(data, filter);
 
     this.getCategories();
 
@@ -134,7 +124,7 @@ export class CategoryComponent extends BaseComponent implements OnInit, AfterVie
    * Aplica el filtro de búsqueda a la tabla
    */
   applyFilter(): void {
-    const term = (this.searchControl.value ?? '').toString().toLowerCase().trim();
+    const term = this.categoryService.normalizeFilterTerm((this.searchControl.value ?? '').toString());
     this.paginatorService.applyFilter(this.dataSource, term, this.sharedPaginator?.paginator);
   }
 
