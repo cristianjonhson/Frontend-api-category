@@ -13,6 +13,7 @@ import { SupplierService } from '../../services';
 import { SupplierCreateDialogComponent } from '../supplier-add/supplier-create-dialog.component';
 import { SupplierEditDialogComponent } from '../supplier-edit/supplier-edit-dialog.component';
 import { DIALOG_CONFIG } from '../../../../shared/constants/dialog.constants';
+import { normalizeFilterTerm } from '../../../../shared/utils';
 import { CONFIRMATION_MESSAGES, ERROR_MESSAGES, SUCCESS_MESSAGES, SWEET_ALERT_TEXTS } from '../../../../shared/constants/messages.constants';
 import { SweetAlertService } from '../../../../shared/services';
 import { APP_CONFIG } from '../../../../shared/constants/app.constants';
@@ -168,7 +169,7 @@ export class SupplierListComponent implements OnInit, AfterViewInit {
   }
 
   private applyFilter(): void {
-    const term = this.supplierService.normalizeFilterTerm((this.searchControl.value ?? '').toString());
+    const term = normalizeFilterTerm((this.searchControl.value ?? '').toString());
     this.paginatorService.applyFilter(this.dataSource, term, this.sharedPaginator?.paginator);
   }
 
