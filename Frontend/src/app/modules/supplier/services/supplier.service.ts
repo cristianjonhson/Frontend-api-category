@@ -9,6 +9,7 @@ import { ISupplier, ISupplierRequest } from '../../../shared/interfaces/supplier
 import { RawSupplier, SupplierApiBody } from '../../../shared/interfaces';
 import { LoggerService } from '../../../core/services/logger.service';
 import { ISupplierRow } from '../components/supplier-list/supplier-list.interface';
+import { normalizeFilterTerm } from '../../../shared/utils';
 
 const baseUrl = environment.base_uri;
 
@@ -43,7 +44,7 @@ export class SupplierService {
   }
 
   matchesSupplierFilter(data: ISupplierRow, filter: string): boolean {
-    const term = this.normalizeFilterTerm(filter);
+    const term = normalizeFilterTerm(filter);
     if (!term) {
       return true;
     }
@@ -57,10 +58,6 @@ export class SupplierService {
       || email.includes(term)
       || phone.includes(term)
       || productsLabel.includes(term);
-  }
-
-  normalizeFilterTerm(term: string): string {
-    return (term ?? '').toString().toLowerCase().trim();
   }
 
   getSuppliers(): Observable<ISupplier[]> {
