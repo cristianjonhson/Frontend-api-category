@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { API_CONFIG } from '../../../shared/constants/api.constants';
+import { API_CONFIG, SKIP_GLOBAL_ERROR_HTTP_OPTIONS } from '../../../shared/constants/api.constants';
 import { ApiResponse } from '../../../shared/models/api-response.model';
 import { ISupplier, ISupplierRequest } from '../../../shared/interfaces/supplier.interface';
 import { RawSupplier, SupplierApiBody } from '../../../shared/interfaces';
@@ -74,13 +74,8 @@ export class SupplierService {
 
   createSupplier(payload: ISupplierRequest): Observable<ISupplier> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.SUPPLIERS}`;
-    const options = {
-      headers: {
-        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
-      }
-    };
 
-    return this.http.post<ApiResponse<SupplierApiBody>>(endpoint, payload, options).pipe(
+    return this.http.post<ApiResponse<SupplierApiBody>>(endpoint, payload, SKIP_GLOBAL_ERROR_HTTP_OPTIONS).pipe(
       map((response) => this.processSingleSupplierResponse(response, payload)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al crear proveedor`, err);
@@ -91,13 +86,8 @@ export class SupplierService {
 
   updateSupplier(id: number, payload: ISupplierRequest): Observable<ISupplier> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.SUPPLIERS}/${id}`;
-    const options = {
-      headers: {
-        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
-      }
-    };
 
-    return this.http.put<ApiResponse<SupplierApiBody>>(endpoint, payload, options).pipe(
+    return this.http.put<ApiResponse<SupplierApiBody>>(endpoint, payload, SKIP_GLOBAL_ERROR_HTTP_OPTIONS).pipe(
       map((response) => this.processSingleSupplierResponse(response, payload)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al actualizar proveedor`, err);
@@ -108,13 +98,8 @@ export class SupplierService {
 
   deleteSupplier(id: number): Observable<void> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.SUPPLIERS}/${id}`;
-    const options = {
-      headers: {
-        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
-      }
-    };
 
-    return this.http.delete<void>(endpoint, options).pipe(
+    return this.http.delete<void>(endpoint, SKIP_GLOBAL_ERROR_HTTP_OPTIONS).pipe(
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al eliminar proveedor`, err);
         return throwError(() => err);
