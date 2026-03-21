@@ -31,6 +31,12 @@ export const API_CONFIG = {
   }
 } as const;
 
+export const SKIP_GLOBAL_ERROR_HTTP_OPTIONS = {
+  headers: {
+    [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
+  }
+} as const;
+
 /**
  * Mensajes de error HTTP estándar
  * @deprecated Usar ERROR_MESSAGES de messages.constants.ts
