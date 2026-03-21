@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
-import { API_CONFIG } from '../../../shared/constants';
+import { API_CONFIG, SKIP_GLOBAL_ERROR_HTTP_OPTIONS } from '../../../shared/constants';
 import { ApiResponse } from '../../../shared/models/api-response.model';
 import { LoggerService } from '../../../core/services/logger.service';
 import {
@@ -89,13 +89,8 @@ export class PurchaseOrderService {
 
   createPurchaseOrder(payload: IPurchaseOrderCreateRequest): Observable<IPurchaseOrder> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.PURCHASE_ORDERS}`;
-    const options = {
-      headers: {
-        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
-      }
-    };
 
-    return this.http.post<ApiResponse<PurchaseOrderApiBody>>(endpoint, payload, options).pipe(
+    return this.http.post<ApiResponse<PurchaseOrderApiBody>>(endpoint, payload, SKIP_GLOBAL_ERROR_HTTP_OPTIONS).pipe(
       map((response) => this.processSinglePurchaseOrderResponse(response)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al crear orden de compra`, err);
@@ -106,13 +101,8 @@ export class PurchaseOrderService {
 
   receivePurchaseOrder(id: number, payload: IPurchaseOrderReceiveRequest): Observable<IPurchaseOrder> {
     const endpoint = `${baseUrl}${API_CONFIG.ENDPOINTS.PURCHASE_ORDERS}/${id}/receive`;
-    const options = {
-      headers: {
-        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
-      }
-    };
 
-    return this.http.post<ApiResponse<PurchaseOrderApiBody>>(endpoint, payload, options).pipe(
+    return this.http.post<ApiResponse<PurchaseOrderApiBody>>(endpoint, payload, SKIP_GLOBAL_ERROR_HTTP_OPTIONS).pipe(
       map((response) => this.processSinglePurchaseOrderResponse(response)),
       catchError((err) => {
         this.logger.error(`${this.logCtx} Error al recibir orden de compra`, err);
