@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { ApiResponse } from '../../../shared/models/api-response.model';
-import { API_CONFIG } from '../../../shared/constants';
+import { API_CONFIG, SKIP_GLOBAL_ERROR_HTTP_OPTIONS } from '../../../shared/constants';
 import { IProduct, IProductRequest } from '../../../shared/interfaces/product.interface';
 import { ProductApiBody, RawProduct } from '../../../shared/interfaces';
 import { IStockRow } from '../components/interfaces';
@@ -107,11 +107,6 @@ export class ProductService {
 
   createProduct(payload: IProductRequest): Observable<IProduct> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}`;
-    const options = {
-      headers: {
-        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
-      }
-    };
     const requestBody: IProductRequest = {
       name: payload?.name,
       price: payload?.price,
@@ -120,7 +115,7 @@ export class ProductService {
       supplierId: payload?.supplierId
     };
 
-    return this.http.post<ApiResponse<ProductApiBody>>(endpoint, requestBody, options).pipe(
+    return this.http.post<ApiResponse<ProductApiBody>>(endpoint, requestBody, SKIP_GLOBAL_ERROR_HTTP_OPTIONS).pipe(
       map((response) => this.processCreateProductResponse(response, requestBody)),
       catchError((err) => throwError(() => err))
     );
@@ -128,11 +123,6 @@ export class ProductService {
 
   updateProduct(id: number, payload: IProductRequest): Observable<IProduct> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}/${id}`;
-    const options = {
-      headers: {
-        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
-      }
-    };
     const requestBody: IProductRequest = {
       name: payload?.name,
       price: payload?.price,
@@ -141,7 +131,7 @@ export class ProductService {
       supplierId: payload?.supplierId
     };
 
-    return this.http.put<ApiResponse<ProductApiBody>>(endpoint, requestBody, options).pipe(
+    return this.http.put<ApiResponse<ProductApiBody>>(endpoint, requestBody, SKIP_GLOBAL_ERROR_HTTP_OPTIONS).pipe(
       map((response) => this.processCreateProductResponse(response, requestBody)),
       catchError((err) => throwError(() => err))
     );
@@ -149,13 +139,8 @@ export class ProductService {
 
   deleteProduct(id: number): Observable<void> {
     const endpoint = `${base_url}${API_CONFIG.ENDPOINTS.PRODUCTS}/${id}`;
-    const options = {
-      headers: {
-        [API_CONFIG.HEADERS.SKIP_GLOBAL_ERROR]: 'true'
-      }
-    };
 
-    return this.http.delete<void>(endpoint, options).pipe(
+    return this.http.delete<void>(endpoint, SKIP_GLOBAL_ERROR_HTTP_OPTIONS).pipe(
       catchError((err) => throwError(() => err))
     );
   }
