@@ -45,37 +45,11 @@ export class ProductService {
   }
 
   buildCategoriesFallback(products: IProduct[], categories: string[]): string[] {
-    const derivedCategories = Array.from(
-      new Set(
-        products
-          .map((product: IProduct) => this.getCategoryName(product))
-          .filter(Boolean)
-      )
-    ).sort();
-
-    if (categories.length === 0) {
-      return derivedCategories;
-    }
-
-    return Array.from(new Set([...categories, ...derivedCategories]))
-      .sort((a, b) => a.localeCompare(b));
+    return this.buildLabelsFallback(products, categories, (product) => this.getCategoryName(product));
   }
 
   buildSuppliersFallback(products: IProduct[], suppliers: string[]): string[] {
-    const derivedSuppliers = Array.from(
-      new Set(
-        products
-          .map((product: IProduct) => this.getSupplierName(product))
-          .filter(Boolean)
-      )
-    ).sort();
-
-    if (suppliers.length === 0) {
-      return derivedSuppliers;
-    }
-
-    return Array.from(new Set([...suppliers, ...derivedSuppliers]))
-      .sort((a, b) => a.localeCompare(b));
+    return this.buildLabelsFallback(products, suppliers, (product) => this.getSupplierName(product));
   }
 
   filterProducts(products: IProduct[], search: string, category: string, supplier: string): IProduct[] {
@@ -150,6 +124,27 @@ export class ProductService {
     const raw = body?.productResponse?.product;
     const list: RawProduct[] = Array.isArray(raw) ? raw : [];
     return list.map((product) => this.normalizeProduct(product));
+  }
+
+  private buildLabelsFallback(
+    products: IProduct[],
+    existingLabels: string[],
+    getLabel: (product: IProduct) => string
+  ): string[] {
+    const derivedLabels = Array.from(
+      new Set(
+        products
+          .map((product: IProduct) => getLabel(product))
+          .filter(Boolean)
+      )
+    ).sort();
+
+    if (existingLabels.length === 0) {
+      return derivedLabels;
+    }
+
+    return Array.from(new Set([...existingLabels, ...derivedLabels]))
+      .sort((a, b) => a.localeCompare(b));
   }
 
   private processCreateProductResponse(response: ApiResponse<ProductApiBody>, fallback: IProductRequest): IProduct {
