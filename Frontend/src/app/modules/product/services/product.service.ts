@@ -32,7 +32,7 @@ export class ProductService {
     });
   }
 
-  getCategoryName(product: IProduct): string {
+  private getCategoryName(product: IProduct): string {
     if (typeof product?.category === 'string') {
       return product.category.trim();
     }
@@ -40,7 +40,7 @@ export class ProductService {
     return (product?.categoryName ?? product?.category?.name ?? '').toString().trim();
   }
 
-  getSupplierName(product: IProduct): string {
+  private getSupplierName(product: IProduct): string {
     return (product?.supplierName ?? '').toString().trim();
   }
 
