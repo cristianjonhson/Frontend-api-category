@@ -1,0 +1,200 @@
+<div class="reports-shell">
+  <section class="reports-hero card rounded-4 border-0 shadow-sm">
+    <div class="card-body p-4 p-lg-5">
+      <div class="hero-top">
+        <div class="reports-copy-block">
+          <div class="hero-kicker-row mb-3">
+            <p class="eyebrow mb-0">Analitica operativa</p>
+            <span class="hero-chip">
+              <i class="bi bi-stars"></i>
+              Vista ejecutiva
+            </span>
+          </div>
+          <h1 class="display-6 fw-bold mb-2">Reportes basicos del inventario</h1>
+          <p class="text-muted mb-0 hero-copy">
+            Consulta una vista consolidada del catalogo, el stock disponible y la actividad de proveedores.
+          </p>
+        </div>
+
+        <div class="hero-actions">
+          <button mat-raised-button color="primary" (click)="refreshReport()" [disabled]="isLoading">
+            <mat-icon>refresh</mat-icon>
+            Actualizar
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-focus-card" *ngIf="!isLoading && report">
+        <div class="focus-card-left">
+          <span class="focus-kicker">Resumen instantaneo</span>
+          <strong>{{ report.lowStockProducts?.length || 0 }} focos de atencion</strong>
+          <p class="mb-0">Productos con menor disponibilidad listos para seguimiento operativo.</p>
+        </div>
+        <div class="focus-card-right">
+          <span class="focus-badge">
+            <i class="bi bi-activity"></i>
+            {{ report.totalPurchaseOrders }} movimientos
+          </span>
+        </div>
+      </div>
+
+      <div class="hero-strip" *ngIf="!isLoading && report">
+        <div class="hero-strip-item">
+          <span class="hero-strip-label">Stock total</span>
+          <strong>{{ report.totalStock | number:'1.0-0' }}</strong>
+        </div>
+        <div class="hero-strip-item">
+          <span class="hero-strip-label">Productos monitoreados</span>
+          <strong>{{ report.totalProducts }}</strong>
+        </div>
+        <div class="hero-strip-item">
+          <span class="hero-strip-label">Proveedores activos</span>
+          <strong>{{ report.totalSuppliers }}</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div *ngIf="isLoading" class="loading-card card rounded-4 border-0 shadow-sm mt-4">
+    <div class="card-body loading-container">
+      <mat-spinner diameter="46"></mat-spinner>
+      <p class="mb-0">Cargando reportes...</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!isLoading && report">
+    <section class="metrics mt-4">
+      <article [ngClass]="getStatCardClass('Productos', report.totalProducts)">
+        <div class="card-body">
+          <p class="metric-label mb-1">Productos</p>
+          <h2 class="metric-value mb-2">{{ report.totalProducts }}</h2>
+          <div class="metric-line"></div>
+          <p class="metric-help mb-0">Items registrados en catalogo</p>
+        </div>
+      </article>
+
+      <article [ngClass]="getStatCardClass('Categorías', report.totalCategories)">
+        <div class="card-body">
+          <p class="metric-label mb-1">Categorias</p>
+          <h2 class="metric-value mb-2">{{ report.totalCategories }}</h2>
+          <div class="metric-line"></div>
+          <p class="metric-help mb-0">Clasificaciones disponibles</p>
+        </div>
+      </article>
+
+      <article [ngClass]="getStatCardClass('Proveedores', report.totalSuppliers)">
+        <div class="card-body">
+          <p class="metric-label mb-1">Proveedores</p>
+          <h2 class="metric-value mb-2">{{ report.totalSuppliers }}</h2>
+          <div class="metric-line"></div>
+          <p class="metric-help mb-0">Aliados con productos asociados</p>
+        </div>
+      </article>
+
+      <article [ngClass]="getStatCardClass('Órdenes de Compra', report.totalPurchaseOrders)">
+        <div class="card-body">
+          <p class="metric-label mb-1">Ordenes de compra</p>
+          <h2 class="metric-value mb-2">{{ report.totalPurchaseOrders }}</h2>
+          <div class="metric-line"></div>
+          <p class="metric-help mb-0">Movimientos de abastecimiento</p>
+        </div>
+      </article>
+
+      <article [ngClass]="getStatCardClass('Stock Total', report.totalStock)">
+        <div class="card-body">
+          <p class="metric-label mb-1">Stock total</p>
+          <h2 class="metric-value mb-2">{{ report.totalStock | number:'1.0-0' }}</h2>
+          <div class="metric-line"></div>
+          <p class="metric-help mb-0">Suma consolidada de existencias</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="report-grid mt-4">
+      <mat-card class="report-card panel-card">
+        <mat-card-header>
+          <div>
+            <p class="panel-eyebrow">Seguimiento</p>
+            <mat-card-title>Productos con bajo stock</mat-card-title>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="table-container">
+            <table mat-table [dataSource]="report.lowStockProducts || []" class="report-table">
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="categoryName">
+                <th mat-header-cell *matHeaderCellDef>Categoria</th>
+                <td mat-cell *matCellDef="let element">{{ element.categoryName }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+                <td mat-cell *matCellDef="let element">
+                  <span [ngClass]="{ 'status-pill': true, 'status-pill--alert': element.quantity < 10 }">
+                    {{ element.quantity }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef>Precio</th>
+                <td mat-cell *matCellDef="let element">{{ element.price | currency }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedLowStockColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedLowStockColumns;"></tr>
+            </table>
+          </div>
+          <p *ngIf="(report.lowStockProducts || []).length === 0" class="no-data">
+            No hay productos con bajo stock.
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="report-card panel-card">
+        <mat-card-header>
+          <div>
+            <p class="panel-eyebrow">Relacion comercial</p>
+            <mat-card-title>Proveedores con mas productos</mat-card-title>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="table-container">
+            <table mat-table [dataSource]="report.supplierProductCount || []" class="report-table">
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="productCount">
+                <th mat-header-cell *matHeaderCellDef>Cantidad de productos</th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="status-pill">{{ element.productCount }}</span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedSupplierColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedSupplierColumns;"></tr>
+            </table>
+          </div>
+          <p *ngIf="(report.supplierProductCount || []).length === 0" class="no-data">
+            No hay proveedores registrados.
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </section>
+  </ng-container>
+
+  <ng-container *ngIf="!isLoading && !report">
+    <div class="error-card card rounded-4 border-0 shadow-sm mt-4">
+      <div class="card-body">
+        <p class="mb-1 error-title">No se pudieron cargar los reportes</p>
+        <p class="mb-0 text-muted">Intenta actualizar de nuevo para consultar la información más reciente.</p>
+      </div>
+    </div>
+  </ng-container>
+</div>
