@@ -62,12 +62,6 @@ importers:
       material-design-icons:
         specifier: 3.0.1
         version: 3.0.1
-      materialize-css:
-        specifier: 1.0.0
-        version: 1.0.0
-      materialize-stepper:
-        specifier: 3.0.1
-        version: 3.0.1
       rxjs:
         specifier: 7.8.1
         version: 7.8.1
@@ -3155,12 +3149,6 @@ packages:
 
   material-design-icons@3.0.1:
     resolution: {integrity: sha512-t19Z+QZBwSZulxptEu05kIm+UyfIdJY1JDwI+nx02j269m6W414whiQz9qfvQIiLrdx71RQv+T48nHhuQXOCIQ==}
-
-  materialize-css@1.0.0:
-    resolution: {integrity: sha512-4/oecXl8y/1i8RDZvyvwAICyqwNoKU4or5uf8uoAd74k76KzZ0Llym4zhJ5lLNUskcqjO0AuMcvNyDkpz8Z6zw==}
-
-  materialize-stepper@3.0.1:
-    resolution: {integrity: sha512-bXT6dyeVGBupDVHiUyHtbd0gzU/36ZSb/9khRv+RBNJ2QI5Vg/IqCZFUHMpjSRZNlpl7mdQ24ZgHriTMZ756rg==}
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -8531,10 +8519,6 @@ snapshots:
       - supports-color
 
   material-design-icons@3.0.1: {}
-
-  materialize-css@1.0.0: {}
-
-  materialize-stepper@3.0.1: {}
 
   math-intrinsics@1.1.0: {}
 
