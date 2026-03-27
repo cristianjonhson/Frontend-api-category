@@ -124,7 +124,7 @@ export class CategoryService {
    * @param category Categoría a validar
    * @returns true si es válida
    */
-  validateCategory(category: CategoryRequest): boolean {
+  private validateCategory(category: CategoryRequest): boolean {
     return !!(category.name?.trim() && category.description?.trim());
   }
 }
