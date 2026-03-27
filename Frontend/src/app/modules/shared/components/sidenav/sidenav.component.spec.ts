@@ -22,11 +22,11 @@ describe('SidenavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SidenavComponent ],
+      declarations: [SidenavComponent],
       providers: [{ provide: MediaMatcher, useValue: mediaMatcherMock }]
     })
-    .overrideTemplate(SidenavComponent, '')
-    .compileComponents();
+      .overrideTemplate(SidenavComponent, '')
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -37,5 +37,12 @@ describe('SidenavComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should include reports in navigation items', () => {
+    expect(component.menuNav).toContain(jasmine.objectContaining({
+      name: 'Reportes',
+      route: 'reports'
+    }));
   });
 });
