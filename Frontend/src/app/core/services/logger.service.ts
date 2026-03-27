@@ -83,7 +83,7 @@ export class LoggerService {
   /**
    * Limpia la consola (solo en desarrollo)
    */
-  clear(): void {
+  private clear(): void {
     if (!this.isProduction) {
       console.clear();
     }
