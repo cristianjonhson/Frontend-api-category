@@ -22,7 +22,7 @@ export class CategoryService {
   constructor(
     private http: HttpClient,
     private logger: LoggerService
-  ) {}
+  ) { }
 
   matchesCategoryFilter(category: ICategory, filter: string): boolean {
     const term = normalizeFilterTerm(filter);
@@ -117,14 +117,5 @@ export class CategoryService {
     }
 
     return response.categoryResponse?.category ?? [];
-  }
-
-  /**
-   * Valida si una categoría tiene datos válidos
-   * @param category Categoría a validar
-   * @returns true si es válida
-   */
-  private validateCategory(category: CategoryRequest): boolean {
-    return !!(category.name?.trim() && category.description?.trim());
   }
 }

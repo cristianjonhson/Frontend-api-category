@@ -15,7 +15,7 @@ export class NotificationService {
     verticalPosition: 'top'
   };
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar) { }
 
   /**
    * Muestra un mensaje de éxito
@@ -36,15 +36,7 @@ export class NotificationService {
   }
 
   /**
-   * Muestra un mensaje de advertencia
-   * @param message Mensaje a mostrar
-   * @param duration Duración en ms (opcional)
-   */
-  private warning(message: string, duration?: number): void {
-    this.show(message, 'warning-snackbar', duration);
-  }
 
-  /**
    * Muestra un mensaje informativo
    * @param message Mensaje a mostrar
    * @param duration Duración en ms (opcional)
