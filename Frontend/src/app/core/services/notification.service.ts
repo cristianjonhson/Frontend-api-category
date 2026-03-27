@@ -40,7 +40,7 @@ export class NotificationService {
    * @param message Mensaje a mostrar
    * @param duration Duración en ms (opcional)
    */
-  warning(message: string, duration?: number): void {
+  private warning(message: string, duration?: number): void {
     this.show(message, 'warning-snackbar', duration);
   }
 
