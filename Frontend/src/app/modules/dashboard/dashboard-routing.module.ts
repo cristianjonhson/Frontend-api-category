@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
+import { ReportsComponent } from './pages/reports/reports.component';
 import { ROUTES } from '../../shared/constants/routes.constants';
 
 /**
@@ -21,6 +22,10 @@ const routes: Routes = [
       {
         path: ROUTES.HOME,
         component: HomeComponent
+      },
+      {
+        path: ROUTES.REPORTS,
+        component: ReportsComponent
       },
       {
         path: ROUTES.CATEGORY,
@@ -59,4 +64,3 @@ const routes: Routes = [
  * @module
  */
 export class DashboardRoutingModule { }
-
