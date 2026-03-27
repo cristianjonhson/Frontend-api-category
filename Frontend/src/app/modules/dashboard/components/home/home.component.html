@@ -2,12 +2,34 @@
   <section class="hero card rounded-4 border-0 shadow-sm">
     <div class="card-body p-4 p-lg-5">
       <div class="hero-top">
-        <div>
-          <p class="eyebrow mb-2">Panel principal</p>
+        <div class="hero-copy-block">
+          <div class="hero-kicker-row mb-3">
+            <p class="eyebrow mb-0">Panel principal</p>
+            <span class="hero-chip">
+              <i class="bi bi-lightning-charge-fill"></i>
+              Flujo diario
+            </span>
+          </div>
           <h1 class="display-6 fw-bold mb-2">Bienvenido al centro de control</h1>
-          <p class="text-muted mb-0">
-            Supervisa el estado del inventario y navega rápido a las tareas clave del sistema.
+          <p class="text-muted mb-0 hero-description">
+            Supervisa el estado del inventario, detecta actividad reciente y navega rápido a las tareas clave del
+            sistema.
           </p>
+
+          <div class="hero-glance mt-4">
+            <div class="glance-pill">
+              <span class="glance-label">Estado API</span>
+              <strong>{{ homeService.getStatusLabel(apiStatus) }}</strong>
+            </div>
+            <div class="glance-pill">
+              <span class="glance-label">Categorias</span>
+              <strong>{{ categoriesCount ?? '—' }}</strong>
+            </div>
+            <div class="glance-pill">
+              <span class="glance-label">Ultima actualizacion</span>
+              <strong>{{ lastUpdated }}</strong>
+            </div>
+          </div>
         </div>
 
         <div class="hero-actions">
@@ -22,26 +44,44 @@
         </div>
       </div>
 
+      <div class="hero-side-panel mt-4">
+        <div class="hero-side-card">
+          <div class="hero-side-header">
+            <span class="hero-side-title">Pulso del sistema</span>
+            <span class="hero-side-dot"></span>
+          </div>
+          <p class="hero-side-value mb-1">{{ apiStatus }}</p>
+          <p class="hero-side-text mb-0">
+            Monitorea disponibilidad, accesos rápidos y actividad reciente desde un solo bloque visual.
+          </p>
+        </div>
+      </div>
+
       <div class="quick-grid mt-4">
         <button type="button" class="quick-card" (click)="goToCategories()">
-          <i class="bi bi-tags-fill"></i>
+          <div class="quick-card-icon-wrap"><i class="bi bi-tags-fill"></i></div>
           <span>Categorias</span>
+          <small>Organiza el catalogo base</small>
         </button>
         <button type="button" class="quick-card" (click)="goToProducts()">
-          <i class="bi bi-box-seam"></i>
+          <div class="quick-card-icon-wrap"><i class="bi bi-box-seam"></i></div>
           <span>Productos</span>
+          <small>Edita items y precios</small>
         </button>
         <button type="button" class="quick-card" (click)="goToStock()">
-          <i class="bi bi-clipboard-data"></i>
+          <div class="quick-card-icon-wrap"><i class="bi bi-clipboard-data"></i></div>
           <span>Stock</span>
+          <small>Revisa existencias actuales</small>
         </button>
         <button type="button" class="quick-card" (click)="goToSuppliers()">
-          <i class="bi bi-truck"></i>
+          <div class="quick-card-icon-wrap"><i class="bi bi-truck"></i></div>
           <span>Proveedores</span>
+          <small>Gestiona aliados comerciales</small>
         </button>
         <button type="button" class="quick-card" (click)="goToPurchases()">
-          <i class="bi bi-receipt"></i>
+          <div class="quick-card-icon-wrap"><i class="bi bi-receipt"></i></div>
           <span>Compras</span>
+          <small>Controla abastecimiento</small>
         </button>
       </div>
     </div>
@@ -52,8 +92,8 @@
       <div class="card-body">
         <p class="metric-label mb-1">Estado API</p>
         <h2 class="metric-value mb-2">{{ homeService.getStatusLabel(apiStatus) }}</h2>
-        <span class="badge"
-              [ngClass]="{
+        <p class="metric-help mb-2">Conectividad del backend en este momento</p>
+        <span class="badge" [ngClass]="{
                 'text-bg-secondary': apiStatus === 'LOADING',
                 'text-bg-success': apiStatus === 'ONLINE',
                 'text-bg-danger': apiStatus === 'OFFLINE'
@@ -83,20 +123,18 @@
   <section class="tips card rounded-4 border-0 shadow-sm mt-4">
     <div class="card-body p-4">
       <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-        <h3 class="h5 fw-bold mb-0">Recomendaciones operativas</h3>
+        <div>
+          <p class="tips-kicker mb-1">Buenas practicas</p>
+          <h3 class="h5 fw-bold mb-0">Recomendaciones operativas</h3>
+        </div>
         <a class="link-primary text-decoration-none" [href]="swaggerUrl" target="_blank" rel="noopener">
           Abrir Swagger <i class="bi bi-box-arrow-up-right ms-1"></i>
         </a>
       </div>
 
       <div class="form-check mb-3">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="homeTipsCheck"
-          [checked]="showTips"
-          (change)="toggleTips($any($event.target).checked)"
-        />
+        <input class="form-check-input" type="checkbox" id="homeTipsCheck" [checked]="showTips"
+          (change)="toggleTips($any($event.target).checked)" />
         <label class="form-check-label" for="homeTipsCheck">
           Mostrar recomendaciones en Home
         </label>
