@@ -7,7 +7,8 @@ export const API_CONFIG = {
     CATEGORIES: '/categories',
     PRODUCTS: '/products',
     SUPPLIERS: '/suppliers',
-    PURCHASE_ORDERS: '/purchase-orders'
+    PURCHASE_ORDERS: '/purchase-orders',
+    REPORTS: '/reports'
   },
   /** Headers técnicos para control interno del frontend */
   HEADERS: {
@@ -49,4 +50,3 @@ export const HTTP_ERROR_MESSAGES = {
   BAD_REQUEST: 'La solicitud contiene datos inválidos.',
   UNKNOWN_ERROR: 'Ocurrió un error inesperado.'
 } as const;
-
